@@ -1,13 +1,23 @@
 import express, { Request,Response,NextFunction } from "express";
-import userRoutes from "./routes/user.routes";
-import feedbackRoutes from "./routes/feedback.routes";
-import ticketRoutes from "./routes/ticket.routes";
-import eventRoutes from "./routes/event.routes";
+import userRoutes from "./routes/user.route";
+import feedbackRoutes from "./routes/feedback.route";
+import ticketRoutes from "./routes/ticket.route";
+import eventRoutes from "./routes/enevt.route";
+import { AppDataSource } from "./config/data-source";
 
 const app = express();
 
 // Middleware to parse JSON requests
 app.use(express.json());
+
+AppDataSource.initialize()
+    .then(() => {
+        console.log("Database connected successfully!");
+    })
+    .catch((error) => {
+        console.error("Error connecting to the database", error);
+    });
+
 
 // Set up routes
 app.use("/api/users", userRoutes); // Routes for user management

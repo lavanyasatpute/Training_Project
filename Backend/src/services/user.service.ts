@@ -1,5 +1,6 @@
 import { userRepo } from "../repository/user.repository";
 import { User } from "../entities/User";
+const bcrypt = require('bcrypt');
 
 export class UserService {
     private userRepository = new userRepo();
@@ -7,9 +8,14 @@ export class UserService {
     // Add a new user
     async AddUser(UserData: Partial<User>): Promise<string> {
         try {
+            const saltRounds = 10;
+            const salt = bcrypt.genSaltSync(saltRounds);
+            const hash = bcrypt.hashSync(UserData.Password, salt);
+            UserData.Password = hash;
+            console.log(UserData);
             const result = await this.userRepository.AddUser(UserData);
             return result;
-        } catch (error:any) {
+        } catch (error: any) {
             throw new Error(`Failed to add user: ${error.message}`);
         }
     }
@@ -19,7 +25,7 @@ export class UserService {
         try {
             const result = await this.userRepository.DeleteUser(id);
             return result;
-        } catch (error:any) {
+        } catch (error: any) {
             throw new Error(`Failed to delete user with ID ${id}: ${error.message}`);
         }
     }
@@ -29,7 +35,7 @@ export class UserService {
         try {
             const result = await this.userRepository.UpdateUser(id, updatedData);
             return result;
-        } catch (error:any) {
+        } catch (error: any) {
             throw new Error(`Failed to update user with ID ${id}: ${error.message}`);
         }
     }
@@ -39,7 +45,7 @@ export class UserService {
         try {
             const users = await this.userRepository.getAllUsers();
             return users;
-        } catch (error:any) {
+        } catch (error: any) {
             throw new Error(`Failed to retrieve users: ${error.message}`);
         }
     }
@@ -49,7 +55,7 @@ export class UserService {
         try {
             const users = await this.userRepository.getFilterUser(filterValue);
             return users;
-        } catch (error:any) {
+        } catch (error: any) {
             throw new Error(`Failed to filter users: ${error.message}`);
         }
     }

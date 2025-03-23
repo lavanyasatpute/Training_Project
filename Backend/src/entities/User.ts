@@ -14,10 +14,16 @@ export class User {
     Email: string;
 
     @Column()
+    Username:string;
+
+    @Column()
     Password: string;
 
     @Column()
     ContactDetails: string;
+
+    @Column()
+    role:string;
 
     @OneToMany(() => Ticket, (ticket) => ticket.User)
     Tickets: Ticket[];

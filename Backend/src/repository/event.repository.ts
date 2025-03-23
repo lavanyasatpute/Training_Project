@@ -23,7 +23,9 @@ export class eventRepo{
     }
 
     async getAllEvent(){ 
-        return await this.appDataSource.find();
+        const data = await this.appDataSource.find();
+        // if(!data) return "Data is not found please add event...."
+        return data
     }
 
     async getFilterEvent(filterValue:Partial<Evententity>){
