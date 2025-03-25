@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
 
-@Entity()
+@Entity("User_tbl_2008")
 export class User {
     @PrimaryGeneratedColumn()
     UserID: number;

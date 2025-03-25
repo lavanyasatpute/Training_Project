@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Evententity } from "./event";
 import { User } from "./User";
 
-@Entity()
+@Entity("Feedback2008")
 export class Feedback {
     @PrimaryGeneratedColumn()
     FeedbackID: number;

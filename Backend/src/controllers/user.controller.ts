@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import * as httpStatus from 'http-status-codes'
 
 const userService = new UserService();
 
@@ -10,17 +11,22 @@ export class UserController {
             const userData = req.body; // Get user data from the request body
             console.log(userData);
             const result = await userService.AddUser(userData); // Call the service
-            res.status(201).send(result); // Respond with a success message
+            res.status(httpStatus.OK).send(result); // Respond with a success message
         } catch (error:any) {
-            res.status(500).send(error.message); // Handle errors
+            res.status(httpStatus.BAD_REQUEST).send(error.message); // Handle errors
         }
     }
 
     // Delete a user by ID
+    /**
+     * This method is used to delete the user 
+     * @param req 
+     * @param res 
+     */
     async deleteUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = parseInt(req.params.id, 10); // Extract user ID from the request parameters
-            const result = await userService.DeleteUser(userId); // Call the service
+            const userId : number = parseInt(req.params.id, 10); // Extract user ID from the request parameters
+            const result : string  = await userService.DeleteUser(userId); // Call the service
             res.status(200).send(result); // Respond with a success message
         } catch (error:any) {
             res.status(500).send(error.message); // Handle errors
