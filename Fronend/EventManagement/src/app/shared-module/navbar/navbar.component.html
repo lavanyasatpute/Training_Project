@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="login">Login</a>
+                    <a class="nav-link" routerLink="/user">Login</a>
                 </li>
             </ul>
             <div class="dropdown">
@@ -18,9 +18,8 @@
                     <span>Lavanya</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">New Project</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+
+                    <li><a class="dropdown-item" *ngIf="isLogedIn" routerLink="user/profile">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -62,8 +61,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span>
+                        <a routerLink="/event" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Add Event</span>
                         </a>
                     </li>
 

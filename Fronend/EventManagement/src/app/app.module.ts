@@ -14,7 +14,8 @@ import { AuthenticationModule } from './authentication/authentication.module';
 //PrimeNG Config
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Material from '@primeng/themes/Material';
+import Aura from '@primeng/themes/aura';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,7 @@ import Material from '@primeng/themes/Material';
     BrowserModule,
     AppRoutingModule,
     SharedModuleModule,
-    MatSnackBarModule,
-    AuthenticationModule
+    RouterModule
   ],
   providers: [CookieService,
     {provide:ErrorHandler, useClass:GlobalErrorHandler},
@@ -33,7 +33,7 @@ import Material from '@primeng/themes/Material';
     provideAnimationsAsync(),
         providePrimeNG({
             theme: {
-                preset: Material
+                preset: Aura
             }
         })
   ],

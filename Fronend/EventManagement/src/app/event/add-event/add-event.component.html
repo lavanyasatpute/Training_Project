@@ -1,0 +1,33 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="container my-5 py-5 w-50 border rounded">
+        <h2 class="text-center text-primary">Create Event</h2>
+        <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input id="title" formControlName="Title" type="text" class="form-control" placeholder="Enter event title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea id="description" formControlName="Description" class="form-control" placeholder="Enter event description" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="schedule" class="form-label">Schedule:</label>
+                <input id="schedule" formControlName="Schedule" type="datetime-local" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Location:</label>
+                <input id="location" formControlName="Location" type="text" class="form-control" placeholder="Enter location" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="categories" class="form-label">Categories:</label>
+                <input id="categories" formControlName="Categories" type="text" class="form-control" placeholder="Enter categories" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="eventForm.invalid">Create Event</button>
+        </form>
+    </div>
+</div>

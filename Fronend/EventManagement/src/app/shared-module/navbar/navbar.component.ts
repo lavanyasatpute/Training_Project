@@ -18,4 +18,6 @@ export class NavbarComponent {
   toggleSubmenu(menu: string): void {
     this.activeSubmenu = this.activeSubmenu === menu ? null : menu;
   }
+
+  isLogedIn = true;
 }

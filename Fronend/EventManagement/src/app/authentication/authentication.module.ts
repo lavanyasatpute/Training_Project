@@ -8,6 +8,20 @@ import { RegistrationFormComponent } from './registration-form/registration-form
 
 import { ButtonModule } from 'primeng/button';
 
+import { Routes } from '@angular/router';
+
+const route: Routes = [
+  
+    
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegistrationFormComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: '', redirectTo: 'login', pathMatch: "full" }
+
+
+
+]
+
 @NgModule({
   declarations: [
     LoginComponent,
@@ -17,9 +31,9 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule,
-    ButtonModule
+    ButtonModule,
+    RouterModule.forChild(route)
   ],
-  exports:[LoginComponent,ProfileComponent]
+  exports: [LoginComponent, ProfileComponent]
 })
 export class AuthenticationModule { }

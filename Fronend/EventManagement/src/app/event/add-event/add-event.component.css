@@ -1,0 +1,43 @@
+body {
+    background-color: #709ad8; /* Dark blue background */
+    color: white;
+}
+
+.custom-card {
+    width: 450px;
+    background: #b0c7e2;
+    border-radius: 12px;
+    color: white;
+}
+
+.card h2 {
+    font-weight: 600;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.form-control {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.form-control:focus {
+    background: #34495e;
+    color: white;
+    box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.2);
+}
+
+button {
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
