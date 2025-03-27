@@ -11,7 +11,8 @@ import { CommonRoutingModule } from './comman-routing.module';
   imports: [
     CommonModule,
     CommonRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RouterModule
   ],
   exports:[NavbarComponent]
 })

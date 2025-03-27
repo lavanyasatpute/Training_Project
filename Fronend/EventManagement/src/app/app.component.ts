@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'EventManagement';
+
+  // ErrorFn(){
+  //   throw new Error("This is a custom error message");
+  // }
 }

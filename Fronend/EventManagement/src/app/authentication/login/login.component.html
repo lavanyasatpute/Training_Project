@@ -1,1 +1,29 @@
-<p>login works!</p>
+<h3 style="text-align: center;">Login Hear..</h3>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+    <!-- Email Field -->
+    <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" formControlName="email" class="form-control" required>
+        <div class="text-danger" *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
+            Please enter a valid email address.
+        </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" formControlName="password" class="form-control" required>
+        <div class="text-danger" *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+            Password is required.
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Submit Form</button>
+    <br><br>
+    <div class="col text-center">
+        <p>Not Registered? Click here to <a style="text-decoration: none;" class="link-primary"
+                routerLink="/">Register</a> </p>
+    </div>
+
+</form>
