@@ -6,6 +6,8 @@ export class userRepo {
 
     // Add a new user
     async AddUser(UserData: Partial<User>) {
+        console.log(UserData);
+        
         const user = this.appDataSource.create(UserData);
         await this.appDataSource.save(user);
         return `${user.Name} has been added successfully.`;

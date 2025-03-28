@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
+import { IUser } from '../../model/user.interface';
+import { API_URL } from '../../model/APIURL';
 
-interface IUser {
-  fullname: string;
-  email: string;
-  password: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +12,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:3000/user/';
+  private apiUrl = `${API_URL}/users/`;
 
-  userRegistration(userData: IUser) {
+  userRegistration(userData: Partial<IUser>) {
     console.log(userData);
-    return this.http.post(this.apiUrl + 'add-user', userData).pipe(
-      catchError((error: any) => {
-        console.error('Registration Error', error);
-        return throwError(() => new Error("Registration Failed. Please try again."));
-      })
-    );
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(this.apiUrl + 'add', userData,{headers:headers})
   }
 
   loginUser(userData: Record<string, string>) {

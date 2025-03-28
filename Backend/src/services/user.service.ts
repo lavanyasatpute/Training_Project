@@ -12,7 +12,7 @@ export class UserService {
             const salt = bcrypt.genSaltSync(saltRounds);
             const hash = bcrypt.hashSync(UserData.Password, salt);
             UserData.Password = hash;
-            console.log(UserData);
+            // console.log(UserData);
             const result = await this.userRepository.AddUser(UserData);
             return result;
         } catch (error: any) {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +14,10 @@ export class NavbarComponent {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  /**
+   * @description
+   * @param menu 
+   */
   toggleSubmenu(menu: string): void {
     this.activeSubmenu = this.activeSubmenu === menu ? null : menu;
   }

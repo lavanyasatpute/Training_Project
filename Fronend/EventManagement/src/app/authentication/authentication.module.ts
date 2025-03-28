@@ -9,16 +9,14 @@ import { RegistrationFormComponent } from './registration-form/registration-form
 import { ButtonModule } from 'primeng/button';
 
 import { Routes } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 const route: Routes = [
   
-    
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegistrationFormComponent },
       { path: 'profile', component: ProfileComponent },
       { path: '', redirectTo: 'login', pathMatch: "full" }
-
-
 
 ]
 
@@ -32,7 +30,8 @@ const route: Routes = [
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
-    RouterModule.forChild(route)
+    RouterModule.forChild(route),
+    HttpClientModule
   ],
   exports: [LoginComponent, ProfileComponent]
 })

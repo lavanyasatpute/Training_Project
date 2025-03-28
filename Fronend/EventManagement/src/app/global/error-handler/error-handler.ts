@@ -9,7 +9,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     handleError(error: any): void {
         console.error("Global Error Caught: ", error);
 
-        this.snackBar.open("An Unexpected Error Occured !", "Close", {
+        this.snackBar.open(`from error handller : ${error}`, "Close", {
              duration: 3000,
               panelClass: ["error-snackBar"],
              });
