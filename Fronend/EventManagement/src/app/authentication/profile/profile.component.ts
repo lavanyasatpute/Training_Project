@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-profile',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
+  constructor(private cookieService: CookieService) {}
+
+  
 
 }

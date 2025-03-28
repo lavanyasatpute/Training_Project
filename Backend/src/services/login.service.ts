@@ -18,9 +18,9 @@ export class loginService {
         const secret = process.env.JWT_SECRET || 'lavanya';
         const token = jwt.sign(
             { id: userid, username: name, role: role },secret,
-            { expiresIn: "1h" }
+            { expiresIn: "1d" }
         );
 
-        return {Token:token,messages:`${name} login successfully...`}
+        return {Token:token,messages:`${name} login successfully...!`,name:username}
     }
 }

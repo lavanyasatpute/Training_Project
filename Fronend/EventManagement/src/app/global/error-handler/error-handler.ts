@@ -10,7 +10,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         console.error("Global Error Caught: ", error);
 
         this.snackBar.open(`from error handller : ${error}`, "Close", {
-             duration: 3000,
+             duration: 5000,
               panelClass: ["error-snackBar"],
              });
 

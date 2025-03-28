@@ -41,46 +41,12 @@ export class RegistrationFormComponent {
       ContactDetails: this.registerForm.value.ContactDetails || '',
       role: this.registerForm.value.role as Role || Role.User
     };
-    this.authService.userRegistration(userData).subscribe((response) => {
+    const result = this.authService.userRegistration(userData).subscribe((response:any) => {
       console.log(response);
     });
-    if (userData.Name != '' &&
-      userData.Email != '' &&
-      userData.Username != '' &&
-      userData.Password != '' &&
-      userData.ContactDetails != ''
-    ) {
-      swal({
-        title: "Registration Successful!",
-        text: `Welcome, ${userData.Name}!`,
-        icon: "success",
-        buttons: {
-          confirm: {
-            text: "Proceed",
-            value: true,
-            visible: true,
-            className: "",
-            closeModal: true
-          }
-        }
-      });
-    } else {
-      // Show error alert for invalid form data
-      swal({
-        title: "Invalid Input!",
-        text: "Please ensure all fields are filled correctly.",
-        icon: "error",
-        buttons: {
-          confirm: {
-            text: "Try Again",
-            value: true,
-            visible: true,
-            className: "",
-            closeModal: true
-          }
-        }
-      });
-    }
+    console.log(result);
+    
+    
   }
 }
 

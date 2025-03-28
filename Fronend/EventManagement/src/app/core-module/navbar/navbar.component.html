@@ -1,101 +1,94 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">UMS</a>
+        <a class="navbar-brand fw-bold" href="#">UMS</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <!-- Show login button when not logged in -->
+            <ul *ngIf="!isLogedIn" class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/user">Login</a>
+                    <a class="nav-link btn btn-outline-light fw-bold px-4 py-2 d-flex align-items-center text-white border border-2 rounded-pill"
+                        routerLink="/user" style="background-color: #333; transition: all 0.3s;">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                    </a>
                 </li>
             </ul>
-            <div class="dropdown">
+
+            <!-- Show username & dropdown when logged in -->
+            <div *ngIf="isLogedIn" class="dropdown ms-3">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                     id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="User" width="30" height="30" class="rounded-circle me-2">
-                    <span>Lavanya</span>
+                    <img src="https://github.com/mdo.png" alt="User" width="35" height="35"
+                        class="rounded-circle me-2 border border-light">
+                    <span class="fw-bold">{{ username }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark text-small shadow">
-
-                    <li><a class="dropdown-item" *ngIf="isLogedIn" routerLink="user/profile">Profile</a></li>
+                    <li><a class="dropdown-item" routerLink="user/profile">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="#">Sign Out</a></li>
+                    <li><a class="dropdown-item text-danger" (click)="signOut()">Sign Out</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- Side Navbar and Main Content -->
-
+<!-- Sidebar and Main Content -->
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <!-- Sidebar -->
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark sidebar">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">Menu</span>
+                    <span class="fs-5 fw-bold">Menu</span>
                 </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
+                    id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        <a href="#" class="nav-link align-middle px-3">
+                            <i class="bi bi-house-door-fill"></i> <span class="ms-2">Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-3 align-middle">
+                            <i class="bi bi-speedometer2"></i> <span class="ms-2">Dashboard</span>
                         </a>
                         <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">All Event</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Location wise
-                                        event</span> </a>
-                            </li>
+                            <li><a class="nav-link px-3">All Events</a></li>
+                            <li><a class="nav-link px-3">Location-wise Events</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a routerLink="/event" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Add Event</span>
+                        <a routerLink="/event" class="nav-link px-3 align-middle">
+                            <i class="bi bi-calendar-plus-fill"></i> <span class="ms-2">Add Event</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Location</span>
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-3 align-middle">
+                            <i class="bi bi-geo-alt-fill"></i> <span class="ms-2">Location</span>
                         </a>
                         <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Location</span>1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Location</span>2</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Location</span>3</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Location</span>4</a>
-                            </li>
+                            <li><a class="nav-link px-3">Location 1</a></li>
+                            <li><a class="nav-link px-3">Location 2</a></li>
+                            <li><a class="nav-link px-3">Location 3</a></li>
+                            <li><a class="nav-link px-3">Location 4</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span>
+                        <a href="#" class="nav-link px-3 align-middle">
+                            <i class="bi bi-people-fill"></i> <span class="ms-2">Customers</span>
                         </a>
                     </li>
                 </ul>
-                <hr>
-
+                <hr class="border-light w-100">
             </div>
         </div>
-        <div class="col py-3">
+
+        <!-- Main Content -->
+        <div class="col py-4 main-content">
             <router-outlet></router-outlet>
         </div>
     </div>

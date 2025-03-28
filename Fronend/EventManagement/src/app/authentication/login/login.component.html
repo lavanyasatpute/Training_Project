@@ -2,9 +2,9 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()">
     <!-- Email Field -->
     <div class="mb-3">
-        <label for="email" class="form-label">Email:</label>
-        <input type="email" id="email" formControlName="email" class="form-control" required>
-        <div class="text-danger" *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" formControlName="username" class="form-control" required>
+        <div class="text-danger" *ngIf="form.controls['username'].invalid && form.controls['username'].touched">
             Please enter a valid email address.
         </div>
     </div>
