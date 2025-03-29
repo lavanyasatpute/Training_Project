@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EventService } from '../../Services/event/event.service';
 
 @Component({
   selector: 'app-add-event',
@@ -9,8 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddEventComponent {
   eventForm!: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  LocationList :string[]=[]
+  constructor(private fb: FormBuilder,private eventService:EventService) {}
 
   ngOnInit() {
     this.eventForm = this.fb.group({
@@ -20,12 +21,19 @@ export class AddEventComponent {
       Location: ['', Validators.required],
       Categories: ['', Validators.required]
     });
+
+    
+
+
   }
 
   onSubmit() {
     if (this.eventForm.valid) {
+      this.eventService.createEvent(this.eventForm.value).subscribe((result:any)=>{
+        console.log(result);
+      });
       console.log("Event Data:", this.eventForm.value);
-      alert("Event Created Successfully!");
+      // alert("Event Created Successfully!");
     }
   }
 

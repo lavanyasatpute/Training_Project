@@ -8,6 +8,7 @@ import { SharedService } from '../../Services/shared.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
+
 export class NavbarComponent implements OnInit {
   isSidebarOpen: boolean = false;
   activeSubmenu: string | null = null;

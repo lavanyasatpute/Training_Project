@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import swal from 'sweetalert';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../Services/Authentication/auth.service';
 import { Router } from '@angular/router';
@@ -42,7 +41,7 @@ export class RegistrationFormComponent {
       role: this.registerForm.value.role as Role || Role.User
     };
     const result = this.authService.userRegistration(userData).subscribe((response:any) => {
-      console.log(response);
+      console.log(response.data +'\n' + response.messages);
     });
     console.log(result);
     

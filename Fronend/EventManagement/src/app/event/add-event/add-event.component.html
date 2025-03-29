@@ -19,8 +19,15 @@
 
             <div class="mb-3">
                 <label for="location" class="form-label">Location:</label>
-                <input id="location" formControlName="Location" type="text" class="form-control" placeholder="Enter location" required>
+                <select id="location" formControlName="Location" class="form-control" required>
+                    <option value="" disabled selected>Select a location</option>
+                    <option value="New York">New York</option>
+                    <option value="London">London</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Tokyo">Tokyo</option>
+                </select>
             </div>
+            
 
             <div class="mb-3">
                 <label for="categories" class="form-label">Categories:</label>

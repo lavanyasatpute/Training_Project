@@ -1,13 +1,14 @@
 import { AppDataSource } from "../config/data-source";
+import { EventDTO } from "../DTO/event.dto";
 import { Evententity } from "../entities/event";
 
 export class eventRepo{
     private appDataSource = AppDataSource.getRepository(Evententity);
 
-    async AddEvent(Eventdata:Partial<Evententity>){
+    async AddEvent(Eventdata:EventDTO){
         const event = await this.appDataSource.create(Eventdata)
         await this.appDataSource.save(event);
-        return `${Eventdata} this event added successfully...`
+        return `${Eventdata.Title} this event added successfully...`
     }
 
     async DeleteEvent(id:number){

@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { loginService } from "../services/login.service";
+import * as StatusCodes from 'http-status-codes'
+
 const LoginService = new loginService();
 
 export class LoginController {
@@ -8,9 +10,9 @@ export class LoginController {
         try {
             const {username,password} = req.body;
             const result = await LoginService.loginUser(username,password);
-            res.status(201).send(result);
+            res.status(StatusCodes.OK).json(result);
         } catch (error: any) {
-            res.status(500).send(error.message);
+            res.status(StatusCodes.BAD_REQUEST).json(error.message);
         }
     }
 }

@@ -16,7 +16,6 @@ const route: Routes = [
 
 @NgModule({
   declarations: [
-    EventListComponent,
     EventDetailsComponent,
     AddEventComponent,
   ],

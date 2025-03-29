@@ -6,10 +6,10 @@ const router = Router();
 const eventController = new EventController();
 
 // Event Routes
-router.post("/events", eventController.addEvent);
-router.delete("/events/:id", eventController.deleteEvent);
-router.put("/events/:id", eventController.updateEvent);
-router.get("/events", eventController.getAllEvents);
-router.get("/events/filter", eventController.getFilteredEvents);
+router.post("/add", eventController.addEvent);
+router.delete("/delete/:id", eventController.deleteEvent);
+router.put("/update/:id", eventController.updateEvent);
+router.get("/getall", eventController.getAllEvents);
+router.get("/filter", eventController.getFilteredEvents);
 
 export default router;

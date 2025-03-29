@@ -9,6 +9,7 @@ export class SharedService {
   private userSubject = new BehaviorSubject<string>('User');
   username$ = this.userSubject.asObservable(); // Observable to share user data
 
+
   constructor(private cookieService: CookieService) {
     this.checkForUserUpdates(); // Start checking for updates
   }
@@ -28,7 +29,7 @@ export class SharedService {
       try {
         const userData = JSON.parse(this.cookieService.get('userData'));
         // console.log(userData);
-        
+
         return userData.name || 'User'; // Return username or default
       } catch (error) {
         console.error('Error parsing cookie data:', error);
@@ -37,7 +38,7 @@ export class SharedService {
     return 'User';
   }
 
-  deleteCookies(){
-    this.cookieService.delete('userData','/');
+  deleteCookies() {
+    this.cookieService.delete('userData', '/');
   }
 }

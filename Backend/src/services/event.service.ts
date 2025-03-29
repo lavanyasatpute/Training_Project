@@ -1,16 +1,18 @@
 import { eventRepo } from "../repository/event.repository";
 import { Evententity } from "../entities/event";
+import { EventDTO } from "../DTO/event.dto";
 
 export class EventService {
     private eventRepository = new eventRepo();
 
     // Add an Event
-    async AddEvent(eventData: Partial<Evententity>): Promise<string> {
+
+    async AddEvent(eventData: EventDTO): Promise<string> {
         try {
             const result = await this.eventRepository.AddEvent(eventData);
             return result;
         } catch (error:any) {
-            throw new Error(`Failed to add event: ${error.message}`);
+            return (`Failed to add event: ${error.message}`);
         }
     }
 
@@ -54,3 +56,5 @@ export class EventService {
         }
     }
 }
+
+

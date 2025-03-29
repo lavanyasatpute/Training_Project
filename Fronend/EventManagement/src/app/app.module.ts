@@ -14,17 +14,21 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { RouterModule } from '@angular/router';
+import { EventListComponent } from './event/event-list/event-list.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
+    EventListComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     SharedModuleModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [CookieService,
     {provide:ErrorHandler, useClass:GlobalErrorHandler},
