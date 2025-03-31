@@ -16,4 +16,5 @@ router.get("/alluser",authMiddleware,roleMiddleware("admin"), userController.get
 router.get("/filter/:id" , userController.getFilteredUsers); // Route to filter users by specific criteria
 router.post('/login',loginController.LoginUser)
 
+
 export default router;

@@ -1,5 +1,6 @@
 import { userRepo } from "../repository/user.repository";
 import { User } from "../entities/User";
+import { classToPlain } from "class-transformer";
 const bcrypt = require('bcrypt');
 
 export class UserService {
@@ -44,7 +45,7 @@ export class UserService {
     async getAllUsers(): Promise<User[]> {
         try {
             const users = await this.userRepository.getAllUsers();
-            return users;
+            return classToPlain(users) as User[];
         } catch (error: any) {
             throw new Error(`Failed to retrieve users: ${error.message}`);
         }
@@ -55,7 +56,7 @@ export class UserService {
         try {
 
             const users = await this.userRepository.getFilterUser(filterValue);
-            return users;
+            return  classToPlain(users) as User[];
         } catch (error: any) {
             throw new Error(`Failed to filter users: ${error.message}`);
         }

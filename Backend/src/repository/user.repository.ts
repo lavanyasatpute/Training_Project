@@ -1,9 +1,11 @@
+// import { notContains } from "class-validator";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entities/User";
+import { classToPlain } from "class-transformer";
 
 export class userRepo {
     private appDataSource = AppDataSource.getRepository(User);
-
+    
     // Add a new user
     async AddUser(UserData: Partial<User>) {
         console.log(UserData);
@@ -31,7 +33,8 @@ export class userRepo {
 
     // Retrieve all users
     async getAllUsers() {
-        return await this.appDataSource.find();
+        const user = await this.appDataSource.find({select:[]})
+        return classToPlain(user);
     }
 
     // Filter users by specific criteria

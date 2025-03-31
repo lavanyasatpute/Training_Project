@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 // import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonRoutingModule } from '../shared-module/comman-routing.module';
+import { CommonRoutingModule } from '../shared/comman-routing.module';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';

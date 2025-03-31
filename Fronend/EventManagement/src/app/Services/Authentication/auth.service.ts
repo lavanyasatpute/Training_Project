@@ -93,10 +93,10 @@ export class AuthService {
         })
       );
     } else {
-      // ✅ Correct way to send an object as a query param
-      const params = new HttpParams().set("filterValue", JSON.stringify({ id: cookiesData.id }));
-
-      return this.http.get(`${this.apiUrl}/filter`, { params }).pipe(
+     
+      // const params = new HttpParams().set("filterValue", JSON.stringify({ id: cookiesData.id }));
+      // const id = cookiesData.id
+      return this.http.get(`${this.apiUrl}/filter/${cookiesData.id}`).pipe(
         catchError(error => {
           console.error("Fetch Users Error:", error);
           return throwError(() => new Error("Failed to fetch users. Please try again."));

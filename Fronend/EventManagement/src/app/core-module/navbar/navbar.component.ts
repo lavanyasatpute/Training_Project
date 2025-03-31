@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { SharedService } from '../../Services/shared.service';
+import { SharedService } from '../../shared/shared.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,9 +18,9 @@ export class NavbarComponent implements OnInit {
   constructor(private cookieService: CookieService,private sharedService:SharedService) {}
 
   ngOnInit(): void {
-    this.sharedService.username$.subscribe(data=>this.username = data);
-    this.sharedService.username$.subscribe(item=>{
-      if(item != 'User'){
+    this.sharedService.username$.subscribe((data:any)=>this.username = data.name);
+    this.sharedService.username$.subscribe((item:any)=>{
+      if(item.name != 'User'){
         this.isLogedIn = true
       }else{
         this.isLogedIn = false

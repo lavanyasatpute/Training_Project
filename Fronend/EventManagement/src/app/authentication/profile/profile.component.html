@@ -1,2 +1,47 @@
-<p>profile works!</p>
-{{allUserProfile | json}}
+<header>
+  <h1>User Profile</h1>
+</header>
+
+
+<div *ngIf="UserRole" class="container">
+  <h2>All Users</h2>
+  <table>
+    <thead>
+      <tr>
+        <!-- Dynamically generate table headers -->
+        <th *ngFor="let col of getColumns()">{{ col }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of allUserProfile">
+        <!-- Dynamically generate table data -->
+        <td *ngFor="let col of getColumns()">{{ row[col] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+
+<div *ngIf="!UserRole" class="container">
+  <h2>User Details</h2>
+  <div class="profile-item">
+    <strong>Name:</strong> <span id="name">{{allUserProfile[0]['Name']}}</span>
+  </div>
+  <div class="profile-item">
+    <strong>Email:</strong> <span id="email">{{allUserProfile[0]['Email']}}</span>
+  </div>
+  <div class="profile-item">
+    <strong>Username:</strong> <span id="username">{{allUserProfile[0]['Username']}}</span>
+  </div>
+  <div class="profile-item">
+    <strong>Contact Details:</strong> <span id="contactDetails">{{allUserProfile[0]['ContactDetails']}}</span>
+  </div>
+  <div class="profile-item">
+    <strong>Role:</strong> <span id="role">{{allUserProfile[0]['role']}}</span>
+  </div>
+</div>
+<footer>
+  <p>&copy; 2025 Profile Page. All Rights Reserved.</p>
+</footer>

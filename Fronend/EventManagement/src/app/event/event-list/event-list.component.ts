@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EventService } from '../../Services/event/event.service';
 import { fadeInAnimation } from '../../angular-animation/animations';
-import { SharedService } from '../../Services/shared.service';
+import { SharedService } from '../../shared/shared.service';
 
 
 @Component({

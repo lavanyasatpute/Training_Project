@@ -38,7 +38,7 @@ app.use((err:any, _req:Request, res:Response,next:NextFunction) => {
 });
 
 // Start the server
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
