@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../../Services/Authentication/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,7 +9,10 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  constructor(private cookieService: CookieService) {}
+  allUserProfile:any[] = []
+  constructor(private cookieService: CookieService,private authService:AuthService) {
+    this.authService.getAllUser().subscribe(data=>this.allUserProfile = data);
+  }
 
   
 

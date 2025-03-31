@@ -1,2 +1,10 @@
-<p>event-list works!</p>
-{{eventList | json}}
+<div class="event-list">
+  <div *ngFor="let event of eventList" @fadeIn class="event-card">
+    <h3>{{ event.Title }}</h3>
+    <p><strong>Description:</strong> {{ event.Description }}</p>
+    <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
+    <p><strong>Location:</strong> {{ event.Location }}</p>
+    <p><strong>Category:</strong> {{ event.Categories }}</p>
+    <p-button *ngIf="user" label="Join Event"></p-button>
+  </div>
+</div>

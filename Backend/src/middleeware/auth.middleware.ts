@@ -1,10 +1,10 @@
-import { NextFunction,Request,Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 const jwt = require('jsonwebtoken');
 require('dotenv').config(); // Load environment variables
 
 // Middleware function
-function authMiddleware(req:any, res:Response, next:NextFunction) {
+async function authMiddleware(req: any, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
 
     // Check if Authorization header exists
@@ -17,12 +17,14 @@ function authMiddleware(req:any, res:Response, next:NextFunction) {
 
     try {
         // Verify token
-        const secret = process.env.JWT_SECRET || "lavanya";
-        const decoded = jwt.verify(token, secret);
-        req.user = decoded; // Attach decoded user info to request
-        next(); // Proceed to next middleware or route
+        const secret_key = process.env.JWT_SECRET || "lavanya";
+        await jwt.verify(token, secret_key, (err: any, decoded: any) => {
+            req.user = decoded; // Attach decoded user info to request
+            next();
+        });
+        // Proceed to next middleware or route
     } catch (err) {
-        return res.status(403).json({ error: "Forbidden: Invalid token" });
+        return res.status(403).json({ message: "Forbidden: Invalid token" });
     }
 }
 

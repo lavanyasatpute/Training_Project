@@ -35,8 +35,8 @@ export class userRepo {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: Partial<User>) {
-        const filterData = await this.appDataSource.find({ where: filterValue });
+    async getFilterUser(filterValue: number) {
+        const filterData = await this.appDataSource.find({ where: {UserID:filterValue} });
         return filterData;
     }
 }

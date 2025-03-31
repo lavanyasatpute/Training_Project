@@ -24,8 +24,8 @@ export class UserDTO {
     @IsString()
     ContactDetails: string;
 
-    // @IsNotEmpty()
-    // @IsString()
-    // @Matches(/^.*\S.*$/, { message: "The field must not be empty or contain only spaces" })
-    Role: string;
+    @IsNotEmpty()
+    @IsString()
+    @Matches(/^.*\S.*$/, { message: "The field must not be empty or contain only spaces" })
+    role: string;
 }

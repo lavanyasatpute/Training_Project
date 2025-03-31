@@ -18,12 +18,22 @@ export class EventService {
 
 
   constructor(private http: HttpClient) {
-    const result = this.http.get(`${this.apiUrl}`+'/getall');
-    this.eventList.push(result);
-    this.Elist.next(this.eventList);
-    console.log("this is from event service",result);
+    const result = this.http.get(`${this.apiUrl}/getall`);
+    console.log(result);
     
-   }
+    result.subscribe(async (data: any) => {
+      await data.data.forEach((element: any) => {
+        this.eventList.push(element);
+        console.log("after fetching getall methode.",this.eventList);
+        this.Elist.next(this.eventList);
+      });
+    }
+    );
+    
+    // console.log(this.eventList);
+    
+
+  }
   createEvent(eventData: Partial<IEvent>): any {
     if (eventData.Title?.trim() !== '' &&
       eventData.Description?.trim() !== '' &&

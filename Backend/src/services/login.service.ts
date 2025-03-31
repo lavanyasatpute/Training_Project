@@ -10,17 +10,17 @@ export class loginService {
 
     async loginUser(username: string, inputpassword: string) {
         const { userid ,name, userName, passWord,role } = await this.LoginRepo.getUsernamePass(username);
-        if (!userName) return "Please add valid username";
+        if (!userName) return {Token:"",messages:"",name:'',role:''};
         if (passWord) {
             const isMatch = bcrypt.compareSync(inputpassword, passWord)
-            if (!isMatch) return "Please enter a valid password..."
+            if (!isMatch) return {Token:"",messages:"",name:'',role:''}
         }
-        const secret = process.env.JWT_SECRET || 'lavanya';
+        const secret_key = process.env.JWT_SECRET || 'lavanya';
         const token = jwt.sign(
-            { id: userid, username: name, role: role },secret,
+            { id: userid, username: name, role: role },secret_key,
             { expiresIn: "1d" }
         );
 
-        return {Token:token,messages:`${name} login successfully...!`,name:username}
+        return {Token:token,messages:`${name} login successfully...!`,name:username,role:role,id: userid}
     }
 }

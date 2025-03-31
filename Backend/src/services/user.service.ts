@@ -51,8 +51,9 @@ export class UserService {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: Partial<User>): Promise<User[]> {
+    async getFilterUser(filterValue: number): Promise<User[]> {
         try {
+
             const users = await this.userRepository.getFilterUser(filterValue);
             return users;
         } catch (error: any) {

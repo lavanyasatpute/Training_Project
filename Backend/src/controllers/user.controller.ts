@@ -5,6 +5,7 @@ import { UserDTO } from "../DTO/user.dto";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { mapValues } from "lodash";
+import { User } from "../entities/User";
 
 const userService = new UserService();
 
@@ -21,7 +22,7 @@ export class UserController {
 
             // Validate the EventDTO
             console.log(userDTO);
-            
+
             const errors = await validate(userDTO);
             if (errors.length > 0) {
                 res.status(StatusCodes.OK).json({
@@ -81,8 +82,11 @@ export class UserController {
     // Filter users by specific criteria
     async getFilteredUsers(req: Request, res: Response): Promise<void> {
         try {
-            const filterValue = req.query; // Extract filter criteria from the query parameters
-            const users = await userService.getFilterUser(filterValue); // Call the service
+            // const filterValue = req.query; // Extract filter criteria from the query parameters
+            let id = req.params.id // Allow undefined
+            // const parsedFilter: Partial<User> = filterValue ? JSON.parse(filterValue) : {}; // Parse safely
+
+            const users = await userService.getFilterUser(Number(id)); // Call the service
             res.status(StatusCodes.OK).json(users); // Respond with the filtered list of users
         } catch (error: any) {
             res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors
