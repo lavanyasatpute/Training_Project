@@ -5,6 +5,7 @@ import { IUser } from '../../model/user.interface';
 import { API_URL } from '../../model/APIURL';
 import { CookieService } from 'ngx-cookie-service';
 import swal from 'sweetalert';
+import { SharedService } from '../../shared/shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
 
   private apiUrl = `${API_URL}/users`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient, private cookieService: CookieService,private sharedService:SharedService) { }
 
   userRegistration(userData: Partial<IUser>): Observable<any> {
     console.log(userData);
@@ -56,6 +57,9 @@ export class AuthService {
 
         // Store user data in cookies
         this.cookieService.set('userData', JSON.stringify(response), { expires: 1, path: '/' });
+
+        //Update usar in shared service
+        // this.sharedService.updateAuthState();
 
         return response.messages;
       }),

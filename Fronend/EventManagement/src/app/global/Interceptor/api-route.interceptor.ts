@@ -2,12 +2,13 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { catchError, Observable, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
+import {Request} from 'express';
 
 @Injectable()
 export class ApiRouteInterceptor implements HttpInterceptor {
   constructor(private cookieService: CookieService) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<Request>, next: HttpHandler): Observable<HttpEvent<any>> {
     let modifiedReq = req;
     let token = '';
 

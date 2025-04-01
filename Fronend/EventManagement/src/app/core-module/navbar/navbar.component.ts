@@ -18,9 +18,11 @@ export class NavbarComponent implements OnInit {
   constructor(private cookieService: CookieService,private sharedService:SharedService) {}
 
   ngOnInit(): void {
-    this.sharedService.username$.subscribe((data:any)=>this.username = data.name);
+    this.sharedService.username$.subscribe((data:any)=>this.username = data);
     this.sharedService.username$.subscribe((item:any)=>{
-      if(item.name != 'User'){
+      // console.log(item);
+      
+      if(item != 'User'){
         this.isLogedIn = true
       }else{
         this.isLogedIn = false

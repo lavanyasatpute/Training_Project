@@ -33,6 +33,6 @@ const route: Routes = [
     RouterModule.forChild(route),
     HttpClientModule
   ],
-  exports: [LoginComponent, ProfileComponent]
+  exports: []
 })
 export class AuthenticationModule { }

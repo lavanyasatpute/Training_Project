@@ -11,16 +11,18 @@ import { SharedService } from '../../shared/shared.service';
 })
 export class ProfileComponent {
   allUserProfile:any[] = []
-  UserRole:boolean = true
-  constructor(private sharedService: SharedService,private authService:AuthService) {
+  UserRole:boolean = false
+  constructor(private sharedService: SharedService,private authService:AuthService ) {
     this.authService.getAllUser().subscribe(data=>this.allUserProfile = data);
-    // this.sharedService.username$.subscribe((item:any)=>{
+    // this.sharedService.authData$.subscribe((item:any)=>{
     //   if(item.role == 'admin'){
     //     this.UserRole = true
     //   }else{
     //     this.UserRole = false
     //   }
-    // })
+    // });
+
+
   }
 
   public getColumns(): string[] {
