@@ -1,69 +1,88 @@
-.container {
-    margin: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-
-/* --------------------------------------------------- */
+/* General Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  color: #333;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
 }
+
+/* Header */
 header {
-  background-color: #6c63ff;
+  background: #007BFF;
   color: white;
   padding: 20px;
   text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Container */
 .container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: white;
   padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
   border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.container h2 {
-  color: #6c63ff;
-  margin-top: 2;
+
+th {
+  background: #007BFF;
+  color: white;
+  padding: 10px;
 }
+
+td {
+  padding: 8px;
+  text-align: center;
+}
+
+/* Profile Items */
 .profile-item {
-  margin-bottom: 10px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-left: 4px solid #007BFF;
+  transition: transform 0.3s ease-in-out;
 }
-.profile-item strong {
-  display: inline-block;
-  width: 120px;
+
+.profile-item:hover {
+  transform: translateX(5px);
 }
+
+/* Footer */
 footer {
-  background-color: #333;
+  background: #333;
   color: white;
   text-align: center;
-  padding: 10px;
+  padding: 15px;
   position: fixed;
-  width: 100%;
   bottom: 0;
+  width: 100%;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

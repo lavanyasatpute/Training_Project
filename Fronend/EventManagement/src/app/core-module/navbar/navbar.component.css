@@ -1,147 +1,199 @@
-/* General Styling
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+/* General Navbar Styling */
+.navbar {
+  background: linear-gradient(to right, #004e92, #000428);
+  padding: 1px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Navbar */
-/* .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #4a0d4a;
+.navbar-brand {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+  color: #f8d210;
+}
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  padding: 10px 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
+/* Login Button */
+.nav-link.btn {
+  font-size: 16px;
+  font-weight: bold;
+  background: #ff6f61;
+  border-radius: 30px;
+  padding: 12px 18px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link.btn:hover {
+  background: #ff3c38;
+  transform: scale(1.05);
+}
+
+/* User Dropdown */
+.dropdown-toggle {
   color: white;
-  padding: 10px 20px;
+  font-weight: bold;
+  transition: color 0.3s ease;
 }
 
-.nav-left h2 {
-  margin: 0;
+.dropdown-toggle:hover {
+  color: #f8d210;
 }
 
-.nav-center {
-  display: flex;
-  gap: 5px;
+.dropdown-menu {
+  background: #222;
+  border-radius: 8px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.nav-center input {
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.nav-right img {
-  width: 35px;
-  border-radius: 50%;
-} */
-
-/* Sidebar */
-/* .sidebar {
-  position: fixed;
-  top: 50px;
-  left: -250px;
-  width: 250px;
-  height: 100vh;
-  background: #3a003a;
+.dropdown-menu .dropdown-item {
   color: white;
+  transition: background 0.3s ease-in-out;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* -------------------------------- Sidebar -------------------------------- */
+.sidebar {
+  background: linear-gradient(to right, #000428, #004e92);
   padding: 15px;
-  transition: left 0.3s ease-in-out;
+  height: 100vh;
+  transition: all 0.3s ease-in-out;
 }
 
-.sidebar.open {
-  left: 0;
+.sidebar .nav-link {
+  font-size: 16px;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
 }
 
-.sidebar ul {
+/* Sidebar Hover Effect */
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Sidebar Menu Titles */
+.sidebar .fs-5 {
+  font-weight: bold;
+  color: #f8d210;
+  padding-bottom: 10px;
+}
+
+/* Sidebar Submenu Handling */
+.sidebar ul.nav {
   list-style: none;
   padding: 0;
 }
 
-.sidebar ul li {
-  padding: 15px;
+.sidebar ul.nav ul {
+  display: none;
+  padding-left: 16px;
+}
+
+.sidebar ul.nav li:hover ul {
+  display: block;
+}
+
+/* Sidebar Items */
+.sidebar ul.nav li {
+  position: relative;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
-.sidebar ul li:hover {
-  background: #590059;
+.sidebar ul.nav li a {
+  display: block;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Toggle Button */
-/* .toggle-btn {
-  position: absolute;
-  left: 20px;
-  top: 10px;
-  background: #3a003a;
+/* Sidebar Submenu */
+.sidebar ul.nav ul li a {
+  font-size: 14px;
+  padding-left: 20px;
+}
+
+.sidebar ul.nav li:hover > a {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Sidebar Divider */
+.sidebar hr {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  width: 100%;
+}
+
+/* -------------------------------- Footer -------------------------------- */
+.footer {
+  background: linear-gradient(to right, #000428, #004e92);
+  padding: 2px 0;
+  font-size: 10px;
   color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-btn:hover {
-  background: #5a005a;
-}  */
 
-/* Sidebar hover effect */
-.sidebar .nav-link {
-  transition: all 0.3s;
+.footer-text {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
-.sidebar .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+.footer-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f8d210;
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color 0.3s ease-in-out;
 }
 
-/* Navbar user dropdown hover effect */
-.dropdown-toggle:hover {
-  opacity: 0.9;
+.footer-links a:hover {
+  color: #ffb703;
 }
 
-/* Add slight box-shadow to navbar */
-.navbar {
-  box-shadow: 0px 4px 10px rgba(86, 84, 84, 0.1);
-}
-
-/* Main content animation */
+/* -------------------------------- Main Content -------------------------------- */
 .main-content {
-  transition: margin-left 0.3s;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Make sidebar responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    width: 220px;
-    left: -250px;
-    height: 100%;
-    transition: left 0.3s;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-
-  .sidebar.active {
-    left: 0;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-
-  .main-content {
-    margin-left: 0;
-  }
-
-  .main-content.active {
-    margin-left: 220px;
-  }
-}
-
-.nav-link:hover {
-    background-color: #555 !important; /* Slightly lighter on hover */
-    transform: scale(1.05); /* Small pop effect */
 }

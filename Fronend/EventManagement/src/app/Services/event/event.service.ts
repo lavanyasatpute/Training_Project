@@ -12,7 +12,12 @@ import { BehaviorSubject } from 'rxjs';
 export class EventService {
   private apiUrl = `${API_URL}/events`;
 
-  eventList: any[] = [];
+
+  private AllLocation: string[] = []
+  private Locationlist = new BehaviorSubject<any>(this.AllLocation)
+  Locationlist$ = this.Locationlist.asObservable();
+  
+  private eventList: any[] = [];
   private Elist = new BehaviorSubject<any>(this.eventList)
   EList$ = this.Elist.asObservable();
 
@@ -24,6 +29,9 @@ export class EventService {
     result.subscribe(async (data: any) => {
       await data.data.forEach((element: any) => {
         this.eventList.push(element);
+        this.AllLocation.push(element.Location);
+
+        this.Locationlist.next(this.AllLocation)
         console.log("after fetching getall methode.", this.eventList);
         this.Elist.next(this.eventList);
       });
@@ -56,6 +64,11 @@ export class EventService {
       });
       this.eventList.push(eventData);
       this.Elist.next(this.eventList);
+
+      if (eventData.Location) {
+        this.AllLocation.push(eventData.Location);
+        this.Locationlist.next(this.AllLocation)
+      }
       const headers = { 'Content-Type': 'application/json' };
       return this.http.post(this.apiUrl + '/add', eventData, { headers })
     } else {

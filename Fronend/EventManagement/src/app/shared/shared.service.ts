@@ -7,54 +7,66 @@ import { BehaviorSubject, interval } from 'rxjs';
 })
 export class SharedService {
   private userSubject = new BehaviorSubject<string>('User');
-  username$ = this.userSubject.asObservable(); // Observable to share user data
+  username$ = this.userSubject.asObservable(); // Observable for username updates
 
+  private authData = new BehaviorSubject<string>('User');
+  authData$ = this.authData.asObservable(); // Observable for role updates
 
   constructor(private cookieService: CookieService) {
-    this.checkForUserUpdates(); // Start checking for updates
+    this.monitorUserChanges();
+    this.monitorRoleChanges();
   }
 
-  private checkForUserUpdates(): void {
-    // Poll every 2 seconds to detect username changes
+  private monitorUserChanges(): void {
     interval(2000).subscribe(() => {
       const newUsername = this.getUsernameFromCookies();
-      if (newUsername !== this.userSubject.getValue()) {
-        this.userSubject.next(newUsername); // Update BehaviorSubject if changed
+      if (newUsername && newUsername !== this.userSubject.getValue()) {
+        this.userSubject.next(newUsername);
       }
     });
   }
 
   private getUsernameFromCookies(): string {
+    try {
+      const userData = this.getUserData();
+      return userData?.name || 'User';
+    } catch (error) {
+      console.error('Error retrieving username:', error);
+      return 'User';
+    }
+  }
+
+  private monitorRoleChanges(): void {
+    interval(2000).subscribe(() => {
+      const newRole = this.getUserRole();
+      if (newRole && newRole !== this.authData.getValue()) {
+        this.authData.next(newRole);
+      }
+    });
+  }
+
+  private getUserRole(): string {
+    try {
+      const userData = this.getUserData();
+      return userData?.role || 'User';
+    } catch (error) {
+      console.error('Error retrieving user role:', error);
+      return 'User';
+    }
+  }
+
+  private getUserData(): any {
     if (this.cookieService.check('userData')) {
       try {
-        const userData = JSON.parse(this.cookieService.get('userData'));
-        // console.log("From shared service: ",userData);
-
-        return userData.name || 'User' || ''; // Return username or default
+        return JSON.parse(this.cookieService.get('userData'));
       } catch (error) {
         console.error('Error parsing cookie data:', error);
       }
     }
-    return 'User';
+    return null;
   }
 
-  deleteCookies() {
+  deleteCookies(): void {
     this.cookieService.delete('userData', '/');
   }
-
-
-  // private authData = new BehaviorSubject<boolean>(this.hasValidToken());
-
-  // authData$ = this.authData.asObservable();
-
- 
-
-  // hasValidToken(): any {
-  //   if(!this.cookieService.get('userData')) return {role:'user'}
-  //   return JSON.parse(this.cookieService.get('userData')); // Check if token exists in cookies/localStorage
-  // }
-
-  // updateAuthState() {
-  //   this.authData.next(this.hasValidToken());
-  // }
 }

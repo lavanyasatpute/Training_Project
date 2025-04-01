@@ -10,4 +10,5 @@ router.delete("/tickets/:id", ticketController.deleteTicket);
 router.put("/tickets/:id", ticketController.updateTicket);
 router.get("/tickets", ticketController.getAllTickets);
 router.get("/tickets/filter", ticketController.getFilteredTickets);
+
 export default router;

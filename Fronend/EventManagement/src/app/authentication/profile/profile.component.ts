@@ -11,24 +11,30 @@ import { SharedService } from '../../shared/shared.service';
 })
 export class ProfileComponent {
   allUserProfile:any[] = []
+
   UserRole:boolean = false
-  constructor(private sharedService: SharedService,private authService:AuthService ) {
-    this.authService.getAllUser().subscribe(data=>this.allUserProfile = data);
-    // this.sharedService.authData$.subscribe((item:any)=>{
-    //   if(item.role == 'admin'){
-    //     this.UserRole = true
-    //   }else{
-    //     this.UserRole = false
-    //   }
-    // });
 
+  userFields = [
+    { label: 'Name', key: 'Name', id: 'name' },
+    { label: 'Email', key: 'Email', id: 'email' },
+    { label: 'Username', key: 'Username', id: 'username' },
+    { label: 'Contact Details', key: 'ContactDetails', id: 'contactDetails' },
+    { label: 'Role', key: 'role', id: 'role' }
+  ];
 
+  constructor(private sharedService: SharedService, private authService: AuthService) {
+    this.authService.getAllUser().subscribe(data => {
+      this.allUserProfile = data;
+    });
+
+    this.sharedService.authData$.subscribe(role => {
+      this.UserRole = role.toLowerCase() === 'admin';
+    });
   }
 
   public getColumns(): string[] {
     return this.allUserProfile.length ? Object.keys(this.allUserProfile[0]) : [];
   }
-
   
 
 }

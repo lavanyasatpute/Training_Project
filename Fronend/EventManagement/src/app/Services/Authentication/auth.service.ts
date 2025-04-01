@@ -73,12 +73,12 @@ export class AuthService {
 
   getAllUser(): Observable<any> {
     const userDataString = this.cookieService.get("userData");
-
+  
     if (!userDataString) {
       console.error("No userData found in cookies.");
       return throwError(() => new Error("User not authenticated."));
     }
-
+  
     let cookiesData;
     try {
       cookiesData = JSON.parse(userDataString);
@@ -86,28 +86,25 @@ export class AuthService {
       console.error("Error parsing userData:", error);
       return throwError(() => new Error("Invalid cookie data."));
     }
-
+  
     console.log("From AuthService getAllUser method:", cookiesData);
-
-    if (cookiesData.role === "admin") {
-      return this.http.get(`${this.apiUrl}/alluser`).pipe(
-        catchError(error => {
-          console.error("Fetch Users Error:", error);
-          return throwError(() => new Error("Failed to fetch users. Please try again."));
-        })
-      );
-    } else {
-     
-      // const params = new HttpParams().set("filterValue", JSON.stringify({ id: cookiesData.id }));
-      // const id = cookiesData.id
-      return this.http.get(`${this.apiUrl}/filter/${cookiesData.id}`).pipe(
-        catchError(error => {
-          console.error("Fetch Users Error:", error);
-          return throwError(() => new Error("Failed to fetch users. Please try again."));
-        })
-      );
-    }
+  
+    const endpoint =
+      cookiesData.role === "admin" 
+        ? `${this.apiUrl}/alluser`
+        : `${this.apiUrl}/filter/${cookiesData.id}`;
+    
+    console.log("From auth service: ",endpoint);
+    
+  
+    return this.http.get(endpoint).pipe(
+      catchError(error => {
+        console.error("Fetch Users Error:", error);
+        return throwError(() => new Error("Failed to fetch users. Please try again."));
+      })
+    );
   }
+  
 
 
 

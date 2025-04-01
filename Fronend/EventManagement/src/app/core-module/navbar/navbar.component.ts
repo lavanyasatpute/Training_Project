@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { SharedService } from '../../shared/shared.service';
+import { EventService } from '../../Services/event/event.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,9 @@ export class NavbarComponent implements OnInit {
   public isLogedIn: boolean = false;
   public username: string = '';
 
-  constructor(private cookieService: CookieService,private sharedService:SharedService) {}
+  public locations:any[] = []
+
+  constructor(private eventService: EventService,private sharedService:SharedService) {}
 
   ngOnInit(): void {
     this.sharedService.username$.subscribe((data:any)=>this.username = data);
@@ -29,6 +32,8 @@ export class NavbarComponent implements OnInit {
       }
     })
     console.log(this.isLogedIn);
+
+    this.eventService.Locationlist$.subscribe(item=>this.locations = item)
      // Check if cookie exists
   }
 
