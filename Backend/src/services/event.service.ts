@@ -47,9 +47,11 @@ export class EventService {
     }
 
     // Filter Events
-    async getFilterEvent(filterValue: Partial<Evententity>){
+    async getFilterEvent(filterValue: number){
         try {
             const events = await this.eventRepository.getFilterEvent(filterValue);
+            console.log("this is from Serive:",events);
+            
             return events;
         } catch (error:any) {
             throw new Error(`Failed to filter events: ${error.message}`);

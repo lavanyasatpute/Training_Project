@@ -3,10 +3,11 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import {Request} from 'express';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ApiRouteInterceptor implements HttpInterceptor {
-  constructor(private cookieService: CookieService) {}
+  constructor(private cookieService: CookieService,private toastrService : ToastrService) {}
 
   intercept(req: HttpRequest<Request>, next: HttpHandler): Observable<HttpEvent<any>> {
     let modifiedReq = req;
@@ -24,8 +25,8 @@ export class ApiRouteInterceptor implements HttpInterceptor {
     } catch (error) {
       console.error('Error parsing userData from cookies:', error);
     }
-
-    console.log("From route interceptor: ", token);
+    // this.toastrService.success(`User Token: ${token}`);
+    // console.log("From route interceptor: ", token);
 
     if (token) {
       modifiedReq = req.clone({

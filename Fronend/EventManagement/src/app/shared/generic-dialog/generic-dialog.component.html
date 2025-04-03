@@ -1,0 +1,15 @@
+<div class="dialog-overlay">
+    <div class="dialog-container">
+        <h2 *ngIf="data['title']">{{ data['title'] }}</h2>
+
+        <div class="dialog-content">
+            <div *ngFor="let key of objectKeys(data)">
+                <p><strong>{{ key }}:</strong> {{ data[key] }}</p>
+            </div>
+        </div>
+
+        <button class="dialog-button" (click)="closeDialog()">
+            {{ data["button"] || "Close" }}
+        </button>
+    </div>
+</div>

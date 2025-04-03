@@ -7,14 +7,39 @@ import { BehaviorSubject, interval } from 'rxjs';
 })
 export class SharedService {
   private userSubject = new BehaviorSubject<string>('User');
-  username$ = this.userSubject.asObservable(); // Observable for username updates
+  username$ = this.userSubject.asObservable();
 
   private authData = new BehaviorSubject<string>('User');
-  authData$ = this.authData.asObservable(); // Observable for role updates
+  authData$ = this.authData.asObservable();
+
+  private userId = new BehaviorSubject<number>(1);
+  userId$ = this.userId.asObservable();
 
   constructor(private cookieService: CookieService) {
     this.monitorUserChanges();
     this.monitorRoleChanges();
+    this.monitorUserId();
+  }
+
+  private monitorUserId(): void {
+    interval(2000).subscribe(() => {
+      const userId = this.getUserIdFromCookies();
+      if (userId !== null && userId !== this.userId.getValue()) {
+        this.userId.next(userId);
+      }
+    });
+  }
+
+  private getUserIdFromCookies(): number | null {
+    try {
+      const userData = this.getUserData();
+      // console.log("this is from shared service:",userData?.id || null);
+      
+      return userData?.id || null;
+    } catch (error) {
+      console.error('Error retrieving user ID:', error);
+      return null;
+    }
   }
 
   private monitorUserChanges(): void {

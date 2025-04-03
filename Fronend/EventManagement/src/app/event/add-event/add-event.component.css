@@ -13,8 +13,9 @@ body {
 
 /* Container Styling */
 .container {
-    max-width: 600px; /* Adjust container width */
+    max-width: 5000px; /* Adjust container width */
     animation: fadeIn 1s ease-in-out;
+    align-items: center;
 }
 
 /* Event Form Styling */

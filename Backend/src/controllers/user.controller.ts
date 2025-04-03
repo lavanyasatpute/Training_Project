@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import * as StatusCodes from 'http-status-codes'
 import { UserDTO } from "../DTO/user.dto";
@@ -6,6 +6,7 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { mapValues } from "lodash";
 import { User } from "../entities/User";
+import { AppError } from "../utils/appError";
 
 const userService = new UserService();
 
@@ -80,7 +81,7 @@ export class UserController {
     }
 
     // Filter users by specific criteria
-    async getFilteredUsers(req: Request, res: Response): Promise<void> {
+    async getFilteredUsers(req: Request, res: Response,next:NextFunction): Promise<void> {
         try {
             // const filterValue = req.query; // Extract filter criteria from the query parameters
             let id = req.params.id // Allow undefined
@@ -89,7 +90,16 @@ export class UserController {
             const users = await userService.getFilterUser(Number(id)); // Call the service
             res.status(StatusCodes.OK).json(users); // Respond with the filtered list of users
         } catch (error: any) {
-            res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors
+            next(error)
+            // res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors
+        }
+    }
+
+    async asyncErrorController(req:Request,res:Response,next:NextFunction){
+        try {
+            await Promise.reject(new AppError("Async error occured!",500));
+        } catch (error) {
+            next(error);
         }
     }
 }

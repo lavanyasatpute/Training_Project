@@ -24,7 +24,7 @@ export class EventService {
 
   constructor(private http: HttpClient) {
     const result = this.http.get(`${this.apiUrl}/getall`);
-    console.log(result);
+    // console.log(result);
 
     result.subscribe(async (data: any) => {
       await data.data.forEach((element: any) => {
@@ -32,7 +32,7 @@ export class EventService {
         this.AllLocation.push(element.Location);
 
         this.Locationlist.next(this.AllLocation)
-        console.log("after fetching getall methode.", this.eventList);
+        // console.log("after fetching getall methode.", this.eventList);
         this.Elist.next(this.eventList);
       });
     }
@@ -90,6 +90,7 @@ export class EventService {
       return "Please enter a valid data..."
     }
   }
+
 
 
 }

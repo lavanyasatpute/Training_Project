@@ -1,11 +1,16 @@
 form {
     max-width: 400px;
-    margin: auto;
+    margin: 20px auto; /* Adds 20px spacing from the top */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     animation: fadeIn 1s ease-in-out;
+}
+
+.userloginform {
+    max-width: 400px;
+    margin: 60px auto; /* 200px from the top, centered horizontally */
 }
 
 label {

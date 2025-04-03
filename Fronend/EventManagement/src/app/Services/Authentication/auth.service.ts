@@ -6,6 +6,7 @@ import { API_URL } from '../../model/APIURL';
 import { CookieService } from 'ngx-cookie-service';
 import swal from 'sweetalert';
 import { SharedService } from '../../shared/shared.service';
+import { UserEventService } from '../UserEvent/user-event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,11 @@ export class AuthService {
 
   private apiUrl = `${API_URL}/users`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService,private sharedService:SharedService) { }
+  constructor(private http: HttpClient, 
+    private cookieService: CookieService,
+    private sharedService:SharedService,
+    private userEventService: UserEventService
+  ) { }
 
   userRegistration(userData: Partial<IUser>): Observable<any> {
     console.log(userData);
@@ -38,7 +43,7 @@ export class AuthService {
   loginUser(userData: Record<string, any>): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, userData).pipe(
       map((response: any) => {
-        console.log("Raw API Response:", response); // Debugging
+        // console.log("Raw API Response:", response); // Debugging
 
         // Check if the response is undefined or an empty object
         if (!response || !("Token" in response)) {
@@ -54,10 +59,14 @@ export class AuthService {
 
         // If login is successful, show success alert
         this.showAlert("Login Successful!", `Welcome, ${response.messages}`, "success");
+        console.log("This auth service:",response);
+        
 
         // Store user data in cookies
         this.cookieService.set('userData', JSON.stringify(response), { expires: 1, path: '/' });
 
+        
+        this.userEventService.eventList = [];
         //Update usar in shared service
         // this.sharedService.updateAuthState();
 

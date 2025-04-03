@@ -48,7 +48,7 @@
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
                     id="menu">
                     <li class="nav-item">
-                        <a class="nav-link align-middle px-3">
+                        <a routerLink="event" class="nav-link align-middle px-3">
                             <i class="bi bi-house-door-fill"></i> <span class="ms-2">Home</span>
                         </a>
                     </li>
@@ -57,12 +57,12 @@
                             <i class="bi bi-speedometer2"></i> <span class="ms-2">Dashboard</span>
                         </a>
                         <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                            <li><a routerLink="event-list" class="nav-link px-3">All Events</a></li>
+                            <li><a routerLink="event/join" class="nav-link px-3">All Events</a></li>
                             <li><a class="nav-link px-3">Location-wise Events</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a routerLink="/event" class="nav-link px-3 align-middle">
+                        <a routerLink="/event/add-event" class="nav-link px-3 align-middle">
                             <i class="bi bi-calendar-plus-fill"></i> <span class="ms-2">Add Event</span>
                         </a>
                     </li>

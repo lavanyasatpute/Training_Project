@@ -10,6 +10,6 @@ router.post("/add", eventController.addEvent);
 router.delete("/delete/:id", eventController.deleteEvent);
 router.put("/update/:id", eventController.updateEvent);
 router.get("/getall" , eventController.getAllEvents);
-router.get("/filter", eventController.getFilteredEvents);
+router.get("/filter/:id", eventController.getFilteredEvents);
 
 export default router;

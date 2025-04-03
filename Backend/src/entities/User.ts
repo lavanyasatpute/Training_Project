@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
 import { Exclude } from "class-transformer";
+import { RelationOfEventUser } from "./relation_between_events_user";
 
 @Entity("User_tbl_2008")
 export class User {
@@ -34,4 +35,9 @@ export class User {
 
     @OneToMany(() => Feedback, (feedback) => feedback.User)
     Feedbacks: Feedback[];
+
+    @ManyToMany(() => RelationOfEventUser, (relationOfEventUser) => relationOfEventUser.userId)
+    userId: RelationOfEventUser;
+
+   
 }

@@ -98,9 +98,9 @@ export class EventController {
     // Get Filtered Events
     async getFilteredEvents(req: Request, res: Response): Promise<void> {
         try {
-            const filterValue = req.query; // Example: filterValue could include fields like Location or Categories
+            const filterValue = req.params.id; // Example: filterValue could include fields like Location or Categories
 
-            const events = await eventService.getFilterEvent(filterValue);
+            const events = await eventService.getFilterEvent(Number(filterValue));
             res.status(200).json({ message: "Filtered events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });

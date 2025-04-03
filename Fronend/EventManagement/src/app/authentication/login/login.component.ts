@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../Services/Authentication/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.maxLength(20)]) // Password validation
   });
   private messaga: any;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,private router: Router) { }
   /**
    * @description
    * Method to handle form submission
@@ -26,6 +27,7 @@ export class LoginComponent {
 
       this.messaga = mess
     })
+    this.router.navigate(['/'])
     // Logging form value
     // console.log("Login Form Submission: ", this.form.value);
 

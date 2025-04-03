@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
+import { RelationOfEventUser } from "./relation_between_events_user";
 
 @Entity()
 export class Evententity {
@@ -27,4 +28,7 @@ export class Evententity {
 
     @OneToMany(() => Feedback, (feedback) => feedback.Event)
     Feedbacks: Feedback[];
+
+    @ManyToMany(() => RelationOfEventUser, (relationOfEventUser) => relationOfEventUser.EventId)
+    relationOfEventUser: RelationOfEventUser;
 }

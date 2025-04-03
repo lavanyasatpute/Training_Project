@@ -29,8 +29,10 @@ export class eventRepo{
         return data
     }
 
-    async getFilterEvent(filterValue:Partial<Evententity>){
-        const filterData = await this.appDataSource.find({where:filterValue})
+    async getFilterEvent(id:number){
+        const filterData = await this.appDataSource.findOne({where:{EventID:id}})
+        // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
+        return filterData
     }
 
 
