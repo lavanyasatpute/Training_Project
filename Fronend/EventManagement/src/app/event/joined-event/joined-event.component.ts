@@ -43,16 +43,24 @@ export class JoinedEventComponent {
   openDialog(Title: string, eventId: number) {
     const dialogRef = this.dialog.open(GenericDialogComponent, {
       data: {
-        title: `Register for ${Title}`,
+        title: `Cancel ${Title}`,
         eventId: eventId,
         "Event": `You are about to register for Event: ${Title}`,
-        button: "Cancel"
+        button: "Cancel",
       }
     });
-    // const cookiesData = JSON.parse(this.cookieService.get('userData'))
-    // console.log(cookiesData);
+    dialogRef.afterClosed().subscribe(() => {
+      this.cancelEvent(eventId);
+    });
+  }
 
-    // this.joinEvent(eventId,cookiesData.id)
+  cancelEvent(eventId: number) {
+    this.userEventService.deleteEventJoinByUser(eventId).subscribe(data=>{
+      console.log(data);
+      
+    });
+    this.eventUserList = this.eventUserList.filter(item => item.EventID !== eventId);
+
   }
 
 }

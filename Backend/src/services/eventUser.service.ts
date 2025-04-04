@@ -13,9 +13,9 @@ export class EventUserService {
         return result
     }
 
-    async DeleteEventUser(id: number) {
-        if (!id) throw new AppError("Id is missing please add Id", 404);
-        const result = await this.eventUserRepo.DeleteEventUser(id);
+    async DeleteEventUser(user_id: number,event_id:number) {
+        if (!event_id && !user_id) throw new AppError("Id is missing please add valid Id", 404);
+        const result = await this.eventUserRepo.DeleteEventUser(user_id,event_id);
         return result
     }
 

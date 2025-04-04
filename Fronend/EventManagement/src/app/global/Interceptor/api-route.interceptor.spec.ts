@@ -3,14 +3,17 @@ import { HttpInterceptor } from '@angular/common/http';
 
 import { ApiRouteInterceptor } from './api-route.interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrService } from 'ngx-toastr';
 
 describe('apiRouteInterceptor', () => {
-  let cookieServiceSpy: jasmine.SpyObj<CookieService>;
+  let cookieServiceSpy: jasmine.SpyObj<CookieService> = jasmine.createSpyObj('CookieService', ['get', 'set', 'delete']);
   let interceptor: HttpInterceptor;
+  let toastrServiceSpy: jasmine.SpyObj<ToastrService>;
 
   beforeEach(() => {
-    cookieServiceSpy = jasmine.createSpyObj('CookieService', ['get', 'set']);
-    interceptor = new ApiRouteInterceptor(cookieServiceSpy);
+    toastrServiceSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
+    interceptor = new ApiRouteInterceptor(cookieServiceSpy, toastrServiceSpy);
+    interceptor = new ApiRouteInterceptor(cookieServiceSpy, toastrServiceSpy);
   });
 
   beforeEach(() => {

@@ -34,7 +34,7 @@ export class SharedService {
     try {
       const userData = this.getUserData();
       // console.log("this is from shared service:",userData?.id || null);
-      
+
       return userData?.id || null;
     } catch (error) {
       console.error('Error retrieving user ID:', error);

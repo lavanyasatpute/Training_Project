@@ -35,13 +35,13 @@ export class EventUserRepo {
         }
     }
 
-    async DeleteEventUser(id: number) {
+    async DeleteEventUser(user_id: number,event_id:number) {
         try {
-            const eventUser = await this.appDataSource.findOne({ where: { id } });
-            if (!eventUser) return `Error: Event with ID ${id} not found`;
+            const eventUser = await this.appDataSource.findOne({ where: { userId: Equal(user_id), EventId: Equal(event_id) } });
+            if (!eventUser) return `Error: EventUser with ID ${user_id} not found`;
 
-            await this.appDataSource.delete(id);
-            return `Event with ID ${id} has been deleted successfully.`;
+            await this.appDataSource.delete(eventUser.id);
+            return `EventUser with ID ${eventUser.id} has been deleted successfully.`;
         } catch (error) {
             console.error("Error deleting event user:", error);
             return "Error: Could not delete event user.";

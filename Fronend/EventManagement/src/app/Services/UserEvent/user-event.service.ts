@@ -76,4 +76,9 @@ export class UserEventService implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
+
+  deleteEventJoinByUser(event_id:number){
+    return this.http.delete(`${this.apiUrl}/delete/${this.userId}/${event_id}`)
+  }
 }

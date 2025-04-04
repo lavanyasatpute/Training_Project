@@ -41,16 +41,18 @@ export class EventUserController {
         }
     }
 
-    // Delete Event
+    // Delete EventUser
     async deleteEventUser(req: Request, res: Response): Promise<void> {
         try {
-            const eventUserID = parseInt(req.params.id, 10);
+            const user_id = parseInt(req.params.user_id, 10);
+            const event_id = parseInt(req.params.event_id,10);
 
-            if (isNaN(eventUserID)) {
+            if (isNaN(user_id && event_id)) {
                 res.status(400).json({ message: "Invalid event ID." });
             }
 
-            const result = await eventUserService.DeleteEventUser(eventUserID);
+            const result = await eventUserService.DeleteEventUser(user_id,event_id);
+            
             res.status(200).json({ message: "Event successfully deleted.", data: result });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });

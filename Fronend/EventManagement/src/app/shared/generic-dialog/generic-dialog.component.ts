@@ -8,16 +8,20 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrl: './generic-dialog.component.css'
 })
 export class GenericDialogComponent {
-  
 
   constructor(
     public dialogRef: MatDialogRef<GenericDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Record<string,any>
   ) {}
 
-  closeDialog(): void {
+  closeDialog() {
     this.dialogRef.close();
+    return "confirm"
   }
+
+  // notCancelDialog(){
+  //   this.dialogRef.close();
+  // }
 
   objectKeys(obj: any): string[] {
     return Object.keys(obj).filter(key => key !== 'button' && key !== "eventId" && key !== "title"); // Exclude title if needed
