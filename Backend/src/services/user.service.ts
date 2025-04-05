@@ -47,7 +47,7 @@ export class UserService {
             const users = await this.userRepository.getAllUsers();
             return classToPlain(users) as User[];
         } catch (error: any) {
-            throw new Error(`Failed to retrieve users: ${error.message}`);
+            throw new Error(`Failed to retrive users: ${error.message}`);
         }
     }
 

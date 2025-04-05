@@ -7,13 +7,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { JoinedEventComponent } from './joined-event/joined-event.component';
 import { ButtonModule } from 'primeng/button';
+import { CreatedEventComponent } from './created-event/created-event.component';
 
 const route: Routes = [
   { path: '', redirectTo: 'event-list', pathMatch: "full" },
 
   { path: 'event-list', component: EventListComponent },
   { path: 'add-event', component: AddEventComponent },
-  { path: 'join', component: JoinedEventComponent }
+  { path: 'join', component: JoinedEventComponent },
+  {path:'creted-event',component:CreatedEventComponent}
 
 ]
 
@@ -23,7 +25,8 @@ const route: Routes = [
     EventDetailsComponent,
     AddEventComponent,
     JoinedEventComponent,
-    EventListComponent
+    EventListComponent,
+    CreatedEventComponent
   ],
   imports: [
     CommonModule,

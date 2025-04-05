@@ -23,7 +23,7 @@ export class EventListComponent {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private userEventService: UserEventService,
-    private cookieService:CookieService
+    private cookieService: CookieService
   ) {
 
     this.eventService.EList$.subscribe(data => {
@@ -52,15 +52,15 @@ export class EventListComponent {
       }
     });
     const cookiesData = JSON.parse(this.cookieService.get('userData'))
-    console.log("this is from event list",cookiesData.id);
-    
-    this.joinEvent(eventId,cookiesData.id)
+    console.log("this is from event list", cookiesData.id);
+
+    this.joinEvent(eventId, cookiesData.id)
   }
 
-  joinEvent(eventId:number,userId:number){
-    this.userEventService.joinEventByUser(eventId,userId).subscribe((data:any)=>{
+  joinEvent(eventId: number, userId: number) {
+    this.userEventService.joinEventByUser(eventId, userId).subscribe((data: any) => {
       console.log(data);
-      
+
     })
   }
 

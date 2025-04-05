@@ -3,5 +3,6 @@ export interface IEvent{
     Description: string,
     Schedule: Date,
     Location: string,
-    Categories: string
+    Categories: string,
+    CreatedBy:number
 }

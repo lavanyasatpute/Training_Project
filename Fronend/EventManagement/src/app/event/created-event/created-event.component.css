@@ -1,0 +1,60 @@
+/* Center the heading */
+h2 {
+    text-align: center;
+    color: #007BFF;
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin-top: 80px;
+}
+
+/* Event Table Styling */
+.event-table {
+    width: 85%;
+    max-width: 700px;
+    margin-top: 80px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    /* margin-right: 0.5px; */
+}
+
+/* Table Headers */
+.event-table th {
+    background: #007BFF;
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+}
+
+/* Table Rows */
+.event-table td {
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Alternating Row Colors */
+.event-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* Action Button */
+.join-button {
+    background: linear-gradient(90deg, #007BFF, #0056b3);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.join-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}

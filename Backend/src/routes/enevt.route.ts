@@ -11,5 +11,6 @@ router.delete("/delete/:id", eventController.deleteEvent);
 router.put("/update/:id", eventController.updateEvent);
 router.get("/getall" , eventController.getAllEvents);
 router.get("/filter/:id", eventController.getFilteredEvents);
+router.get("/created-event/:id",eventController.getFilteredEventCreatedByUser);
 
 export default router;

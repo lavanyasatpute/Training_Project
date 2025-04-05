@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { SharedService } from '../../shared/shared.service';
 import { EventService } from '../../Services/event/event.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-navbar',
@@ -16,12 +17,19 @@ export class NavbarComponent implements OnInit {
   public isLogedIn: boolean = false;
   public username: string = '';
 
-  public locations:any[] = []
+  public location:string = ""
 
-  constructor(private eventService: EventService,private sharedService:SharedService) {}
+  public createdEvent = true;
+
+  constructor(private eventService: EventService,private sharedService:SharedService,private http:HttpClient) {}
 
   ngOnInit(): void {
+
+
+
+    
     this.sharedService.username$.subscribe((data:any)=>this.username = data);
+    this.sharedService. userLocation$.subscribe(data=>this.location = data);
     this.sharedService.username$.subscribe((item:any)=>{
       // console.log(item);
       
@@ -33,7 +41,7 @@ export class NavbarComponent implements OnInit {
     })
     console.log(this.isLogedIn);
 
-    this.eventService.Locationlist$.subscribe(item=>this.locations = item)
+    // this.eventService.Locationlist$.subscribe(item=>this.locations = item)
      // Check if cookie exists
   }
 
@@ -47,4 +55,5 @@ export class NavbarComponent implements OnInit {
   signOut(){
     this.sharedService.deleteCookies();
   }
+  
 }

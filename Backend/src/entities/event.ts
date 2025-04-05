@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, RelationId } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
 import { RelationOfEventUser } from "./relation_between_events_user";
+import { User } from "./User";
 
-@Entity()
+@Entity("Event_tbl")
 export class Evententity {
     @PrimaryGeneratedColumn()
     EventID: number;
@@ -30,5 +31,11 @@ export class Evententity {
     Feedbacks: Feedback[];
 
     @ManyToMany(() => RelationOfEventUser, (relationOfEventUser) => relationOfEventUser.EventId)
-    relationOfEventUser: RelationOfEventUser;
+    relationOfEventUser: RelationOfEventUser[];
+
+    @ManyToOne(() => User, (user) => user.userEvent, { nullable: false })
+    CreatedBy: User;
+
+    @RelationId((event: Evententity) => event.CreatedBy)
+    CreatedById: number;
 }

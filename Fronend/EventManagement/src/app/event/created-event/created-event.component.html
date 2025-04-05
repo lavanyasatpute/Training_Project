@@ -1,0 +1,39 @@
+<!-- <h2 style="text-align: center;">Created Events</h2>
+<div *ngIf="user" class="event-list">
+    <div *ngFor="let event of createdEventList; let i = index" @fadeIn class="event-card">
+        <h3>{{ event.Title }}</h3>
+        <p><strong>Description:</strong> {{ event.Description }}</p>
+        <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
+        <p><strong>Location:</strong> {{ event.Location }}</p>
+        <p><strong>Category:</strong> {{ event.Categories }}</p>
+        <p-button class="join-button" label="Delete" (click)="openDialog(event.Title,event.EventID,i)"></p-button>
+    </div>
+</div> -->
+
+<h2 style="text-align: center;">Created Events</h2>
+
+<table class="event-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Schedule</th>
+            <th>Location</th>
+            <th>Category</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let event of createdEventList; let i = index" @fadeIn>
+            <td>{{ event.Title }}</td>
+            <td>{{ event.Description }}</td>
+            <td>{{ event.Schedule | date:'medium' }}</td>
+            <td>{{ event.Location }}</td>
+            <td>{{ event.Categories }}</td>
+            <td>
+                <button class="join-button" (click)="openDialog(event.Title,event.EventID,i)">Cancel Event</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

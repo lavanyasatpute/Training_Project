@@ -43,12 +43,12 @@ export class UserEventService implements OnDestroy {
         const eventRequests = response.data.map(eventData =>
           this.http.get<{ data: IEvent }>(`${API_URL}/events/filter/${eventData.EventId}`)
           // console.log("EventId",`${API_URL}/events/filter/${eventData.EventId}`);
-          
+
         );
 
         const allEventsSub = forkJoin(eventRequests).subscribe(eventResponses => {
           const events = eventResponses.map(res => this.eventList.push(res.data));
-          
+
           this.eventUserListSubject.next(this.eventList);
         }, error => {
           console.error('Error fetching event data:', error);
@@ -66,10 +66,10 @@ export class UserEventService implements OnDestroy {
 
   joinEventByUser(eventId: number, userId: number) {
     const data = { EventId: eventId, userId };
-    this.http.get<{ data: IEvent }>(`${API_URL}/events/filter/${eventId}`).subscribe((eventData)=>{
-          this.eventList.push(eventData.data)
-          this.eventUserListSubject.next(this.eventList)
-        })
+    this.http.get<{ data: IEvent }>(`${API_URL}/events/filter/${eventId}`).subscribe((eventData) => {
+      this.eventList.push(eventData.data)
+      this.eventUserListSubject.next(this.eventList)
+    })
     return this.http.post(`${this.apiUrl}/add`, data);
   }
 
@@ -78,7 +78,10 @@ export class UserEventService implements OnDestroy {
   }
 
 
-  deleteEventJoinByUser(event_id:number){
+  deleteEventJoinByUser(event_id: number, index: number) {
+    this.eventList = this.eventList.filter((item, i) => i !== index);
+    this.eventUserListSubject.next(this.eventList);
+
     return this.http.delete(`${this.apiUrl}/delete/${this.userId}/${event_id}`)
   }
 }

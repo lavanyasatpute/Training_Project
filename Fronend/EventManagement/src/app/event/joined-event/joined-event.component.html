@@ -1,11 +1,11 @@
 <h2>Joined Event..</h2>
 <div *ngIf="user" class="event-list">
-  <div *ngFor="let event of eventUserList" @fadeIn class="event-card">
+  <div *ngFor="let event of eventUserList; let i = index" @fadeIn class="event-card">
     <h3>{{ event.Title }}</h3>
     <p><strong>Description:</strong> {{ event.Description }}</p>
     <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
     <p><strong>Location:</strong> {{ event.Location }}</p>
     <p><strong>Category:</strong> {{ event.Categories }}</p>
-    <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID)"></p-button>
+    <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID,i)"></p-button>
   </div>
 </div>

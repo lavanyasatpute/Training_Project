@@ -20,8 +20,10 @@ export class EventUserService {
     }
 
     async getFilteredEventUser(userId: number) {
-        if(!userId) throw new AppError("User Id is missimg",404)
+        if(!userId) throw new AppError("User Id is missing",404)
         return await this.eventUserRepo.getFilteredEventUser(userId);
     }
+
+    
 
 }

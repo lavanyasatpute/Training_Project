@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
 import { Exclude } from "class-transformer";
 import { RelationOfEventUser } from "./relation_between_events_user";
+import { Evententity } from "./event";
 
 @Entity("User_tbl_2008")
 export class User {
@@ -12,13 +13,12 @@ export class User {
 
     @Column()
     Name: string;
-    
-// unique: true
-    @Column({unique: true})
+
+    @Column({ unique: true })
     Email: string;
 
     @Column()
-    Username:string;
+    Username: string;
 
     @Exclude()
     @Column()
@@ -26,9 +26,12 @@ export class User {
 
     @Column()
     ContactDetails: string;
-    
+
     @Column()
-    role:string;
+    role: string;
+
+    @Column({ default: "Mumbai" })
+    location: string;
 
     @OneToMany(() => Ticket, (ticket) => ticket.User)
     Tickets: Ticket[];
@@ -39,5 +42,6 @@ export class User {
     @ManyToMany(() => RelationOfEventUser, (relationOfEventUser) => relationOfEventUser.userId)
     userId: RelationOfEventUser;
 
-   
+    @OneToMany(() => Evententity, (event) => event.CreatedBy)
+    userEvent: Evententity[];
 }

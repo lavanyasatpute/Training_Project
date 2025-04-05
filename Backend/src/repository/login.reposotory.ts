@@ -8,7 +8,7 @@ export class loginRepo {
     async getUsernamePass(userName: string) {
         const user = await this.appDataSource.findOne({ where: { Username: userName } });
         // if(!user) return "User is not valid please register first....."
-        return { userid: user?.UserID, name: user?.Name, userName: user?.Username, passWord: user?.Password, role: user?.role };
+        return { userid: user?.UserID, name: user?.Name, userName: user?.Username, passWord: user?.Password, role: user?.role,location:user?.location };
     }
 
     // async getUserPass(userName:string){

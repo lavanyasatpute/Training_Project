@@ -15,11 +15,38 @@ export class SharedService {
   private userId = new BehaviorSubject<number>(1);
   userId$ = this.userId.asObservable();
 
+  private userLocation = new BehaviorSubject<string>("");
+  userLocation$ = this.userLocation.asObservable();
+
   constructor(private cookieService: CookieService) {
     this.monitorUserChanges();
     this.monitorRoleChanges();
     this.monitorUserId();
+    this.monitorUserLocation();
   }
+
+  
+  private monitorUserLocation(): void {
+    interval(2000).subscribe(() => {
+      const userLocation = this.getUserLocationFromCookies() as unknown as string;
+      if (userLocation !== '' && userLocation !== this.userLocation.getValue()) {
+        this.userLocation.next(userLocation);
+      }
+    });
+  }
+
+  private getUserLocationFromCookies(): number | null {
+    try {
+      const userData = this.getUserData();
+      // console.log("this is from shared service:",userData?.id || null);
+
+      return userData?.location || null;
+    } catch (error) {
+      console.error('Error retrieving user ID:', error);
+      return null;
+    }
+  }
+
 
   private monitorUserId(): void {
     interval(2000).subscribe(() => {

@@ -1,35 +1,34 @@
 import { Component } from '@angular/core';
-import { EventService } from '../../Services/event/event.service';
 import { fadeInAnimation } from '../../angular-animation/animations';
 import { SharedService } from '../../shared/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component'
 import { UserEventService } from '../../Services/UserEvent/user-event.service';
 import { CookieService } from 'ngx-cookie-service';
+import { EventService } from '../../Services/event/event.service';
 
 @Component({
-  selector: 'app-joined-event',
+  selector: 'app-created-event',
   standalone: false,
-  templateUrl: './joined-event.component.html',
-  styleUrl: './joined-event.component.css',
+  templateUrl: './created-event.component.html',
+  styleUrl: './created-event.component.css',
   animations: [fadeInAnimation]
 })
-
-export class JoinedEventComponent {
-  eventUserList: any[] = []
+export class CreatedEventComponent {
+  createdEventList: any[] = []
   user = false
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
-    private userEventService: UserEventService,
-    private cookieService: CookieService
+    private eventService: EventService,
+    private userEventService: UserEventService
   ) { }
 
   ngOnInit() {
 
-    this.userEventService.eventUserList$.subscribe(data => {
-      this.eventUserList = data;
-      console.log("this is from join eventlist component..", data);
+    this.eventService.eventCreateByUser$.subscribe(data => {
+      this.createdEventList = data;
+      console.log("this is from Created eventlist component..", data);
     });
     this.sharedService.username$.subscribe(item => {
       if (item != 'User') {
@@ -43,10 +42,10 @@ export class JoinedEventComponent {
   openDialog(Title: string, eventId: number, index: number) {
     const dialogRef = this.dialog.open(GenericDialogComponent, {
       data: {
-        title: `Cancel ${Title}`,
+        title: `Delete ${Title}`,
         eventId: eventId,
-        "Event": `You are about to register for Event: ${Title}`,
-        button: "Cancel",
+        "Event": `You are Crested that Event: ${Title}`,
+        button: "Delete",
       }
     });
     dialogRef.afterClosed().subscribe(() => {
@@ -55,17 +54,12 @@ export class JoinedEventComponent {
   }
 
   cancelEvent(index: number, eventId: number) {
-    this.eventUserList = this.eventUserList.filter((item, i) => i !== index);
-    
-    this.userEventService.deleteEventJoinByUser(eventId, index).subscribe(data => {
-      console.log("Event cancel", data);
-    });
-    
+    this.createdEventList = this.createdEventList.filter((item, i) => i !== index);
+
+    // this.eventService.deleteEventCreatedByUser(eventId, index).subscribe(data => {
+    //   console.log("Event cancel", data);
+    // });
+
 
   }
-
 }
-
-
-
-

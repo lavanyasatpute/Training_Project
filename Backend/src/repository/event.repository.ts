@@ -1,3 +1,4 @@
+import { Equal } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { EventDTO } from "../DTO/event.dto";
 import { Evententity } from "../entities/event";
@@ -31,6 +32,12 @@ export class eventRepo{
 
     async getFilterEvent(id:number){
         const filterData = await this.appDataSource.findOne({where:{EventID:id}})
+        // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
+        return filterData
+    }
+
+    async getFilterEventCreatedByUser(id:number){
+        const filterData = await this.appDataSource.find({where:{CreatedBy: Equal(id)}})
         // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
         return filterData
     }
