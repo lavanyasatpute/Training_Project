@@ -27,7 +27,7 @@ export class JoinedEventComponent {
 
   ngOnInit() {
 
-    this.userEventService.eventUserList$.subscribe(data => {
+    this.userEventService.eventList$.subscribe(data => {
       this.eventUserList = data;
       console.log("this is from join eventlist component..", data);
     });
@@ -40,7 +40,7 @@ export class JoinedEventComponent {
     })
   }
 
-  openDialog(Title: string, eventId: number, index: number) {
+  openDialog(Title: string, eventId: string, index: number) {
     const dialogRef = this.dialog.open(GenericDialogComponent, {
       data: {
         title: `Cancel ${Title}`,
@@ -54,10 +54,10 @@ export class JoinedEventComponent {
     });
   }
 
-  cancelEvent(index: number, eventId: number) {
+  cancelEvent(index: number, eventId: string) {
     this.eventUserList = this.eventUserList.filter((item, i) => i !== index);
     
-    this.userEventService.deleteEventJoinByUser(eventId, index).subscribe(data => {
+    this.userEventService.leaveEvent(String(eventId), index).subscribe((data:any) => {
       console.log("Event cancel", data);
     });
     

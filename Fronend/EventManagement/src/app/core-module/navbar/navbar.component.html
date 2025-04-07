@@ -67,7 +67,7 @@
                         </a>
                     </li>
                     <li>
-                        <a *ngIf="createdEvent" routerLink="/event/creted-event" class="nav-link px-3 align-middle">
+                        <a *ngIf="eventUserListLength" routerLink="/event/creted-event" class="nav-link px-3 align-middle">
                             <i class="bi bi-calendar-plus-fill"></i> <span class="ms-2">Created Event</span>
                         </a>
                     </li>
@@ -80,8 +80,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-3 align-middle">
-                            <i class="bi bi-people-fill"></i> <span class="ms-2">Customers</span>
+                        <a routerLink="/event/tickets" class="nav-link px-3 align-middle">
+                            <i class="bi bi-people-fill"></i> <span class="ms-2">My Tickets</span>
                         </a>
                     </li>
                 </ul>

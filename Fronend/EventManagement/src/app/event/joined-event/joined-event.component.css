@@ -113,3 +113,23 @@ p-button:hover {
     transform: translateY(0);
   }
 }
+
+
+
+.no-events-message {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.no-events-icon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 12px;
+}
+

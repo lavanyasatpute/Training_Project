@@ -1,21 +1,48 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Evententity } from "./event";
 import { User } from "./User";
 
-@Entity()
+export enum TicketType {
+    REGULAR = 'regular',
+    VIP = 'vip',
+    VVIP = 'vvip'
+}
+
+@Entity('tickets')
 export class Ticket {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     TicketID: number;
 
     @ManyToOne(() => Evententity, (event) => event.Tickets)
     Event: Evententity;
 
-    @ManyToOne(() => User, (user) => user.Tickets)
-    User: User;
+    @ManyToOne(() => User, (user) => user.purchasedTickets)
+    purchaser: User;
 
-    @Column()
+    @Column({
+        type: 'enum',
+        enum: TicketType,
+        default: TicketType.REGULAR
+    })
     TicketType: string;
 
-    @Column()
+    @CreateDateColumn()
     PurchaseDate: Date;
+
+    @Column({ nullable: true })
+    seatNumber: string;
+
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    Price: number;
+
+    @Column({ default: true })
+    isActive: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
+

@@ -1,13 +1,14 @@
 import { ticketRepo } from "../repository/ticket.repository";
 import { Ticket } from "../entities/Ticket";
+import { PurchaseTicketDto } from "../DTO/ticket.dto";
 
 export class TicketService {
     private ticketRepository = new ticketRepo();
 
     // Add a Ticket
-    async AddTicket(ticketData: Partial<Ticket>): Promise<string> {
+    async AddTicket(purchaseTicketDto: PurchaseTicketDto, userId: string): Promise<string> {
         try {
-            const result = await this.ticketRepository.AddTicket(ticketData);
+            const result = await this.ticketRepository.purchaseTicket(purchaseTicketDto,userId);
             return result;
         } catch (error:any) {
             throw new Error(`Failed to add ticket: ${error.message}`);
@@ -35,9 +36,9 @@ export class TicketService {
     }
 
     // Get All Tickets
-    async getAllTickets(): Promise<Ticket[]> {
+    async getUserTickets(userId: string): Promise<Ticket[]> {
         try {
-            const tickets = await this.ticketRepository.getAllTickets();
+            const tickets = await this.ticketRepository.getUserTickets(userId);
             return tickets;
         } catch (error:any) {
             throw new Error(`Failed to retrieve tickets: ${error.message}`);

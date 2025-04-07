@@ -19,13 +19,19 @@ export class NavbarComponent implements OnInit {
 
   public location:string = ""
 
-  public createdEvent = true;
+  // public createdEvent = true;
+
+  eventUserListLength:boolean = true;
 
   constructor(private eventService: EventService,private sharedService:SharedService,private http:HttpClient) {}
 
   ngOnInit(): void {
 
-
+    // if(this.eventService.EventListCreatedByUser.length != 0){
+    //   this.eventUserListLength = true
+    // }else{
+    //   this.eventUserListLength = false
+    // }
 
     
     this.sharedService.username$.subscribe((data:any)=>this.username = data);

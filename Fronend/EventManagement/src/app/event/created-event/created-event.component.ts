@@ -17,6 +17,11 @@ import { EventService } from '../../Services/event/event.service';
 export class CreatedEventComponent {
   createdEventList: any[] = []
   user = false
+
+  // Add these properties for edit functionality
+  editEventForm: any = {};
+  categoryList: string[] = ['Technology', 'Film', 'Media', 'Entertainment', 'Sports', 'Education', 'Business',"Festival"];
+
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
@@ -25,7 +30,6 @@ export class CreatedEventComponent {
   ) { }
 
   ngOnInit() {
-
     this.eventService.eventCreateByUser$.subscribe(data => {
       this.createdEventList = data;
       console.log("this is from Created eventlist component..", data);
@@ -39,7 +43,7 @@ export class CreatedEventComponent {
     })
   }
 
-  openDialog(Title: string, eventId: number, index: number) {
+  openDialog(Title: string, eventId: string, index: number) {
     const dialogRef = this.dialog.open(GenericDialogComponent, {
       data: {
         title: `Delete ${Title}`,
@@ -49,17 +53,53 @@ export class CreatedEventComponent {
       }
     });
     dialogRef.afterClosed().subscribe(() => {
-      this.cancelEvent(index, eventId);
+      this.cancelEvent(index, String(eventId));
     });
   }
 
-  cancelEvent(index: number, eventId: number) {
+  cancelEvent(index: number, eventId: string) {
     this.createdEventList = this.createdEventList.filter((item, i) => i !== index);
 
-    // this.eventService.deleteEventCreatedByUser(eventId, index).subscribe(data => {
-    //   console.log("Event cancel", data);
-    // });
+    this.eventService.deleteEventCreatedByUser(eventId, index).subscribe(data => {
+      console.log("Event cancel", data);
+    });
+  }
 
+  // New methods for edit functionality
+  editEvent(event: any, index: number): void {
+    // Make a copy of the event to avoid direct binding before submitting
+    this.editEventForm = { ...event };
 
+    // Convert string date to Date object if needed
+    if (typeof this.editEventForm.Schedule === 'string') {
+      this.editEventForm.Schedule = new Date(this.editEventForm.Schedule);
+    }
+
+    // Set the editing flag
+    event.isEditing = true;
+  }
+
+  cancelEdit(event: any): void {
+    // Reset the editing flag
+    event.isEditing = false;
+    // Clear form
+    this.editEventForm = {};
+  }
+
+  updateEvent(eventId: string, index: number): void {
+    this.eventService.updateEventCreatedByUser(eventId, this.editEventForm).subscribe(
+      (updatedEvent) => {
+        // Update the event in the list is handled by the service
+        // Just turn off editing mode
+        console.log(updatedEvent);
+        
+        this.createdEventList[index].isEditing = false;
+        // Clear form
+        this.editEventForm = {};
+      },
+      (error) => {
+        console.error('Error updating event:', error);
+      }
+    );
   }
 }

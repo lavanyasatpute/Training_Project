@@ -2,70 +2,96 @@ import { Component } from '@angular/core';
 import { EventService } from '../../Services/event/event.service';
 import { fadeInAnimation } from '../../angular-animation/animations';
 import { SharedService } from '../../shared/shared.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component'
+import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component';
 import { UserEventService } from '../../Services/UserEvent/user-event.service';
 import { CookieService } from 'ngx-cookie-service';
-
+import { IEvent } from '../../model/event.interface';
+import { ITicket, TicketType } from '../../model/ticket.interface';
+import { TicketService } from '../../Services/ticket/ticket.service';
 
 @Component({
   selector: 'app-event-list',
   standalone: false,
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.css',
+  styleUrls: ['./event-list.component.css'],
   animations: [fadeInAnimation]
 })
 export class EventListComponent {
-  eventList: any[] = []
-  user = false
-  constructor(private eventService: EventService,
+  eventList: IEvent[] = [];
+  user = false;
+  userId = '';
+
+  regularticket: TicketType = TicketType.REGULAR;
+  vipticket: TicketType = TicketType.VIP;
+  vvipticket: TicketType = TicketType.VVIP;
+
+  constructor(
+    private eventService: EventService,
     private sharedService: SharedService,
     private dialog: MatDialog,
     private userEventService: UserEventService,
-    private cookieService: CookieService
+    private ticketService: TicketService
   ) {
-
     this.eventService.EList$.subscribe(data => {
       this.eventList = data;
-      // console.log("this is from eventlist component..", data);
     });
   }
 
   ngOnInit() {
-    this.sharedService.username$.subscribe(item => {
-      if (item != 'User') {
-        this.user = true
-      } else {
-        this.user = false
-      }
-    })
+    this.sharedService.username$.subscribe(name => {
+      this.user = name !== 'User';
+    });
+
+    this.sharedService.userId$.subscribe(id => {
+      this.userId = id;
+    });
   }
 
-  openDialog(Title: string, eventId: number) {
-    const dialogRef = this.dialog.open(GenericDialogComponent, {
+  getTicketPrice(event: IEvent, ticketType: string): number {
+    switch (ticketType) {
+      case TicketType.VIP:
+        return event.vipPrice;
+      case TicketType.VVIP:
+        return event.vvipPrice;
+      default:
+        return event.regularPrice;
+    }
+  }
+
+  openDialog(event: IEvent, ticketValue: string) {
+    const [Ticketprice, ticketTypeStr] = ticketValue.split('|');
+    const ticketPrice = parseFloat(Ticketprice);
+    const ticketType = ticketTypeStr as TicketType; // cast to enum
+
+    this.dialog.open(GenericDialogComponent, {
       data: {
-        title: `Register for ${Title}`,
-        eventId: eventId,
-        "Event": `You are about to register for Event: ${Title}`,
-        button: "Join"
+        title: `Register for ${event.Title}`,
+        eventId: event.EventID,
+        Event: `You are about to register for Event: ${event.Title}`,
+        button: "Join",
+        Ticket_Price: ticketPrice,
+        Ticket_Type: ticketType
       }
     });
-    const cookiesData = JSON.parse(this.cookieService.get('userData'))
-    console.log("this is from event list", cookiesData.id);
 
-    this.joinEvent(eventId, cookiesData.id)
+    this.joinEvent(event.EventID, ticketType);
   }
 
-  joinEvent(eventId: number, userId: number) {
-    this.userEventService.joinEventByUser(eventId, userId).subscribe((data: any) => {
+
+  formatOption(price: number, type: string): string {
+    return `${price}|${type}`;
+  }
+
+  joinEvent(eventId: string, ticketType: TicketType) {
+    this.userEventService.joinEvent(eventId, this.userId).subscribe((data: any) => {
+      console.log("Event joined:", data, "Ticket Type:", ticketType);
+    });
+
+    this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data=>{
       console.log(data);
-
-    })
+      
+    });
   }
-
-
-
-
 
 }

@@ -41,7 +41,7 @@ export class RegistrationFormComponent {
       role: this.registerForm.value.role as Role || Role.User
     };
     const result = this.authService.userRegistration(userData).subscribe((response:any) => {
-      console.log(response.data +'\n' + response.messages);
+      console.log("From registration comp: ",response.data +'\n' + response.messages);
     });
     console.log(result);
     

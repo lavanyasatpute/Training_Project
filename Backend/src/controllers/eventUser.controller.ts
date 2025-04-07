@@ -44,10 +44,10 @@ export class EventUserController {
     // Delete EventUser
     async deleteEventUser(req: Request, res: Response): Promise<void> {
         try {
-            const user_id = parseInt(req.params.user_id, 10);
-            const event_id = parseInt(req.params.event_id,10);
+            const user_id = req.params.user_id;
+            const event_id = (req.params.event_id);
 
-            if (isNaN(user_id && event_id)) {
+            if (!(user_id && event_id)) {
                 res.status(400).json({ message: "Invalid event ID." });
             }
 
@@ -61,9 +61,9 @@ export class EventUserController {
 
     async getFilteredEventUser(req: Request, res: Response): Promise<void> {
         try {
-            const UserID = parseInt(req.params.userId, 10);
+            const UserID = req.params.userId;
 
-            if (isNaN(UserID)) {
+            if (!(UserID)) {
                 res.status(400).json({ message: "Invalid User ID." });
             }
 

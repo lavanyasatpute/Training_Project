@@ -18,6 +18,7 @@ export class EventController {
     async addEvent(req: Request, res: Response): Promise<void> {
         try {
             const eventDTO = plainToInstance(EventDTO, req.body);
+            const createrId = req.params.id;
 
             // Validate the EventDTO
             // const trimmedEventDTO = mapValues(eventDTO, (value) => 
@@ -34,7 +35,7 @@ export class EventController {
             }
 
             // Proceed to add the event
-            const result = await eventService.AddEvent(eventDTO);
+            const result = await eventService.AddEvent(eventDTO,createrId);
             res.status(201).json({ message: "Event successfully created.", data: result });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });
@@ -44,9 +45,9 @@ export class EventController {
     // Delete Event
     async deleteEvent(req: Request, res: Response): Promise<void> {
         try {
-            const eventID = parseInt(req.params.id, 10);
+            const eventID = req.params.id;
 
-            if (isNaN(eventID)) {
+            if (!(eventID)) {
                 res.status(400).json({ message: "Invalid event ID." });
             }
 
@@ -60,9 +61,9 @@ export class EventController {
     // Update Event
     async updateEvent(req: Request, res: Response): Promise<void> {
         try {
-            const eventID = parseInt(req.params.id, 10);
+            const eventID = req.params.id;
 
-            if (isNaN(eventID)) {
+            if (!(eventID)) {
                 res.status(400).json({ message: "Invalid event ID." });
             }
 
@@ -100,7 +101,7 @@ export class EventController {
         try {
             const filterValue = req.params.id; // Example: filterValue could include fields like Location or Categories
 
-            const events = await eventService.getFilterEvent(Number(filterValue));
+            const events = await eventService.getFilterEvent((filterValue));
             res.status(200).json({ message: "Filtered events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });
@@ -111,7 +112,7 @@ export class EventController {
         try {
             const id = req.params.id; // Example: filterValue could include fields like Location or Categories
 
-            const events = await eventService.getFilteredEventCreatedByUser(Number(id));
+            const events = await eventService.getFilteredEventCreatedByUser((id));
             res.status(200).json({ message: "Filtered events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });

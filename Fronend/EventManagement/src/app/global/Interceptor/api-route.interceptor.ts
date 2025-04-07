@@ -22,6 +22,8 @@ export class ApiRouteInterceptor implements HttpInterceptor {
           token = userData?.Token || ''; // Extract token safely
         }
       }
+      console.log("Token",token);
+      
     } catch (error) {
       console.error('Error parsing userData from cookies:', error);
     }

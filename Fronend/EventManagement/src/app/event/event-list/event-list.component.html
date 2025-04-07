@@ -5,6 +5,18 @@
     <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
     <p><strong>Location:</strong> {{ event.Location }}</p>
     <p><strong>Category:</strong> {{ event.Categories }}</p>
-    <p-button *ngIf="user" label="Join Event" (click)="openDialog(event.Title,event.EventID)"></p-button>
+
+    <!-- Ticket Type Dropdown -->
+    <label>Select Ticket Type:</label>
+    <select #ticketSelect>
+      <option [value]="formatOption(event.regularPrice, regularticket)">Regular - ₹{{ event.regularPrice }}</option>
+      <option [value]="formatOption(event.vipPrice, vipticket)">VIP - ₹{{ event.vipPrice }}</option>
+      <option [value]="formatOption(event.vvipPrice, vvipticket)">VVIP - ₹{{ event.vvipPrice }}</option>
+    </select>
+<br><br>
+    <p-button *ngIf="user"
+              label="Join Event"
+              (click)="openDialog(event, ticketSelect.value)">
+    </p-button>
   </div>
 </div>

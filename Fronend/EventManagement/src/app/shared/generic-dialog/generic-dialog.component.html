@@ -4,14 +4,17 @@
 
         <div class="dialog-content">
             <div *ngFor="let key of objectKeys(data)">
-                <p><strong>{{ key }}:</strong> {{ data[key] }}</p>
+                <p *ngIf="key !== 'title' && key !== 'button' && key !== 'Obutton' && key !== 'ticketOptions'">
+                    <strong>{{ key }}:</strong> {{ data[key] }}
+                </p>
             </div>
         </div>
+
 
         <button class="dialog-button" (click)="closeDialog()">
             {{ data["button"] || "Close" }}
         </button>
-        <!-- <button class="dialog-button" (click)="notCancelDialog()">
+        <!-- <button class="dialog-button" (click)="notCancelDialog()" *ngIf="data['Obutton']">
             {{ data["Obutton"] || "Open" }}
         </button> -->
     </div>

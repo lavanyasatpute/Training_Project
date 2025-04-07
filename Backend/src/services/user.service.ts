@@ -22,7 +22,7 @@ export class UserService {
     }
 
     // Delete a user by ID
-    async DeleteUser(id: number): Promise<string> {
+    async DeleteUser(id: string): Promise<string> {
         try {
             const result = await this.userRepository.DeleteUser(id);
             return result;
@@ -32,8 +32,14 @@ export class UserService {
     }
 
     // Update a user's information
-    async UpdateUser(id: number, updatedData: Partial<User>): Promise<string> {
+    async UpdateUser(id: string, updatedData: Partial<User>): Promise<string> {
         try {
+            if (updatedData.Password) {
+                const saltRounds = 10;
+                const salt = bcrypt.genSaltSync(saltRounds);
+                const hash = bcrypt.hashSync(updatedData.Password, salt);
+                updatedData.Password = hash;
+            }
             const result = await this.userRepository.UpdateUser(id, updatedData);
             return result;
         } catch (error: any) {
@@ -52,11 +58,11 @@ export class UserService {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: number): Promise<User[]> {
+    async getFilterUser(filterValue: string): Promise<User[]> {
         try {
 
             const users = await this.userRepository.getFilterUser(filterValue);
-            return  classToPlain(users) as User[];
+            return classToPlain(users) as User[];
         } catch (error: any) {
             throw new Error(`Failed to filter users: ${error.message}`);
         }
