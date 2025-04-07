@@ -1,4 +1,7 @@
 /* General Styles */
+.search{
+  margin-top: 50px;
+}
 body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(to right, #ece9e6, #ffffff);

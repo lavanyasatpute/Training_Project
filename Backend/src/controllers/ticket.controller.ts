@@ -75,6 +75,7 @@ export class TicketController {
 
             if (!ticketId || !email) {
                 res.status(400).json({ message: 'Ticket ID and email are required' });
+                return
             }
 
             const result = await sendTicketToEmail.sendTicketToEmail(ticketId, email);

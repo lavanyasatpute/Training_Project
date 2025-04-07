@@ -27,6 +27,8 @@
     "nodemon": "^3.1.9",
     "pdfkit": "^0.16.0",
     "qrcode": "^1.5.4",
+    "radis": "^2.0.0",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.21"

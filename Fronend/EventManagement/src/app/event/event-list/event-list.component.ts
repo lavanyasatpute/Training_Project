@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from '../../Services/event/event.service';
 import { fadeInAnimation } from '../../angular-animation/animations';
 import { SharedService } from '../../shared/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component';
 import { UserEventService } from '../../Services/UserEvent/user-event.service';
-import { CookieService } from 'ngx-cookie-service';
+import { debounce } from 'lodash';
 import { IEvent } from '../../model/event.interface';
 import { ITicket, TicketType } from '../../model/ticket.interface';
 import { TicketService } from '../../Services/ticket/ticket.service';
@@ -17,8 +17,9 @@ import { TicketService } from '../../Services/ticket/ticket.service';
   styleUrls: ['./event-list.component.css'],
   animations: [fadeInAnimation]
 })
-export class EventListComponent {
+export class EventListComponent implements OnInit {
   eventList: IEvent[] = [];
+  filteredEvent: IEvent[] = [];
   user = false;
   userId = '';
 
@@ -36,6 +37,7 @@ export class EventListComponent {
     this.eventService.EList$.subscribe(data => {
       this.eventList = data;
     });
+    this.debouncedSearch = debounce(this.filterEvents.bind(this), 300);
   }
 
   ngOnInit() {
@@ -46,6 +48,8 @@ export class EventListComponent {
     this.sharedService.userId$.subscribe(id => {
       this.userId = id;
     });
+
+    this.filteredEvent = [...this.eventList];
   }
 
   getTicketPrice(event: IEvent, ticketType: string): number {
@@ -88,10 +92,31 @@ export class EventListComponent {
       console.log("Event joined:", data, "Ticket Type:", ticketType);
     });
 
-    this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data=>{
+    this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data => {
       console.log(data);
-      
+
     });
   }
+  searchKeyword: string = '';
+  onSearchChange() {
+    this.debouncedSearch();
+  }
+
+  filterEvents() {
+    const keyword = this.searchKeyword.trim().toLowerCase();
+
+    if (!keyword) {
+      this.filteredEvent = [...this.eventList]; // show all if no keyword
+      return;
+    }
+
+    this.filteredEvent = this.eventList.filter(event =>
+      Object.values(event).some(value =>
+        String(value).toLowerCase().includes(keyword)
+      )
+    );
+  }
+
+  debouncedSearch: () => void;
 
 }

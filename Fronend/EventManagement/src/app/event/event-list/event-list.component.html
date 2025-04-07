@@ -1,5 +1,16 @@
+
+<div class="search" style="text-align: center; margin-bottom: 20px;">
+  <input type="text"
+         placeholder="Search events..."
+         [(ngModel)]="searchKeyword"
+         (ngModelChange)="onSearchChange()"
+         class="p-inputtext p-component"
+         style="padding: 8px 12px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
+</div>
+
+
 <div class="event-list">
-  <div *ngFor="let event of eventList" @fadeIn class="event-card">
+  <div *ngFor="let event of filteredEvent" @fadeIn class="event-card">
     <h3>{{ event.Title }}</h3>
     <p><strong>Description:</strong> {{ event.Description }}</p>
     <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>

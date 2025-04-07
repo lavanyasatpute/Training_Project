@@ -49,6 +49,7 @@ export class EventUserController {
 
             if (!(user_id && event_id)) {
                 res.status(400).json({ message: "Invalid event ID." });
+                return
             }
 
             const result = await eventUserService.DeleteEventUser(user_id,event_id);
@@ -65,6 +66,7 @@ export class EventUserController {
 
             if (!(UserID)) {
                 res.status(400).json({ message: "Invalid User ID." });
+                return
             }
 
             const result = await eventUserService.getFilteredEventUser(UserID);

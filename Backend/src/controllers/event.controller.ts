@@ -3,9 +3,12 @@ import { EventService } from "../services/event.service";
 import { EventDTO } from "../DTO/event.dto";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
-import { mapValues } from "lodash";
+const redis =require("redis");
 
 const eventService = new EventService();
+
+const client = redis.createClient();
+client.connect();
 
 export class EventController {
 
@@ -24,7 +27,7 @@ export class EventController {
             // const trimmedEventDTO = mapValues(eventDTO, (value) => 
             //     typeof value === "string" ? value.trim() : value
             // );
-            
+
             const errors = await validate(eventDTO);
             if (errors.length > 0) {
                 res.status(400).json({
@@ -35,7 +38,7 @@ export class EventController {
             }
 
             // Proceed to add the event
-            const result = await eventService.AddEvent(eventDTO,createrId);
+            const result = await eventService.AddEvent(eventDTO, createrId);
             res.status(201).json({ message: "Event successfully created.", data: result });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });
@@ -49,6 +52,7 @@ export class EventController {
 
             if (!(eventID)) {
                 res.status(400).json({ message: "Invalid event ID." });
+                return
             }
 
             const result = await eventService.DeleteEvent(eventID);
@@ -65,6 +69,7 @@ export class EventController {
 
             if (!(eventID)) {
                 res.status(400).json({ message: "Invalid event ID." });
+                return
             }
 
             const updatedData = req.body;
@@ -77,6 +82,7 @@ export class EventController {
                     message: "Validation failed, please provide valid data.",
                     errors: errors.map((error: any) => Object.values(error.constraints)),
                 });
+                return
             }
 
             const result = await eventService.UpdateEvent(eventID, updatedData);
@@ -89,7 +95,15 @@ export class EventController {
     // Get All Events
     async getAllEvents(req: Request, res: Response): Promise<void> {
         try {
+            const cacheKey = 'allEvent';
+            const cached = await client.get(cacheKey);
+
+            if (cached) {
+                res.status(200).json({ message: "Events retrieved successfully.", data: JSON.parse(cached) });
+                return 
+            }
             const events = await eventService.getAllEvents();
+            await client.set(cacheKey, JSON.stringify(events), { EX: 600 })
             res.status(200).json({ message: "Events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });
@@ -108,7 +122,7 @@ export class EventController {
         }
     }
 
-    async getFilteredEventCreatedByUser(req: Request, res: Response){
+    async getFilteredEventCreatedByUser(req: Request, res: Response) {
         try {
             const id = req.params.id; // Example: filterValue could include fields like Location or Categories
 
