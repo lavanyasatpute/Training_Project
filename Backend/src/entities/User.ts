@@ -8,8 +8,8 @@ import { Evententity } from "./event";
 @Entity("User_tbl_2008")
 export class User {
     @Exclude()
-    @PrimaryGeneratedColumn()
-    UserID: number;
+    @PrimaryGeneratedColumn('uuid')
+    UserID: string;
 
     @Column()
     Name: string;
@@ -33,8 +33,8 @@ export class User {
     @Column({ default: "Mumbai" })
     location: string;
 
-    @OneToMany(() => Ticket, (ticket) => ticket.User)
-    Tickets: Ticket[];
+    @OneToMany(() => Ticket, ticket => ticket.purchaser)
+    purchasedTickets: Ticket[];
 
     @OneToMany(() => Feedback, (feedback) => feedback.User)
     Feedbacks: Feedback[];
@@ -43,5 +43,6 @@ export class User {
     userId: RelationOfEventUser;
 
     @OneToMany(() => Evententity, (event) => event.CreatedBy)
-    userEvent: Evententity[];
+    createdEvents: Evententity[];
 }
+

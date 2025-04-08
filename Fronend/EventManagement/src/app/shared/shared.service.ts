@@ -12,7 +12,7 @@ export class SharedService {
   private authData = new BehaviorSubject<string>('User');
   authData$ = this.authData.asObservable();
 
-  private userId = new BehaviorSubject<number>(1);
+  private userId = new BehaviorSubject<string>("");
   userId$ = this.userId.asObservable();
 
   private userLocation = new BehaviorSubject<string>("");
@@ -51,8 +51,8 @@ export class SharedService {
   private monitorUserId(): void {
     interval(2000).subscribe(() => {
       const userId = this.getUserIdFromCookies();
-      if (userId !== null && userId !== this.userId.getValue()) {
-        this.userId.next(userId);
+      if (userId !== null && String(userId) !== String(this.userId.getValue())) {
+        this.userId.next(String(userId));
       }
     });
   }

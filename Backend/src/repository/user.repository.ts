@@ -8,7 +8,7 @@ export class userRepo {
     
     // Add a new user
     async AddUser(UserData: Partial<User>) {
-        console.log(UserData);
+        // console.log("From user repo",UserData);
         
         const user = this.appDataSource.create(UserData);
         await this.appDataSource.save(user);
@@ -16,7 +16,7 @@ export class userRepo {
     }
 
     // Delete a user by ID
-    async DeleteUser(id: number) {
+    async DeleteUser(id: string) {
         const userName = await this.appDataSource.findOne({ where: { UserID: id } });
         if (!userName) throw new Error(`User with ID ${id} not found.`);
         await this.appDataSource.delete(id);
@@ -24,7 +24,7 @@ export class userRepo {
     }
 
     // Update a user's information
-    async UpdateUser(id: number, updatedData: Partial<User>) {
+    async UpdateUser(id: string, updatedData: Partial<User>) {
         const userName = await this.appDataSource.findOne({ where: { UserID: id } });
         if (!userName) throw new Error(`User with ID ${id} not found.`);
         await this.appDataSource.update(id, updatedData);
@@ -38,7 +38,7 @@ export class userRepo {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: number) {
+    async getFilterUser(filterValue: string) {
         const filterData = await this.appDataSource.find({ where: {UserID:filterValue} });
         return filterData;
     }

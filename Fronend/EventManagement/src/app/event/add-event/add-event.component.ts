@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventService } from '../../Services/event/event.service';
 import { SharedService } from '../../shared/shared.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-event',
@@ -10,10 +11,15 @@ import { SharedService } from '../../shared/shared.service';
   styleUrls: ['./add-event.component.css'] // Corrected property name
 })
 export class AddEventComponent implements OnInit {
+
+  @Output() close = new EventEmitter<boolean>();
+  @Output() eventCreated = new EventEmitter<any>();
+
   eventForm!: FormGroup;
   LocationList: string[] = [];
+  isSubmitting: boolean = false;
 
-  constructor(private fb: FormBuilder, private eventService: EventService, private sharedService: SharedService) {}
+  constructor(private fb: FormBuilder, private eventService: EventService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.eventForm = this.fb.group({
@@ -22,8 +28,13 @@ export class AddEventComponent implements OnInit {
       Schedule: ['', Validators.required],
       Location: ['', Validators.required],
       Categories: ['', Validators.required],
-      CreatedBy: [null] // Default value set to null instead of empty array
+      CreatedBy: [null],
+      regularPrice: [50, [Validators.required, Validators.min(0)]],
+      vipPrice: [150, [Validators.required, Validators.min(0)]],
+      vvipPrice: [300, [Validators.required, Validators.min(0)]],
+      totalSeats: [100, [Validators.required, Validators.min(1)]]
     });
+
 
     // Preload user ID once to prevent repeated subscriptions
     this.sharedService.userId$.subscribe(id => {
@@ -34,15 +45,26 @@ export class AddEventComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.eventForm.valid) {
-      console.log("this is from event adding component:",this.eventForm.value);
-      
-      this.eventService.createEvent(this.eventForm.value).subscribe({
-        next: (result: any) => console.log("Event Created Successfully:", result),
-        error: (err: any) => console.error("Event Creation Failed:", err)
-      });
-    } else {
-      console.warn("Form is invalid. Please check required fields.");
+    if (this.eventForm.invalid) {
+      return;
     }
+
+    this.isSubmitting = true;
+
+    (this.eventService.createEvent(this.eventForm.value) as Observable<any>).subscribe({
+      next: (event) => {
+        this.isSubmitting = false;
+        this.eventCreated.emit(event);
+        this.closePopup();
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        console.error('Error creating event:', error);
+      }
+    });
+  }
+
+  closePopup(): void {
+    this.close.emit(true);
   }
 }

@@ -1,1 +1,76 @@
-<p>event-details works!</p>
+<div class="my-tickets-container p-6">
+  <h2 class="text-3xl font-bold mb-6 text-center text-indigo-700">🎟 My Tickets</h2>
+  
+  <div class="table-wrapper">
+    <table class="tickets-table">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Ticket Type</th>
+          <th>Seat</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Purchased</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets" class="ticket-row">
+          <td class="event-title">{{ ticket.Event.Title }}</td>
+          <td>{{ ticket.Event.Schedule | date: 'mediumDate' }}</td>
+          <td>{{ ticket.Event.Location }}</td>
+          <td class="capitalize">{{ ticket.TicketType }}</td>
+          <td>{{ ticket.seatNumber || 'Not Assigned' }}</td>
+          <td>₹ {{ ticket.Price }}</td>
+          <td>
+            <span [ngClass]="ticket.isActive ? 'status-active' : 'status-inactive'">
+              {{ ticket.isActive ? 'Active' : 'Cancelled' }}
+            </span>
+          </td>
+          <td>{{ ticket.PurchaseDate | date: 'short' }}</td>
+          <td>
+            <button class="email-button" (click)="openEmailDialog(ticket)">
+              <i class="fa fa-envelope"></i> Send
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="tickets.length === 0" class="no-tickets">
+    You haven't purchased any tickets yet.
+  </div>
+  
+  <!-- Email Dialog -->
+  <div class="email-dialog-overlay" *ngIf="showEmailDialog">
+    <div class="email-dialog">
+      <h3>Send Ticket</h3>
+      <p>Send "{{ selectedTicket?.Event?.Title }}" ticket to:</p>
+      
+      <div class="form-group">
+        <label for="email">Email Address:</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="recipientEmail" 
+          placeholder="Enter email address"
+          class="email-input"
+        >
+      </div>
+      
+      <div class="dialog-buttons">
+        <button class="cancel-button" (click)="closeEmailDialog()">Cancel</button>
+        <button 
+          class="send-button" 
+          [disabled]="!isValidEmail(recipientEmail)" 
+          (click)="sendTicketEmail()"
+        >
+          Send Ticket
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

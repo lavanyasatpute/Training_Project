@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDate, IsOptional, Matches } from "class-validator";
+import { IsNotEmpty, IsString, IsDate, IsOptional, Matches, IsNumber, IsPositive } from "class-validator";
 
 export class EventDTO {
     @IsNotEmpty()
@@ -25,4 +25,20 @@ export class EventDTO {
     @IsString()
     @Matches(/^.*\S.*$/, { message: "The field must not be empty or contain only spaces" })
     Categories: string;
+
+    @IsNumber()
+    @IsPositive()
+    regularPrice: number;
+
+    @IsNumber()
+    @IsPositive()
+    vipPrice: number;
+
+    @IsNumber()
+    @IsPositive()
+    vvipPrice: number;
+
+    @IsNumber()
+    @IsPositive()
+    totalSeats: number;
 }

@@ -1,40 +1,156 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="container my-5 py-5 w-50 border rounded">
-        <h2 class="text-center text-primary">Create Event</h2>
-        <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-                <label for="title" class="form-label">Title:</label>
-                <input id="title" formControlName="Title" type="text" class="form-control" placeholder="Enter event title" required>
-            </div>
+  <div class="container my-5 py-5 w-50 border rounded">
+    <h2 class="text-center text-primary">Create Event</h2>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input id="title" formControlName="Title" type="text" class="form-control" placeholder="Enter event title"
+          required>
+      </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <textarea id="description" formControlName="Description" class="form-control" placeholder="Enter event description" required></textarea>
-            </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" formControlName="Description" class="form-control"
+          placeholder="Enter event description" required></textarea>
+      </div>
 
-            <div class="mb-3">
-                <label for="schedule" class="form-label">Schedule:</label>
-                <input id="schedule" formControlName="Schedule" type="datetime-local" class="form-control" required>
-            </div>
+      <div class="mb-3">
+        <label for="schedule" class="form-label">Schedule:</label>
+        <input id="schedule" formControlName="Schedule" type="datetime-local" class="form-control" required>
+      </div>
 
-            <div class="mb-3">
-                <label for="location" class="form-label">Location:</label>
-                <select id="location" formControlName="Location" class="form-control" required>
-                    <option value="" disabled selected>Select a location</option>
-                    <option value="New York">New York</option>
-                    <option value="London">London</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Tokyo">Tokyo</option>
-                </select>
-            </div>
-            
+      <div class="mb-3">
+        <label for="location" class="form-label">Location:</label>
+        <select id="location" formControlName="Location" class="form-control" required>
+          <option value="" disabled selected>Select a location</option>
+          <option value="New York">New York</option>
+          <option value="London">London</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Tokyo">Tokyo</option>
+        </select>
+      </div>
 
-            <div class="mb-3">
-                <label for="categories" class="form-label">Categories:</label>
-                <input id="categories" formControlName="Categories" type="text" class="form-control" placeholder="Enter categories" required>
-            </div>
+      <div class="mb-3">
+        <label for="categories" class="form-label">Categories:</label>
+        <input id="categories" formControlName="Categories" type="text" class="form-control"
+          placeholder="Enter categories" required>
+      </div>
 
-            <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="eventForm.invalid">Create Event</button>
-        </form>
-    </div>
+      <div class="mb-3">
+        <label for="regularPrice" class="form-label">Regular Price ($):</label>
+        <input id="regularPrice" formControlName="regularPrice" type="number" min="0" class="form-control"
+          placeholder="Regular ticket price" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="vipPrice" class="form-label">VIP Price ($):</label>
+        <input id="vipPrice" formControlName="vipPrice" type="number" min="0" class="form-control"
+          placeholder="VIP ticket price" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="vvipPrice" class="form-label">VVIP Price ($):</label>
+        <input id="vvipPrice" formControlName="vvipPrice" type="number" min="0" class="form-control"
+          placeholder="VVIP ticket price" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="totalSeats" class="form-label">Total Seats:</label>
+        <input id="totalSeats" formControlName="totalSeats" type="number" min="1" class="form-control"
+          placeholder="Total available seats" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="eventForm.invalid">Create Event</button>
+    </form>
+  </div>
 </div>
+<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+<!-- src/app/components/create-event-popup/create-event-popup.component.html -->
+<!-- <div class="popup-overlay">
+  <div class="popup-container">
+    <div class="popup-header">
+      <h2>Create New Event</h2>
+      <button type="button" class="close-btn" (click)="closePopup()">×</button>
+    </div>
+    
+    <div class="popup-body">
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Event Name</label>
+          <input type="text" id="name" formControlName="name" class="form-control">
+          <div *ngIf="eventForm.get('name').invalid && eventForm.get('name').touched" class="error-message">
+            Event name is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="date">Event Date</label>
+          <input type="datetime-local" id="date" formControlName="date" class="form-control">
+          <div *ngIf="eventForm.get('date').invalid && eventForm.get('date').touched" class="error-message">
+            Event date is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Event Location</label>
+          <input type="text" id="location" formControlName="location" class="form-control">
+          <div *ngIf="eventForm.get('location').invalid && eventForm.get('location').touched" class="error-message">
+            Event location is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" class="form-control" rows="3"></textarea>
+          <div *ngIf="eventForm.get('description').invalid && eventForm.get('description').touched" class="error-message">
+            Description is required
+          </div>
+        </div>
+        
+        <div class="ticket-pricing">
+          <h3>Ticket Pricing</h3>
+          
+          <div class="form-group">
+            <label for="regularPrice">Regular Ticket Price ($)</label>
+            <input type="number" id="regularPrice" formControlName="regularPrice" class="form-control">
+            <div *ngIf="eventForm.get('regularPrice').invalid && eventForm.get('regularPrice').touched" class="error-message">
+              Regular price must be at least 0
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="vipPrice">VIP Ticket Price ($)</label>
+            <input type="number" id="vipPrice" formControlName="vipPrice" class="form-control">
+            <div *ngIf="eventForm.get('vipPrice').invalid && eventForm.get('vipPrice').touched" class="error-message">
+              VIP price must be at least 0
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="vvipPrice">VVIP Ticket Price ($)</label>
+            <input type="number" id="vvipPrice" formControlName="vvipPrice" class="form-control">
+            <div *ngIf="eventForm.get('vvipPrice').invalid && eventForm.get('vvipPrice').touched" class="error-message">
+              VVIP price must be at least 0
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="totalSeats">Total Available Seats</label>
+          <input type="number" id="totalSeats" formControlName="totalSeats" class="form-control">
+          <div *ngIf="eventForm.get('totalSeats').invalid && eventForm.get('totalSeats').touched" class="error-message">
+            Total seats must be at least 1
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="cancel-btn" (click)="closePopup()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="eventForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'Creating...' : 'Create Event' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> -->

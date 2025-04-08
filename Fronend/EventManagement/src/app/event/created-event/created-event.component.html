@@ -1,39 +1,92 @@
-<!-- <h2 style="text-align: center;">Created Events</h2>
-<div *ngIf="user" class="event-list">
-    <div *ngFor="let event of createdEventList; let i = index" @fadeIn class="event-card">
-        <h3>{{ event.Title }}</h3>
-        <p><strong>Description:</strong> {{ event.Description }}</p>
-        <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
-        <p><strong>Location:</strong> {{ event.Location }}</p>
-        <p><strong>Category:</strong> {{ event.Categories }}</p>
-        <p-button class="join-button" label="Delete" (click)="openDialog(event.Title,event.EventID,i)"></p-button>
+<ng-container *ngIf="createdEventList.length > 0; else noEventsTemplate">
+    <h2 style="text-align: center;">Created Events</h2>
+
+    <div class="event-table-container">
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Schedule</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let event of createdEventList; let i = index" [@fadeIn]>
+
+                    <!-- View Mode -->
+                    <ng-container *ngIf="!event.isEditing; else editMode">
+                        <td>{{ event.Title }}</td>
+                        <td>{{ event.Description }}</td>
+                        <td>{{ event.Schedule | date: 'medium' }}</td>
+                        <td>{{ event.Location }}</td>
+                        <td>{{ event.Categories }}</td>
+                        <td class="action-buttons">
+                            <button class="icon-button edit-button" (click)="editEvent(event, i)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="icon-button delete-button"
+                                (click)="openDialog(event.Title, event.EventID, i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Edit Mode -->
+                    <ng-template #editMode>
+                        <td>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <input matInput [(ngModel)]="editEventForm.Title" name="title-{{i}}">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <input matInput [(ngModel)]="editEventForm.Description" name="description-{{i}}">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="editEventForm.Schedule"
+                                    name="schedule-{{i}}">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <input matInput [(ngModel)]="editEventForm.Location" name="location-{{i}}">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-select [(ngModel)]="editEventForm.Categories" name="category-{{i}}">
+                                    <mat-option *ngFor="let category of categoryList" [value]="category">
+                                        {{ category }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </td>
+                        <td class="action-buttons">
+                            <button class="icon-button save-button" (click)="updateEvent(event.EventID, i)">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button class="icon-button cancel-button" (click)="cancelEdit(event)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div> -->
 
-<h2 style="text-align: center;">Created Events</h2>
+</ng-container>
 
-<table class="event-table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Schedule</th>
-            <th>Location</th>
-            <th>Category</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let event of createdEventList; let i = index" @fadeIn>
-            <td>{{ event.Title }}</td>
-            <td>{{ event.Description }}</td>
-            <td>{{ event.Schedule | date:'medium' }}</td>
-            <td>{{ event.Location }}</td>
-            <td>{{ event.Categories }}</td>
-            <td>
-                <button class="join-button" (click)="openDialog(event.Title,event.EventID,i)">Cancel Event</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+<ng-template #noEventsTemplate>
+    <div class="no-events-message">
+        <mat-icon class="no-events-icon">event_busy</mat-icon>
+        <p>No events found. Start by creating a new event.</p>
+    </div>
+</ng-template>

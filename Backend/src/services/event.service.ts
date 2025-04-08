@@ -8,9 +8,9 @@ export class EventService {
 
     // Add an Event
 
-    async AddEvent(eventData: EventDTO): Promise<string> {
+    async AddEvent(eventData: EventDTO,creatorId:string): Promise<string> {
         try {
-            const result = await this.eventRepository.AddEvent(eventData);
+            const result = await this.eventRepository.createEvent(eventData,creatorId);
             return result;
         } catch (error: any) {
             return (`Failed to add event: ${error.message}`);
@@ -18,7 +18,7 @@ export class EventService {
     }
 
     // Delete an Event
-    async DeleteEvent(eventID: number): Promise<string> {
+    async DeleteEvent(eventID: string): Promise<string> {
         try {
             const result = await this.eventRepository.DeleteEvent(eventID);
             return result;
@@ -28,7 +28,7 @@ export class EventService {
     }
 
     // Update an Event
-    async UpdateEvent(eventID: number, updatedData: Partial<Evententity>): Promise<string> {
+    async UpdateEvent(eventID: string, updatedData: Partial<Evententity>): Promise<string> {
         try {
             const result = await this.eventRepository.updateEvent(eventID, updatedData);
             return result;
@@ -48,7 +48,7 @@ export class EventService {
     }
 
     // Filter Events
-    async getFilterEvent(filterValue: number) {
+    async getFilterEvent(filterValue: string) {
         try {
             const events = await this.eventRepository.getFilterEvent(filterValue);
             // console.log("this is from Serive:", events);
@@ -59,7 +59,7 @@ export class EventService {
         }
     }
 
-    async getFilteredEventCreatedByUser(userId: number) {
+    async getFilteredEventCreatedByUser(userId: string) {
         if (!userId) throw new AppError("User Id is missimg", 404)
         return await this.eventRepository.getFilterEventCreatedByUser(userId)
     }

@@ -22,7 +22,7 @@ export class UserController {
             // );
 
             // Validate the EventDTO
-            console.log(userDTO);
+            // console.log(userDTO);
 
             const errors = await validate(userDTO);
             if (errors.length > 0) {
@@ -50,8 +50,8 @@ export class UserController {
      */
     async deleteUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId: number = parseInt(req.params.id, 10); // Extract user ID from the request parameters
-            const result: string = await userService.DeleteUser(userId); // Call the service
+            const userId = (req.params.id); // Extract user ID from the request parameters
+            const result: string = await userService.DeleteUser(String(userId)); // Call the service
             res.status(StatusCodes.OK).json(result); // Respond with a success message
         } catch (error: any) {
             res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors
@@ -61,7 +61,7 @@ export class UserController {
     // Update a user's information
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = parseInt(req.params.id, 10); // Extract user ID from the request parameters
+            const userId = (req.params.id); // Extract user ID from the request parameters
             const updatedData = req.body; // Get updated data from the request body
             const result = await userService.UpdateUser(userId, updatedData); // Call the service
             res.status(StatusCodes.OK).json(result); // Respond with a success message
@@ -87,7 +87,7 @@ export class UserController {
             let id = req.params.id // Allow undefined
             // const parsedFilter: Partial<User> = filterValue ? JSON.parse(filterValue) : {}; // Parse safely
 
-            const users = await userService.getFilterUser(Number(id)); // Call the service
+            const users = await userService.getFilterUser(String(id)); // Call the service
             res.status(StatusCodes.OK).json(users); // Respond with the filtered list of users
         } catch (error: any) {
             next(error)

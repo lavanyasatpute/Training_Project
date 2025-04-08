@@ -1,10 +1,33 @@
+
+<div class="search" style="text-align: center; margin-bottom: 20px;">
+  <input type="text"
+         placeholder="Search events..."
+         [(ngModel)]="searchKeyword"
+         (ngModelChange)="onSearchChange()"
+         class="p-inputtext p-component"
+         style="padding: 8px 12px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
+</div>
+
+
 <div class="event-list">
-  <div *ngFor="let event of eventList" @fadeIn class="event-card">
+  <div *ngFor="let event of filteredEvent" @fadeIn class="event-card">
     <h3>{{ event.Title }}</h3>
     <p><strong>Description:</strong> {{ event.Description }}</p>
     <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
     <p><strong>Location:</strong> {{ event.Location }}</p>
     <p><strong>Category:</strong> {{ event.Categories }}</p>
-    <p-button *ngIf="user" label="Join Event" (click)="openDialog(event.Title,event.EventID)"></p-button>
+
+    <!-- Ticket Type Dropdown -->
+    <label>Select Ticket Type:</label>
+    <select #ticketSelect>
+      <option [value]="formatOption(event.regularPrice, regularticket)">Regular - ₹{{ event.regularPrice }}</option>
+      <option [value]="formatOption(event.vipPrice, vipticket)">VIP - ₹{{ event.vipPrice }}</option>
+      <option [value]="formatOption(event.vvipPrice, vvipticket)">VVIP - ₹{{ event.vvipPrice }}</option>
+    </select>
+<br><br>
+    <p-button *ngIf="user"
+              label="Join Event"
+              (click)="openDialog(event, ticketSelect.value)">
+    </p-button>
   </div>
 </div>
