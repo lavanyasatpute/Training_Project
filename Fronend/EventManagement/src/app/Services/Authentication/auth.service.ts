@@ -15,9 +15,9 @@ export class AuthService {
 
   private apiUrl = `${API_URL}/users`;
 
-  constructor(private http: HttpClient, 
+  constructor(private http: HttpClient,
     private cookieService: CookieService,
-    private sharedService:SharedService,
+    private sharedService: SharedService,
     private userEventService: UserEventService
   ) { }
 
@@ -59,13 +59,13 @@ export class AuthService {
 
         // If login is successful, show success alert
         this.showAlert("Login Successful!", `Welcome, ${response.messages}`, "success");
-        console.log("This auth service:",response);
-        
+        console.log("This auth service:", response);
+
 
         // Store user data in cookies
         this.cookieService.set('userData', JSON.stringify(response), { expires: 1, path: '/' });
 
-        
+
         this.userEventService.eventList = [];
         //Update usar in shared service
         // this.sharedService.updateAuthState();
@@ -82,12 +82,12 @@ export class AuthService {
 
   getAllUser(): Observable<any> {
     const userDataString = this.cookieService.get("userData");
-  
+
     if (!userDataString) {
       console.error("No userData found in cookies.");
       return throwError(() => new Error("User not authenticated."));
     }
-  
+
     let cookiesData;
     try {
       cookiesData = JSON.parse(userDataString);
@@ -95,17 +95,17 @@ export class AuthService {
       console.error("Error parsing userData:", error);
       return throwError(() => new Error("Invalid cookie data."));
     }
-  
+
     console.log("From AuthService getAllUser method:", cookiesData);
-  
+
     const endpoint =
-      cookiesData.role === "admin" 
+      cookiesData.role === "admin"
         ? `${this.apiUrl}/alluser`
         : `${this.apiUrl}/filter/${cookiesData.id}`;
-    
-    console.log("From auth service: ",endpoint);
-    
-  
+
+    console.log("From auth service: ", endpoint);
+
+
     return this.http.get(endpoint).pipe(
       catchError(error => {
         console.error("Fetch Users Error:", error);
@@ -113,8 +113,15 @@ export class AuthService {
       })
     );
   }
-  
 
+  deleteUser(userId: string) {
+    return this.http.delete(`${this.apiUrl}/delete/${userId}`);
+  }
+
+  updateUserProfile(form:any) {
+    return this.http.put(`${this.apiUrl}/update/${form.UserID}`,form);
+
+  }
 
 
   private showAlert(title: string, text: string, icon: "success" | "error") {

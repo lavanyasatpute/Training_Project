@@ -47,13 +47,15 @@ export class EventService {
       this.eventList = response.data || [];
       this.AllLocation = this.eventList.map((event: any) => event.Location);
       this.Elist.next(this.eventList);
+      console.log("this is from event service list",this.eventList);
+      
       this.Locationlist.next(this.AllLocation);
     });
   }
 
   //  Subscribe to shared user ID and fetch events created by that user
-  private listenToUserIdChanges(): void {
-    this.sharedService.userId$.subscribe(id => {
+  private async listenToUserIdChanges() {
+    this.sharedService.userId$.subscribe(async id => {
       this.userId = id;
       console.log("EventService → User ID:", this.userId);
       this.loadEventsCreatedByUser(this.userId);
@@ -61,7 +63,7 @@ export class EventService {
   }
 
   //  Load events created by a specific user
-  private loadEventsCreatedByUser(userId: string): void {
+  loadEventsCreatedByUser(userId: string): void {
     this.http.get(`${this.apiUrl}/created-event/${userId}`).subscribe((response: any) => {
       this.EventListCreatedByUser = response.data || [];
       this.eventcreateByUserSubject.next(this.EventListCreatedByUser);

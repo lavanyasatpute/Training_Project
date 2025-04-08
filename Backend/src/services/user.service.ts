@@ -1,6 +1,7 @@
 import { userRepo } from "../repository/user.repository";
 import { User } from "../entities/User";
 import { classToPlain } from "class-transformer";
+import { AppError } from "../utils/appError";
 const bcrypt = require('bcrypt');
 
 export class UserService {
@@ -27,12 +28,12 @@ export class UserService {
             const result = await this.userRepository.DeleteUser(id);
             return result;
         } catch (error: any) {
-            throw new Error(`Failed to delete user with ID ${id}: ${error.message}`);
+            throw new AppError(`Failed to delete user with ID ${id}: ${error.message}`,400);
         }
     }
 
     // Update a user's information
-    async UpdateUser(id: string, updatedData: Partial<User>): Promise<string> {
+    async UpdateUser(id: string, updatedData: Partial<User>){
         try {
             if (updatedData.Password) {
                 const saltRounds = 10;
@@ -43,7 +44,7 @@ export class UserService {
             const result = await this.userRepository.UpdateUser(id, updatedData);
             return result;
         } catch (error: any) {
-            throw new Error(`Failed to update user with ID ${id}: ${error.message}`);
+            throw new AppError(`Failed to update user with ID ${id}: ${error.message}`,400);
         }
     }
 
@@ -53,7 +54,7 @@ export class UserService {
             const users = await this.userRepository.getAllUsers();
             return classToPlain(users) as User[];
         } catch (error: any) {
-            throw new Error(`Failed to retrive users: ${error.message}`);
+            throw new AppError(`Failed to retrive users: ${error.message}`,400);
         }
     }
 
@@ -64,7 +65,7 @@ export class UserService {
             const users = await this.userRepository.getFilterUser(filterValue);
             return classToPlain(users) as User[];
         } catch (error: any) {
-            throw new Error(`Failed to filter users: ${error.message}`);
+            throw new AppError(`Failed to filter users: ${error.message}`,400);
         }
     }
 }

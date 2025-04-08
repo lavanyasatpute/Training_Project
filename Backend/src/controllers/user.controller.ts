@@ -44,6 +44,7 @@ export class UserController {
 
     // Delete a user by ID
     /**
+     * @description
      * This method is used to delete the user 
      * @param req 
      * @param res 

@@ -44,5 +44,9 @@ export class User {
 
     @OneToMany(() => Evententity, (event) => event.CreatedBy)
     createdEvents: Evententity[];
+
+    @Exclude()
+    @Column({default:'active'})
+    status:string
 }
 
