@@ -43,7 +43,7 @@ export class EventService {
             const events = await this.eventRepository.getAllEvent();
             return events;
         } catch (error: any) {
-            throw new Error(`Failed to retrive events: ${error.message}`);
+            throw new Error(`Failed to retrivecd  events: ${error.message}`);
         }
     }
 
