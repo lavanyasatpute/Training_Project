@@ -19,7 +19,7 @@ export class userRepo {
     async DeleteUser(id: string) {
         const userName = await this.appDataSource.findOne({ where: { UserID: id } });
         if (!userName) throw new Error(`User with ID ${id} not found.`);
-        await this.appDataSource.delete(id);
+        await this.appDataSource.update(id,{status:'deactive'});
         return `${userName.Name} has been deleted successfully.`;
     }
 
@@ -27,19 +27,19 @@ export class userRepo {
     async UpdateUser(id: string, updatedData: Partial<User>) {
         const userName = await this.appDataSource.findOne({ where: { UserID: id } });
         if (!userName) throw new Error(`User with ID ${id} not found.`);
-        await this.appDataSource.update(id, updatedData);
-        return `${userName.Name} has been updated successfully.`;
+        const updatedUserData = await this.appDataSource.update(id, updatedData);
+        return updatedUserData;
     }
 
     // Retrieve all users
     async getAllUsers() {
-        const user = await this.appDataSource.find({select:[]})
+        const user = await this.appDataSource.find({where:{role:'user'}})
         return classToPlain(user);
     }
 
     // Filter users by specific criteria
     async getFilterUser(filterValue: string) {
-        const filterData = await this.appDataSource.find({ where: {UserID:filterValue} });
+        const filterData = await this.appDataSource.find({ where: {UserID:filterValue,status:'active'} });
         return filterData;
     }
 }
