@@ -45,9 +45,9 @@ export class FeedbackService {
     }
 
     // Filter Feedback
-    async getFilterFeedback(filterValue: Partial<Feedback>): Promise<Feedback[]> {
+    async getFilterFeedback(id: string): Promise<Feedback[]> {
         try {
-            const feedbacks = await this.feedbackRepository.getFilterFeedback(filterValue);
+            const feedbacks = await this.feedbackRepository.getFilterFeedback(id);
             return feedbacks;
         } catch (error:any) {
             throw new Error(`Failed to filter feedback: ${error.message}`);

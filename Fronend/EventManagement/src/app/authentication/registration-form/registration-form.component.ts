@@ -16,7 +16,7 @@ export class RegistrationFormComponent {
     Email: new FormControl('', [Validators.required, Validators.email]),
     Username: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]),
-    ContactDetails: new FormControl('', [Validators.required]),
+    ContactDetails: new FormControl( [Validators.required], [Validators.pattern(/^[0-9]{10}$/)]),
     role: new FormControl('', [Validators.required])
   })
 
@@ -37,7 +37,7 @@ export class RegistrationFormComponent {
       Email: this.registerForm.value.Email || '',
       Username: this.registerForm.value.Username || '',
       Password: this.registerForm.value.Password || '',
-      ContactDetails: this.registerForm.value.ContactDetails || '',
+      ContactDetails: String(this.registerForm.value.ContactDetails) || '',
       role: this.registerForm.value.role as Role || Role.User
     };
     const result = this.authService.userRegistration(userData).subscribe((response:any) => {

@@ -120,7 +120,8 @@
             <div class="stat-label">Canceled</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value">{{ selectedUser.eventStats.created + selectedUser.eventStats.joined + selectedUser.eventStats.canceled }}</div>
+            <div class="stat-value">{{ selectedUser.eventStats.created + selectedUser.eventStats.joined +
+              selectedUser.eventStats.canceled }}</div>
             <div class="stat-label">Total</div>
           </div>
         </div>
@@ -167,7 +168,7 @@
             <canvas id="platformTrendChart"></canvas>
           </div>
         </div>
-        
+
         <h3>User Rankings</h3>
         <table class="rankings-table">
           <thead>
@@ -190,6 +191,17 @@
           </tbody>
         </table>
       </div>
+      <br><br>
+      <div *ngIf="UserRole" class="feedback-container">
+        <h2 class="feedback-header">User Feedback</h2>
+
+        <div *ngFor="let feedback of feedBackData" class="feedback-card">
+          <div class="feedback-rating">⭐ {{ feedback.Rating }}/5</div>
+          <p class="feedback-comment">"{{ feedback.Comments }}"</p>
+          <!-- <p class="feedback-meta">— User ID: {{ feedback.User?.id || 'Unknown' }}</p> -->
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

@@ -10,9 +10,13 @@
     <!-- Email -->
     <div class="form-group mb-3">
       <label for="email" class="form-label text-secondary">Email Address</label>
-      <input type="email" name="Email" id="Email" formControlName="Email" placeholder="Enter Email"
-        class="form-control">
+      <input type="email" name="Email" id="Email" formControlName="Email" placeholder="Enter Email" class="form-control"
+        class="form-control" [ngClass]="{ 'is-invalid': registerForm.get('Email')?.invalid && registerForm.get('Email')?.touched }" required>
     </div>
+    <div *ngIf="registerForm.get('Email')?.touched && registerForm.get('Email')?.invalid" class="invalid-feedback">
+    <div *ngIf="registerForm.get('Email')?.errors?.['required']">Email is required.</div>
+    <div *ngIf="registerForm.get('Email')?.errors?.['email']">Please enter a valid email address.</div>
+  </div>
     <!-- Username -->
     <div class="form-group mb-3">
       <label for="Username" class="form-label text-secondary">Username</label>
@@ -28,7 +32,7 @@
     <!-- Contact Details -->
     <div class="form-group mb-3">
       <label for="ContactDetails" class="form-label text-secondary">Contact Number</label>
-      <input type="text" name="ContactDetails" id="ContactDetails" formControlName="ContactDetails"
+      <input type="number" name="ContactDetails" id="ContactDetails" formControlName="ContactDetails"
         placeholder="Enter Contact Number" class="form-control">
     </div>
     <!-- Role -->
@@ -39,11 +43,11 @@
     </div> -->
     <!-- Register Button -->
     <div class="text-center">
-      <button type="submit" class="btn btn-primary btn-lg w-100">Register</button>
+      <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="registerForm.valid">Register</button>
     </div>
     <!-- Login Link -->
     <div class="text-center mt-4">
-      <p class="text-secondary">Already registered? 
+      <p class="text-secondary">Already registered?
         <a routerLink="../login" class="text-decoration-none text-primary fw-bold">Login</a>
       </p>
     </div>
