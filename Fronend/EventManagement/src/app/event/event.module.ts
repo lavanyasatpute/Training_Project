@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthGuard } from '../guard/auth.guard';
 
 
 
@@ -23,10 +24,10 @@ const route: Routes = [
   { path: '', redirectTo: 'event-list', pathMatch: "full" },
 
   { path: 'event-list', component: EventListComponent },
-  { path: 'add-event', component: AddEventComponent },
-  { path: 'join', component: JoinedEventComponent },
-  {path:'creted-event',component:CreatedEventComponent},
-  {path:'tickets',component:EventDetailsComponent}
+  { path: 'add-event', component: AddEventComponent,canActivate:[AuthGuard] },
+  { path: 'join', component: JoinedEventComponent ,canActivate:[AuthGuard]},
+  {path:'creted-event',component:CreatedEventComponent,canActivate:[AuthGuard]},
+  {path:'tickets',component:EventDetailsComponent,canActivate:[AuthGuard]}
 
 ]
 

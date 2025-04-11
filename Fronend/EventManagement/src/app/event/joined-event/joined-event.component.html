@@ -8,11 +8,11 @@
       <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
       <p><strong>Location:</strong> {{ event.Location }}</p>
       <p><strong>Category:</strong> {{ event.Categories }}</p>
-      <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID,i)"></p-button>
+      <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID,i)"></p-button>&nbsp;
+      <p-button label="Feedback" (click)="openFeedbackPopup(event.EventID)"></p-button>
     </div>
   </div>
 </ng-container>
-
 
 <ng-template #noEventsTemplate>
   <div class="no-events-message">
@@ -20,3 +20,22 @@
     <p>No events found. Start by Joining a new event.</p>
   </div>
 </ng-template>
+
+<!-- Feedback Popup -->
+<div class="feedback-popup" *ngIf="showFeedbackPopup">
+  <div class="feedback-content">
+    <h3>Submit Feedback</h3>
+    <form (ngSubmit)="submitFeedback()">
+      <label for="rating">Rating (1–5)</label>
+      <input type="number" id="rating" [(ngModel)]="feedbackData.rating" name="rating" min="1" max="5" required>
+
+      <label for="comment">Comments</label>
+      <textarea id="comment" [(ngModel)]="feedbackData.comment" name="comment" rows="4" required></textarea>
+
+      <div class="form-actions">
+        <button type="submit">Submit</button>
+        <button type="button" (click)="closeFeedbackPopup()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

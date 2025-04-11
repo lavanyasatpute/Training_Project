@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import swal from 'sweetalert';
 import { SharedService } from '../../shared/shared.service';
 import { UserEventService } from '../UserEvent/user-event.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AuthService {
   constructor(private http: HttpClient,
     private cookieService: CookieService,
     private sharedService: SharedService,
-    private userEventService: UserEventService
+    private userEventService: UserEventService,
+    private router:Router
   ) { }
 
   userRegistration(userData: Partial<IUser>): Observable<any> {
@@ -30,6 +32,7 @@ export class AuthService {
     }
 
     this.showAlert("Registration Successful!", `Welcome, ${userData.Name}!`, "success");
+    this.router.navigate(['/user/login']);
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/add`, userData, { headers }).pipe(

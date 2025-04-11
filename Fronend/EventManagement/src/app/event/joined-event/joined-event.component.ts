@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GenericDialogComponent } from '../../shared/generic-dialog/generic-dialog.component'
 import { UserEventService } from '../../Services/UserEvent/user-event.service';
 import { CookieService } from 'ngx-cookie-service';
+import { FeedbackService } from '../../Services/feedBack/feedback.service';
+import { StarIcon } from 'primeng/icons';
 
 @Component({
   selector: 'app-joined-event',
@@ -17,12 +19,19 @@ import { CookieService } from 'ngx-cookie-service';
 
 export class JoinedEventComponent {
   eventUserList: any[] = []
-  user = false
+  user = false;
+  showFeedbackPopup = false;
+  feedbackData = {
+    rating: 1,
+    comment: '',
+    eventId: ''
+  };
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
     private userEventService: UserEventService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private feeBackService: FeedbackService
   ) { }
 
   ngOnInit() {
@@ -56,13 +65,45 @@ export class JoinedEventComponent {
 
   cancelEvent(index: number, eventId: string) {
     this.eventUserList = this.eventUserList.filter((item, i) => i !== index);
-    
-    this.userEventService.leaveEvent(String(eventId), index).subscribe((data:any) => {
+
+    this.userEventService.leaveEvent(String(eventId), index).subscribe((data: any) => {
       console.log("Event cancel", data);
     });
-    
-
   }
+
+  openFeedbackPopup(eventId: string) {
+    this.feedbackData = {
+      rating: 1,
+      comment: '',
+      eventId:eventId
+    };
+    this.showFeedbackPopup = true;
+  }
+
+  closeFeedbackPopup() {
+    this.showFeedbackPopup = false;
+  }
+
+  // feedBack(eventId: string, comments: string, rating: number) {
+  //   this.feeBackService.feedBack(eventId, comments, rating).subscribe((data) => {
+  //     console.log(data);
+
+  //   })
+
+  // }
+  submitFeedback() {
+  // Call your API to submit the feedback
+  const { eventId, rating, comment } = this.feedbackData;
+  console.log('Submitting feedback:', { eventId, rating, comment });
+  this.feeBackService.feedBack(eventId, comment, rating).subscribe((data) => {
+      console.log(data);
+  });
+
+  // Example: Call a feedbackService
+  // this.feedbackService.submitFeedback(this.feedbackData).subscribe(...);
+
+  this.closeFeedbackPopup();
+}
 
 }
 

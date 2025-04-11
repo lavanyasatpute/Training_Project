@@ -7,7 +7,7 @@ export class FeedbackController {
         try {
             const feedbackData = req.body;
             const result = await feedbackService.AddFeedback(feedbackData);
-            res.status(201).send(result);
+            res.status(201).send({result});
         } catch (error:any) {
             res.status(500).send(error.message);
         }
@@ -37,7 +37,7 @@ export class FeedbackController {
     async getAllFeedback(req: Request, res: Response): Promise<void> {
         try {
             const feedbacks = await feedbackService.getAllFeedback();
-            res.status(200).json(feedbacks);
+            res.status(200).json({feedbacks});
         } catch (error:any) {
             res.status(500).send(error.message);
         }
@@ -45,9 +45,9 @@ export class FeedbackController {
 
     async getFilteredFeedback(req: Request, res: Response): Promise<void> {
         try {
-            const filterValue = req.query; // Example: filterValue could include fields like EventID or UserID
-            const feedbacks = await feedbackService.getFilterFeedback(filterValue);
-            res.status(200).json(feedbacks);
+            const id = req.params.id; // Example: filterValue could include fields like EventID or UserID
+            const feedbacks = await feedbackService.getFilterFeedback(id);
+            res.status(200).json({feedbacks});
         } catch (error:any) {
             res.status(500).send(error.message);
         }

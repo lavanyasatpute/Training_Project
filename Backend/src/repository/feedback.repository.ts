@@ -33,7 +33,7 @@ export class feedbackRepo {
     }
 
     // Filter Feedback by Specific Criteria
-    async getFilterFeedback(filterValue: Partial<Feedback>) {
-        return await this.appDataSource.find({ where: filterValue });
+    async getFilterFeedback(id: string) {
+        return await this.appDataSource.find({ where: {User:{UserID:id}} });
     }
 }

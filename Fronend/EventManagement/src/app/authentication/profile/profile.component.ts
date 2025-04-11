@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../Services/Authentication/auth.service';
 import { SharedService } from '../../shared/shared.service';
 import { Chart, registerables } from 'chart.js';
+import { HttpClient } from '@angular/common/http';
+import { FeedbackService } from '../../Services/feedBack/feedback.service';
 
 // Register all Chart.js components
 Chart.register(...registerables);
@@ -21,7 +23,9 @@ export class ProfileComponent implements OnInit {
   formData: any = {};
   activityChart: any;
   userRankingsChart: any;
-  
+
+  feedBackData:any[]= [];
+
   userFields = [
     { label: 'Name', key: 'Name', id: 'name', editable: true },
     { label: 'Email', key: 'Email', id: 'email', editable: true },
@@ -29,56 +33,69 @@ export class ProfileComponent implements OnInit {
     { label: 'Contact Details', key: 'ContactDetails', id: 'contactDetails', editable: true },
     { label: 'Role', key: 'role', id: 'role', editable: false }
   ];
-  
-  constructor(private sharedService: SharedService, private authService: AuthService) {
+
+  constructor(private sharedService: SharedService, private authService: AuthService, private http: HttpClient,private feedBackService:FeedbackService) {
     this.sharedService.authData$.subscribe(role => {
       this.UserRole = role?.toLowerCase() === 'admin';
     });
+    this.feedBackService.getAllFeedback().subscribe((data:any)=>{
+      this.feedBackData = data.feedbacks
+
+      console.log("This is from feedback profile",this.feedBackData);
+      
+    })
   }
-  
+
   ngOnInit(): void {
     this.loadUserData();
   }
-  
+  created = 0
   loadUserData(): void {
     this.authService.getAllUser().subscribe(data => {
+      console.log("From profile component:", data);
+      const createdCount = data.map((userId: any) => this.http.get(`http://localhost:4000/api/eventuser/filter/${userId.UserID}`).subscribe(() => {
+        this.created = this.created + 1
+      }))
       this.allUserProfile = data.map((user: any) => ({
         ...user,
         eventStats: {
-          created: Math.floor(Math.random() * 10),
+          created: this.created + 1,
           joined: Math.floor(Math.random() * 15),
           canceled: Math.floor(Math.random() * 5)
         }
       }));
+
+
+
     });
   }
-  
+
   getColumns(): string[] {
     if (!this.allUserProfile.length) return [];
     const baseColumns = Object.keys(this.allUserProfile[0]).filter(key => key !== 'eventStats');
     return [...baseColumns, 'Actions'];
   }
-  
+
   viewUserVisualization(user: any): void {
     this.selectedUser = user;
     this.showVisualizationPopup = true;
-    
+
     // Need to wait for DOM to be updated
     setTimeout(() => {
       this.createVisualizationCharts();
     }, 100);
   }
-  
+
   createVisualizationCharts(): void {
     // Destroy previous charts if they exist
     if (this.activityChart) {
       this.activityChart.destroy();
     }
-    
+
     if (this.userRankingsChart) {
       this.userRankingsChart.destroy();
     }
-    
+
     // Create charts based on whether viewing single user or all users
     if (this.selectedUser) {
       this.createSingleUserCharts();
@@ -86,13 +103,13 @@ export class ProfileComponent implements OnInit {
       this.createAllUsersCharts();
     }
   }
-  
+
   createSingleUserCharts(): void {
     const ctx = document.getElementById('userActivityChart') as HTMLCanvasElement;
     if (!ctx) return;
-    
+
     const stats = this.selectedUser.eventStats;
-    
+
     this.activityChart = new Chart(ctx, {
       type: 'pie',
       data: {
@@ -132,7 +149,7 @@ export class ProfileComponent implements OnInit {
 
     // Mock data for timeline - in real app, you'd have actual dates
     const currentDate = new Date();
-    const months = Array.from({length: 6}, (_, i) => {
+    const months = Array.from({ length: 6 }, (_, i) => {
       const date = new Date();
       date.setMonth(currentDate.getMonth() - 5 + i);
       return date.toLocaleString('default', { month: 'short' });
@@ -182,14 +199,14 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-  
+
   createAllUsersCharts(): void {
     // Overall platform activity pie chart
     const pieCtx = document.getElementById('platformActivityPie') as HTMLCanvasElement;
     if (!pieCtx) return;
-    
+
     const stats = this.getOverallStats();
-    
+
     this.activityChart = new Chart(pieCtx, {
       type: 'pie',
       data: {
@@ -226,7 +243,7 @@ export class ProfileComponent implements OnInit {
     // Top users bar chart
     const barCtx = document.getElementById('topUsersChart') as HTMLCanvasElement;
     if (!barCtx) return;
-    
+
     // Get top 5 most active users
     const topUsers = [...this.allUserProfile]
       .sort((a, b) => {
@@ -235,7 +252,7 @@ export class ProfileComponent implements OnInit {
         return totalB - totalA;
       })
       .slice(0, 5);
-    
+
     this.userRankingsChart = new Chart(barCtx, {
       type: 'bar',
       data: {
@@ -283,8 +300,8 @@ export class ProfileComponent implements OnInit {
     if (!lineCtx) return;
 
     // Mock monthly data - in a real app, you'd aggregate this from actual data
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dis'];
+
     new Chart(lineCtx, {
       type: 'line',
       data: {
@@ -334,33 +351,33 @@ export class ProfileComponent implements OnInit {
   generateRandomTimelineData(points: number, total: number): number[] {
     const result = [];
     let remaining = total;
-    
+
     for (let i = 0; i < points - 1; i++) {
       const value = Math.floor(Math.random() * (remaining / 2));
       result.push(value);
       remaining -= value;
     }
-    
+
     result.push(remaining);
     return result;
   }
-  
+
   closeVisualization(): void {
     this.showVisualizationPopup = false;
     this.selectedUser = null;
-    
+
     // Clean up charts
     if (this.activityChart) {
       this.activityChart.destroy();
       this.activityChart = null;
     }
-    
+
     if (this.userRankingsChart) {
       this.userRankingsChart.destroy();
       this.userRankingsChart = null;
     }
   }
-  
+
   deleteUser(userId: string): void {
     if (confirm('Are you sure you want to delete this user?')) {
       this.authService.deleteUser(userId).subscribe(() => {
@@ -368,12 +385,12 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
-  
+
   startEditing(): void {
     this.isEditing = true;
     this.formData = { ...this.allUserProfile[0] };
   }
-  
+
   saveUserProfile(): void {
     this.authService.updateUserProfile(this.formData).subscribe((updatedUser: any) => {
       if (this.UserRole) {
@@ -393,18 +410,18 @@ export class ProfileComponent implements OnInit {
       this.isEditing = false;
     });
   }
-  
+
   cancelEditing(): void {
     this.isEditing = false;
   }
-  
+
   getOverallStats(): any {
     if (!this.allUserProfile.length) return { created: 0, joined: 0, canceled: 0, total: 0 };
-    
+
     const totalCreated = this.allUserProfile.reduce((sum, user) => sum + (user.eventStats?.created || 0), 0);
     const totalJoined = this.allUserProfile.reduce((sum, user) => sum + (user.eventStats?.joined || 0), 0);
     const totalCanceled = this.allUserProfile.reduce((sum, user) => sum + (user.eventStats?.canceled || 0), 0);
-    
+
     return {
       totalUsers: this.allUserProfile.length,
       created: totalCreated,
@@ -413,7 +430,7 @@ export class ProfileComponent implements OnInit {
       total: totalCreated + totalJoined + totalCanceled
     };
   }
-  
+
   trackById(index: number, user: any): any {
     return user.Id;
   }

@@ -65,6 +65,8 @@ export class EventService {
   //  Load events created by a specific user
   loadEventsCreatedByUser(userId: string): void {
     this.http.get(`${this.apiUrl}/created-event/${userId}`).subscribe((response: any) => {
+      console.log("this is from eventservice",response);
+      
       this.EventListCreatedByUser = response.data || [];
       this.eventcreateByUserSubject.next(this.EventListCreatedByUser);
     });
