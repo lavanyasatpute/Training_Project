@@ -22,9 +22,11 @@ export class TicketController {
             }
             const user_Id = req.params.userId;
             const result = await ticketService.AddTicket(ticketDto, user_Id);
+            console.log(result);
+            
             res.status(201).json({data:result});
         } catch (error: any) {
-            res.status(500).send(error.message);
+            res.status(404).send(error.message);
         }
     }
 
@@ -53,9 +55,11 @@ export class TicketController {
         try {
             const userid = req.params.userId;
             const tickets = await ticketService.getUserTickets(userid);
+            // console.log(tickets);
+            
             res.status(200).json(tickets);
         } catch (error: any) {
-            res.status(500).send(error.message);
+            res.status(404).send(error.message);
         }
     }
 

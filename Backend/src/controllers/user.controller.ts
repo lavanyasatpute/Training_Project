@@ -4,8 +4,6 @@ import * as StatusCodes from 'http-status-codes'
 import { UserDTO } from "../DTO/user.dto";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { mapValues } from "lodash";
-import { User } from "../entities/User";
 import { AppError } from "../utils/appError";
 
 const userService = new UserService();
@@ -62,9 +60,11 @@ export class UserController {
     // Update a user's information
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = (req.params.id); // Extract user ID from the request parameters
+            const userId = req.params.id; // Extract user ID from the request parameters
             const updatedData = req.body; // Get updated data from the request body
-            const result = await userService.UpdateUser(userId, updatedData); // Call the service
+            const result = await userService.UpdateUser(userId, updatedData);
+            // console.log(result);
+             // Call the service
             res.status(StatusCodes.OK).json(result); // Respond with a success message
         } catch (error: any) {
             res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors

@@ -90,12 +90,13 @@ export class EventListComponent implements OnInit {
   joinEvent(eventId: string, ticketType: TicketType) {
     this.userEventService.joinEvent(eventId, this.userId).subscribe((data: any) => {
       console.log("Event joined:", data, "Ticket Type:", ticketType);
+      this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data => {
+        console.log(data);
+
+      });
     });
 
-    this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data => {
-      console.log(data);
 
-    });
   }
   searchKeyword: string = '';
   onSearchChange() {

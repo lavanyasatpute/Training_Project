@@ -38,7 +38,7 @@ export class JoinedEventComponent {
 
     this.userEventService.eventList$.subscribe(data => {
       this.eventUserList = data;
-      console.log("this is from join eventlist component..", data);
+      // console.log("this is from join eventlist component..", data);
     });
     this.sharedService.username$.subscribe(item => {
       if (item != 'User') {

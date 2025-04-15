@@ -3,12 +3,12 @@ import { EventService } from "../services/event.service";
 import { EventDTO } from "../DTO/event.dto";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
-const redis =require("redis");
+// const redis =require("redis");
 
 const eventService = new EventService();
 
-const client = redis.createClient();
-client.connect();
+// const client = redis.createClient();
+// client.connect();
 
 export class EventController {
 
@@ -95,15 +95,15 @@ export class EventController {
     // Get All Events
     async getAllEvents(req: Request, res: Response): Promise<void> {
         try {
-            const cacheKey = 'allEvent';
-            const cached = await client.get(cacheKey);
+            // const cacheKey = 'allEvent';
+            // const cached = await client.get(cacheKey);
 
-            if (cached) {
-                res.status(200).json({ message: "Events retrieved successfully.", data: JSON.parse(cached) });
-                return 
-            }
+            // if (cached) {
+            //     res.status(200).json({ message: "Events retrieved successfully.", data: JSON.parse(cached) });
+            //     return 
+            // }
             const events = await eventService.getAllEvents();
-            await client.set(cacheKey, JSON.stringify(events), { EX: 600 })
+            // await client.set(cacheKey, JSON.stringify(events), { EX: 600 })
             res.status(200).json({ message: "Events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });

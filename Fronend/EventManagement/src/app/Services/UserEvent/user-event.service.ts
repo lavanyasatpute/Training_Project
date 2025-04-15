@@ -9,7 +9,7 @@ import { IEvent } from '../../model/event.interface';
   providedIn: 'root'
 })
 export class UserEventService implements OnDestroy {
- 
+
   private apiUrl = `${API_URL}/eventuser`;
 
   public eventList: IEvent[] = [];
@@ -22,7 +22,7 @@ export class UserEventService implements OnDestroy {
   constructor(private http: HttpClient, private sharedService: SharedService) {
     const userSub = this.sharedService.userId$.subscribe((id) => {
       this.currentUserId = id;
-      console.log('UserId:', this.currentUserId);
+      // console.log('UserId:', this.currentUserId);
       this.fetchUserJoinedEvents();
     });
     this.subscriptions.push(userSub);
@@ -35,35 +35,45 @@ export class UserEventService implements OnDestroy {
     if (!this.currentUserId) return;
 
     const sub = this.http.get<{ data: any[] }>(`${this.apiUrl}/filter/${this.currentUserId}`)
-      .subscribe(response => {
-        const eventUserRelations = response.data;
+      .subscribe({
+        next: response => {
+          const eventUserRelations = response.data;
+          console.log("From event user relation: ",eventUserRelations);
+          
 
-        if (!eventUserRelations.length) {
-          this.eventList = [];
-          this.eventListSubject.next([]);
-          return;
-        }
+          if (!eventUserRelations || !Array.isArray(eventUserRelations)) {
+            this.eventList = [];
+            this.eventListSubject.next([]);
+            return;
+          }
 
-        const eventRequests = eventUserRelations.map(relation =>
-          this.http.get<{ data: IEvent }>(`${API_URL}/events/filter/${relation.eventId}`)
-        );
+          // Fetch all events based on user's relations
+          const eventRequests = eventUserRelations.map((relation: { eventId: any; }) =>
+            this.http.get<{ data: IEvent }>(`${API_URL}/events/filter/${relation.eventId}`)
+          );
 
-        const allEventsSub = forkJoin(eventRequests).subscribe(eventResponses => {
-          this.eventList = eventResponses.map(res => res.data);
-          this.eventListSubject.next(this.eventList);
-        }, error => {
-          console.error('Error fetching event data:', error);
-          this.eventListSubject.next([]);
-        });
+          const allEventsSub = forkJoin(eventRequests).subscribe({
+            next: eventResponses => {
+              this.eventList = eventResponses.map(res => res.data);
+              this.eventListSubject.next(this.eventList);
+            },
+            error: error => this.handleError('Error fetching event data', error)
+          });
 
-        this.subscriptions.push(allEventsSub);
-      }, error => {
-        console.error('Error fetching user-event relations:', error);
-        this.eventListSubject.next([]);
+          this.subscriptions.push(allEventsSub);
+        },
+        error: error => this.handleError('Error fetching user-event relations', error)
       });
 
     this.subscriptions.push(sub);
   }
+
+  // Centralized error handling function
+  private handleError(message: string, error: any): void {
+    console.error(message, error);
+    this.eventListSubject.next([]);
+  }
+
 
   /**
    * Join an event for the user and update state.

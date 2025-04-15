@@ -20,8 +20,6 @@ export class Ticket {
     purchaser: User;
 
     @Column({
-        type: 'enum',
-        enum: TicketType,
         default: TicketType.REGULAR
     })
     TicketType: string;

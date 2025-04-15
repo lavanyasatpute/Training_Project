@@ -4,7 +4,6 @@ import { TicketType } from '../entities/Ticket';
 
 export class PurchaseTicketDto {
   @IsNotEmpty()
-  @IsUUID()
   eventId: string;
 
   @IsNotEmpty()

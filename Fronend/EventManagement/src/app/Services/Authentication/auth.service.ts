@@ -20,11 +20,11 @@ export class AuthService {
     private cookieService: CookieService,
     private sharedService: SharedService,
     private userEventService: UserEventService,
-    private router:Router
+    private router: Router
   ) { }
 
   userRegistration(userData: Partial<IUser>): Observable<any> {
-    console.log(userData);
+    // console.log(userData);
 
     if (!userData.Name || !userData.Email || !userData.Username || !userData.Password || !userData.ContactDetails) {
       this.showAlert("Invalid Input!", "Please ensure all fields are filled correctly.", "error");
@@ -62,7 +62,7 @@ export class AuthService {
 
         // If login is successful, show success alert
         this.showAlert("Login Successful!", `Welcome, ${response.messages}`, "success");
-        console.log("This auth service:", response);
+        // console.log("This auth service:", response);
 
 
         // Store user data in cookies
@@ -99,14 +99,14 @@ export class AuthService {
       return throwError(() => new Error("Invalid cookie data."));
     }
 
-    console.log("From AuthService getAllUser method:", cookiesData);
+    // console.log("From AuthService getAllUser method:", cookiesData);
 
     const endpoint =
       cookiesData.role === "admin"
         ? `${this.apiUrl}/alluser`
         : `${this.apiUrl}/filter/${cookiesData.id}`;
 
-    console.log("From auth service: ", endpoint);
+    // console.log("From auth service: ", endpoint);
 
 
     return this.http.get(endpoint).pipe(
@@ -121,11 +121,14 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/delete/${userId}`);
   }
 
-  updateUserProfile(form:any) {
-    return this.http.put(`${this.apiUrl}/update/${form.UserID}`,form);
+  updateUserProfile(form: any) {
+    return this.http.put(`${this.apiUrl}/update/${form.UserID}`, form);
 
   }
 
+  filteredUser(userId:string){
+    return this.http.get(`${this.apiUrl}/filter/${userId}`);
+  }
 
   private showAlert(title: string, text: string, icon: "success" | "error") {
     swal({

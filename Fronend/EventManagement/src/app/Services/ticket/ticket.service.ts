@@ -20,9 +20,9 @@ export class TicketService {
     });
   }
 
-  purchaseTicket(ticketData: IPurchaseTicketData): Observable<ITicket> {
+  purchaseTicket(ticketData: IPurchaseTicketData){
     
-    return this.http.post<ITicket>(`${this.apiUrl}/tickets/${this.user_id}`, ticketData);
+    return this.http.post(`${this.apiUrl}/tickets/${this.user_id}`, ticketData);
   }
 
   getUserTickets(): Observable<ITicket[]> {

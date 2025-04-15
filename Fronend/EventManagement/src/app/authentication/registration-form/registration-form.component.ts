@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../Services/Authentication/auth.service';
 import { Router } from '@angular/router';
 import { IUser, Role } from '../../model/user.interface';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-registration-form',
@@ -20,7 +21,7 @@ export class RegistrationFormComponent {
     role: new FormControl('', [Validators.required])
   })
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,private cookieService:CookieService) { }
 
   userRegistration() {
     // const userData: IUser = {
@@ -43,7 +44,9 @@ export class RegistrationFormComponent {
     const result = this.authService.userRegistration(userData).subscribe((response:any) => {
       console.log("From registration comp: ",response.data +'\n' + response.messages);
     });
-    console.log(result);
+    // console.log(result);
+    // this.cookieService.set("userData")
+
     
     
   }

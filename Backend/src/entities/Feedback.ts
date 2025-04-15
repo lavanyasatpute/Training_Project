@@ -16,6 +16,6 @@ export class Feedback {
     @Column("text")
     Comments: string;
 
-    @Column()
+    @Column('int')
     Rating: number;
 }

@@ -4,6 +4,8 @@ import { SharedService } from '../../shared/shared.service';
 import { Chart, registerables } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 import { FeedbackService } from '../../Services/feedBack/feedback.service';
+import { forkJoin } from 'rxjs';
+import { UserEventService } from '../../Services/UserEvent/user-event.service';
 
 // Register all Chart.js components
 Chart.register(...registerables);
@@ -24,7 +26,8 @@ export class ProfileComponent implements OnInit {
   activityChart: any;
   userRankingsChart: any;
 
-  feedBackData:any[]= [];
+  feedBackData: any[] = [];
+  userId: string = '';
 
   userFields = [
     { label: 'Name', key: 'Name', id: 'name', editable: true },
@@ -34,40 +37,71 @@ export class ProfileComponent implements OnInit {
     { label: 'Role', key: 'role', id: 'role', editable: false }
   ];
 
-  constructor(private sharedService: SharedService, private authService: AuthService, private http: HttpClient,private feedBackService:FeedbackService) {
+  constructor(private sharedService: SharedService, private authService: AuthService, private http: HttpClient, private feedBackService: FeedbackService, private userEventService: UserEventService) {
     this.sharedService.authData$.subscribe(role => {
       this.UserRole = role?.toLowerCase() === 'admin';
     });
-    this.feedBackService.getAllFeedback().subscribe((data:any)=>{
+
+    this.sharedService.userId$.subscribe(id => {
+      this.userId = id;
+    })
+
+    this.feedBackService.getAllFeedback().subscribe((data: any) => {
       this.feedBackData = data.feedbacks
 
-      console.log("This is from feedback profile",this.feedBackData);
-      
+      // console.log("This is from feedback profile", this.feedBackData);
+
     })
   }
 
   ngOnInit(): void {
     this.loadUserData();
   }
-  created = 0
+  created: number = 0;
+  joined: number = 0;
+  cancel: number = 0;
   loadUserData(): void {
+
+
     this.authService.getAllUser().subscribe(data => {
-      console.log("From profile component:", data);
-      const createdCount = data.map((userId: any) => this.http.get(`http://localhost:4000/api/eventuser/filter/${userId.UserID}`).subscribe(() => {
-        this.created = this.created + 1
-      }))
-      this.allUserProfile = data.map((user: any) => ({
-        ...user,
-        eventStats: {
-          created: this.created + 1,
-          joined: Math.floor(Math.random() * 15),
-          canceled: Math.floor(Math.random() * 5)
+      // console.log("From profile component:", data);
+      const response = data.map((item: any) => this.http.get(`http://localhost:4000/api/events/created-event/${item.UserID}`));
+      const joinedEvent = data.map((item: any) => this.http.get(`http://localhost:4000/api/eventuser/filter/${item.UserID}`));
+      const canceledEvent = data.map((item: any) => this.http.get(`http://localhost:4000/api/tickets/my-tickets/${item.UserID}`));
+      //this is method for gained a joing event count 
+
+      forkJoin(response).subscribe((item: any) => {
+        // this.created = item.data.length;
+        if (item) {
+          item.forEach((element: any) => this.created = element.data.length);
+          forkJoin(joinedEvent).subscribe((joinEvent: any) => {
+            if (Array.isArray(joinEvent)) {
+
+              joinEvent.forEach((item:any)=>this.joined = item.data.length)
+               console.log("joined Event Profile:",joinEvent);
+
+              forkJoin(canceledEvent).subscribe((cancel: any) => {
+                if (cancel[0][0]) {
+                  // cancel.forEach(((item:any)=> item[0].isActive=='false' || 0? this.cancel += 1: this.cancel))
+                  cancel.forEach((item: any) => (item[0].isActive) == 0 ? this.cancel += 1 : this.cancel)
+
+                  this.allUserProfile = data.map((user: any) => ({
+                    ...user,
+                    eventStats: {
+                      created: this.created,
+                      joined: this.joined,
+                      canceled: this.cancel
+                    }
+                  }));
+                }
+                // cancel.forEach((element: any) => element.data.isActive == 0 || 'false' ? this.cancel = this.cancel + 1 : this.cancel = 0)
+              })
+            }
+          })
         }
-      }));
-
-
-
-    });
+      })
+    })
+    // console.log("Profile component: ", this.created);
   }
 
   getColumns(): string[] {
@@ -162,21 +196,21 @@ export class ProfileComponent implements OnInit {
         datasets: [
           {
             label: 'Created',
-            data: this.generateRandomTimelineData(6, stats.created),
+            data: this.generateRandomTimelineData(0, stats.created),
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             tension: 0.4
           },
           {
             label: 'Joined',
-            data: this.generateRandomTimelineData(6, stats.joined),
+            data: this.generateRandomTimelineData(0, stats.joined),
             borderColor: 'rgba(54, 162, 235, 1)',
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             tension: 0.4
           },
           {
             label: 'Canceled',
-            data: this.generateRandomTimelineData(6, stats.canceled),
+            data: this.generateRandomTimelineData(0, stats.canceled),
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             tension: 0.4
@@ -379,9 +413,11 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteUser(userId: string): void {
+    console.log(userId);
+
     if (confirm('Are you sure you want to delete this user?')) {
       this.authService.deleteUser(userId).subscribe(() => {
-        this.allUserProfile = this.allUserProfile.filter(user => user.Id !== userId);
+        this.allUserProfile = this.allUserProfile.filter(user => user.userId !== userId);
       });
     }
   }
@@ -392,7 +428,10 @@ export class ProfileComponent implements OnInit {
   }
 
   saveUserProfile(): void {
-    this.authService.updateUserProfile(this.formData).subscribe((updatedUser: any) => {
+    const { eventStats, ...formData } = this.formData;
+    // console.log("profile component form data user update:",formData);
+
+    this.authService.updateUserProfile(formData).subscribe((updatedUser: any) => {
       if (this.UserRole) {
         const index = this.allUserProfile.findIndex(u => u.UserID === updatedUser.UserID);
         if (index !== -1) {

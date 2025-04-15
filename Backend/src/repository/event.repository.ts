@@ -95,8 +95,10 @@ export class eventRepo {
         if (!user_id) {
             throw new AppError('UserId not found', 400);
         }
-        const filterData = await this.eventRepository.find({ where: { CreatedBy: Equal(user_id) } })
+        const filterData = await this.eventRepository.find({ where: { CreatedBy: { UserID: user_id } }, relations: ['CreatedBy'] })
         // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
+        // console.log(filterData);
+        
         return filterData
     }
 
