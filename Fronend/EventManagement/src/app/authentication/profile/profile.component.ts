@@ -4,7 +4,7 @@ import { SharedService } from '../../shared/shared.service';
 import { Chart, registerables } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 import { FeedbackService } from '../../Services/feedBack/feedback.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { UserEventService } from '../../Services/UserEvent/user-event.service';
 
 // Register all Chart.js components
@@ -19,6 +19,8 @@ Chart.register(...registerables);
 export class ProfileComponent implements OnInit {
   allUserProfile: any[] = [];
   UserRole = false;
+
+  role:string = 'user'
   showVisualizationPopup = false;
   selectedUser: any = null;
   isEditing = false;
@@ -40,6 +42,7 @@ export class ProfileComponent implements OnInit {
   constructor(private sharedService: SharedService, private authService: AuthService, private http: HttpClient, private feedBackService: FeedbackService, private userEventService: UserEventService) {
     this.sharedService.authData$.subscribe(role => {
       this.UserRole = role?.toLowerCase() === 'admin';
+      this.role = role?.toLowerCase()
     });
 
     this.sharedService.userId$.subscribe(id => {
@@ -61,48 +64,74 @@ export class ProfileComponent implements OnInit {
   joined: number = 0;
   cancel: number = 0;
   loadUserData(): void {
+    // const currentUser = this.authService.getCurrentUser(); // Assuming you have a method to get logged-in user info
+    // const role = currentUser.role;
 
+    // For a single user
+    const fetchUserData = (user: string) => {
+      const userId = user
 
-    this.authService.getAllUser().subscribe(data => {
-      // console.log("From profile component:", data);
-      const response = data.map((item: any) => this.http.get(`http://localhost:4000/api/events/created-event/${item.UserID}`));
-      const joinedEvent = data.map((item: any) => this.http.get(`http://localhost:4000/api/eventuser/filter/${item.UserID}`));
-      const canceledEvent = data.map((item: any) => this.http.get(`http://localhost:4000/api/tickets/my-tickets/${item.UserID}`));
-      //this is method for gained a joing event count 
+      const created$ = this.http.get(`http://localhost:4000/api/events/created-event/${userId}`);
+      const joined$ = this.http.get(`http://localhost:4000/api/eventuser/filter/${userId}`);
+      const canceled$ = this.http.get(`http://localhost:4000/api/tickets/my-tickets/${userId}`);
 
-      forkJoin(response).subscribe((item: any) => {
-        // this.created = item.data.length;
-        if (item) {
-          item.forEach((element: any) => this.created = element.data.length);
-          forkJoin(joinedEvent).subscribe((joinEvent: any) => {
-            if (Array.isArray(joinEvent)) {
+      forkJoin([created$, joined$, canceled$]).subscribe(([created, joined, canceled]: any) => {
+        const createdCount = created.data.length || 0;
+        const joinedCount = joined.data.length || 0;
+        let cancelCount = 0;
 
-              joinEvent.forEach((item:any)=>this.joined = item.data.length)
-               console.log("joined Event Profile:",joinEvent);
+        canceled.forEach((ticket: any) => {
+          if (ticket.isActive === 0) cancelCount += 1;
+        });
 
-              forkJoin(canceledEvent).subscribe((cancel: any) => {
-                if (cancel[0][0]) {
-                  // cancel.forEach(((item:any)=> item[0].isActive=='false' || 0? this.cancel += 1: this.cancel))
-                  cancel.forEach((item: any) => (item[0].isActive) == 0 ? this.cancel += 1 : this.cancel)
+        this.allUserProfile = [{
+          ...(typeof user === 'object' && user !== null ? user : {}),
+          eventStats: {
+            created: createdCount,
+            joined: joinedCount,
+            canceled: cancelCount
+          }
+        }];
+      });
+    };
 
-                  this.allUserProfile = data.map((user: any) => ({
-                    ...user,
-                    eventStats: {
-                      created: this.created,
-                      joined: this.joined,
-                      canceled: this.cancel
-                    }
-                  }));
+    // If Admin, get all users
+    if (this.role == 'admin') {
+      this.authService.getAllUser().subscribe(users => {
+        const profileRequests = users.map((user: any) =>
+          forkJoin([
+            this.http.get(`http://localhost:4000/api/events/created-event/${user.UserID}`),
+            this.http.get(`http://localhost:4000/api/eventuser/filter/${user.UserID}`),
+            this.http.get(`http://localhost:4000/api/tickets/my-tickets/${user.UserID}`)
+          ]).pipe(
+            map(([created, joined, canceled]: any) => {
+              let cancelCount = 0;
+              canceled.forEach((ticket: any) => {
+                if (ticket.isActive === 0) cancelCount += 1;
+              });
+
+              return {
+                ...user,
+                eventStats: {
+                  created: created.data.length || 0,
+                  joined: joined.data.length || 0,
+                  canceled: cancelCount
                 }
-                // cancel.forEach((element: any) => element.data.isActive == 0 || 'false' ? this.cancel = this.cancel + 1 : this.cancel = 0)
-              })
-            }
-          })
-        }
-      })
-    })
-    // console.log("Profile component: ", this.created);
+              };
+            })
+          )
+        );
+
+        forkJoin(profileRequests).subscribe((profiles: any) => {
+          this.allUserProfile = profiles;
+        });
+      });
+    } else {
+      // If normal user, get only their data
+      fetchUserData(this.userId);
+    }
   }
+
 
   getColumns(): string[] {
     if (!this.allUserProfile.length) return [];

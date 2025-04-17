@@ -1,25 +1,28 @@
-<ng-container *ngIf="eventUserList.length > 0; else noEventsTemplate">
+<!-- For Regular Users -->
+<ng-container *ngIf="userRole !== 'admin'">
+  <ng-container *ngIf="eventUserList.length > 0; else noUserEventsTemplate">
+    <h2 style="text-align: center;">Joined Events</h2>
 
-  <h2>Joined Event..</h2>
-  <div *ngIf="user" class="event-list">
-    <div *ngFor="let event of eventUserList; let i = index" @fadeIn class="event-card">
-      <h3>{{ event.Title }}</h3>
-      <p><strong>Description:</strong> {{ event.Description }}</p>
-      <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
-      <p><strong>Location:</strong> {{ event.Location }}</p>
-      <p><strong>Category:</strong> {{ event.Categories }}</p>
-      <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID,i)"></p-button>&nbsp;
-      <p-button label="Feedback" (click)="openFeedbackPopup(event.EventID)"></p-button>
+    <div *ngIf="user" class="event-list">
+      <div *ngFor="let event of eventUserList; let i = index" @fadeIn class="event-card">
+        <h3>{{ event.Title }}</h3>
+        <p><strong>Description:</strong> {{ event.Description }}</p>
+        <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
+        <p><strong>Location:</strong> {{ event.Location }}</p>
+        <p><strong>Category:</strong> {{ event.Categories }}</p>
+        <p-button label="Cancel Event" (click)="openDialog(event.Title,event.EventID,i)"></p-button>&nbsp;
+        <p-button label="Feedback" (click)="openFeedbackPopup(event.EventID)"></p-button>
+      </div>
     </div>
-  </div>
-</ng-container>
+  </ng-container>
 
-<ng-template #noEventsTemplate>
-  <div class="no-events-message">
-    <mat-icon class="no-events-icon">event_busy</mat-icon>
-    <p>No events found. Start by Joining a new event.</p>
-  </div>
-</ng-template>
+  <ng-template #noUserEventsTemplate>
+    <div class="no-events-message">
+      <mat-icon class="no-events-icon">event_busy</mat-icon>
+      <p>No joined events found. Start by joining a new one!</p>
+    </div>
+  </ng-template>
+</ng-container>
 
 <!-- Feedback Popup -->
 <div class="feedback-popup" *ngIf="showFeedbackPopup">
@@ -39,3 +42,33 @@
     </form>
   </div>
 </div>
+
+<!-- For Admin -->
+<ng-container *ngIf="userRole === 'admin'">
+  <h2 style="text-align: center; margin-top: 50px;">Pending Events for Approval</h2>
+
+  <ng-container *ngIf="eventUserList.length > 0; else noAdminEventsTemplate">
+    <div class="event-list">
+      <div *ngFor="let event of eventAdminList" class="event-card">
+        <h3>{{ event.Title }}</h3>
+        <p><strong>Description:</strong> {{ event.Description }}</p>
+        <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
+        <p><strong>Location:</strong> {{ event.Location }}</p>
+        <p><strong>Category:</strong> {{ event.Categories }}</p>
+        <h5><strong>Created By:</strong> {{ event.CreatedById }}</h5>
+
+        <div class="admin-actions">
+          <button (click)="approveEvent(event.EventID,event)" class="approve-btn">Approve</button>
+          <button (click)="rejectEvent(event.EventID)" class="reject-btn">Reject</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noAdminEventsTemplate>
+    <div class="no-events-message">
+      <mat-icon class="no-events-icon">event_busy</mat-icon>
+      <p>No pending events for approval at the moment.</p>
+    </div>
+  </ng-template>
+</ng-container>

@@ -32,7 +32,7 @@ export class CreatedEventComponent {
   ngOnInit() {
     this.eventService.eventCreateByUser$.subscribe(data => {
       this.createdEventList = data;
-      console.log("this is from Created eventlist component..", data);
+      // console.log("this is from Created eventlist component..", data);
     });
     this.sharedService.username$.subscribe(item => {
       if (item != 'User') {

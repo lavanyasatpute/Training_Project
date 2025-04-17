@@ -1,8 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, ManyToMany, RelationId, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+    ManyToOne,
+    ManyToMany,
+    RelationId,
+    CreateDateColumn,
+    UpdateDateColumn
+} from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
 import { RelationOfEventUser } from "./relation_between_events_user";
 import { User } from "./User";
+import { ApprovalStatus } from "../constant/aprrovalStatus";
+import { Status } from "../constant/status";
+import { Exclude } from "class-transformer";
 
 @Entity("Event_tbl")
 export class Evententity {
@@ -40,7 +53,7 @@ export class Evententity {
     CreatedById: number;
 
     @Column({ default: "active" })
-    status: string
+    status: Status;
 
     @Column('decimal', { precision: 10, scale: 2 })
     regularPrice: number;
@@ -57,11 +70,32 @@ export class Evententity {
     @Column('int', { default: 0 })
     availableSeats: number;
 
-
+    @Exclude()
     @CreateDateColumn()
     createdAt: Date;
 
+    @Exclude()
     @UpdateDateColumn()
     updatedAt: Date;
 
+    // Admin Approval Logic
+    @Exclude()
+    @Column({ default: "pending" })
+    approvalStatus: ApprovalStatus;
+
+    @Exclude()
+    @Column({ type: 'datetime', nullable: true })
+    approvedAt: Date;
+
+    @Exclude()
+    @Column({ type: 'datetime', nullable: true })
+    rejectedAt: Date;
+
+    @Exclude()
+    @ManyToOne(() => User, { nullable: true })
+    approvedBy: User;
+
+    @Exclude()
+    @RelationId((event: Evententity) => event.approvedBy)
+    approvedById: number;
 }

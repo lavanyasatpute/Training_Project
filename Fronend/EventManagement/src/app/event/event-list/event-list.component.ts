@@ -78,8 +78,10 @@ export class EventListComponent implements OnInit {
         Ticket_Type: ticketType
       }
     });
-
-    this.joinEvent(event.EventID, ticketType);
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.joinEvent(event.EventID, ticketType);
+    });
+    
   }
 
 

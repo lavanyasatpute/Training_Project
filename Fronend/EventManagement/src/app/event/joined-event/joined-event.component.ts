@@ -8,6 +8,8 @@ import { UserEventService } from '../../Services/UserEvent/user-event.service';
 import { CookieService } from 'ngx-cookie-service';
 import { FeedbackService } from '../../Services/feedBack/feedback.service';
 import { StarIcon } from 'primeng/icons';
+import { AuthService } from '../../Services/Authentication/auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-joined-event',
@@ -19,6 +21,7 @@ import { StarIcon } from 'primeng/icons';
 
 export class JoinedEventComponent {
   eventUserList: any[] = []
+  eventAdminList: any[] = [];
   user = false;
   showFeedbackPopup = false;
   feedbackData = {
@@ -26,20 +29,43 @@ export class JoinedEventComponent {
     comment: '',
     eventId: ''
   };
+  userRole: string = 'user'
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
     private userEventService: UserEventService,
-    private cookieService: CookieService,
-    private feeBackService: FeedbackService
-  ) { }
+    private eventService: EventService,
+    private feeBackService: FeedbackService,
+    private authService: AuthService,
+
+  ) {
+    this.sharedService.authData$.subscribe(role => {
+      this.userRole = role
+    })
+  }
 
   ngOnInit() {
 
     this.userEventService.eventList$.subscribe(data => {
       this.eventUserList = data;
-      // console.log("this is from join eventlist component..", data);
     });
+
+    this.eventService.getAllEventForAdmin().subscribe((event: any) => {
+      const userNameObservables = event.data.map((item: any) =>
+        this.authService.filteredUser(item.CreatedById)
+      );
+
+      forkJoin(userNameObservables).subscribe((userData: any) => {
+        // Merge user data with event data
+        this.eventAdminList = event.data.map((eventItem: any, index: number) => ({
+          ...eventItem,
+          CreatedById: userData[index][0].Name
+        }));
+
+        console.log("Final merged data:", this.eventAdminList);
+      });
+    });
+
     this.sharedService.username$.subscribe(item => {
       if (item != 'User') {
         this.user = true
@@ -75,7 +101,7 @@ export class JoinedEventComponent {
     this.feedbackData = {
       rating: 1,
       comment: '',
-      eventId:eventId
+      eventId: eventId
     };
     this.showFeedbackPopup = true;
   }
@@ -92,19 +118,38 @@ export class JoinedEventComponent {
 
   // }
   submitFeedback() {
-  // Call your API to submit the feedback
-  const { eventId, rating, comment } = this.feedbackData;
-  console.log('Submitting feedback:', { eventId, rating, comment });
-  this.feeBackService.feedBack(eventId, comment, rating).subscribe((data) => {
+    // Call your API to submit the feedback
+    const { eventId, rating, comment } = this.feedbackData;
+    console.log('Submitting feedback:', { eventId, rating, comment });
+    this.feeBackService.feedBack(eventId, comment, rating).subscribe((data) => {
       console.log(data);
-  });
+    });
 
-  // Example: Call a feedbackService
-  // this.feedbackService.submitFeedback(this.feedbackData).subscribe(...);
+    // Example: Call a feedbackService
+    // this.feedbackService.submitFeedback(this.feedbackData).subscribe(...);
 
-  this.closeFeedbackPopup();
-}
-
+    this.closeFeedbackPopup();
+  }
+  approveEvent(id: string,event:any) {
+    this.eventService.aprroveEvent(id,event).subscribe({
+      next: (data: any) => {
+        alert(data.data);
+      },
+      error: (err: any) => {
+        alert(`Error approving event:, ${err}`);
+      }
+    });
+  }
+  rejectEvent(id: string) {
+    this.eventService.rejectEvent(id).subscribe({
+      next: (data: any) => {
+        alert(data.data);
+      },
+      error: (err: any) => {
+        alert(`Error approving event:, ${err}`);
+      }
+    });
+  }
 }
 
 

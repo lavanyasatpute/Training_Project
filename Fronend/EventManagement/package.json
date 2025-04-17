@@ -25,6 +25,8 @@
     "chart": "^0.1.2",
     "chart.js": "^4.4.8",
     "dotenv": "^16.4.7",
+    "highcharts": "^12.2.0",
+    "highcharts-angular": "^4.0.1",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "ngx-cookie-service": "^19.1.2",

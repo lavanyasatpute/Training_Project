@@ -59,13 +59,13 @@ export class UserService {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: string): Promise<User[]> {
+    async getFilterUser(filterValue: string): Promise<User[] | any> {
         try {
 
             const users = await this.userRepository.getFilterUser(filterValue);
             return classToPlain(users) as User[];
         } catch (error: any) {
-            throw new AppError(`Failed to filter users: ${error.message}`,400);
+            return new AppError(`Failed to filter users: ${error.message}`,400);
         }
     }
 }

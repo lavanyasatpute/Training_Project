@@ -28,4 +28,6 @@ export interface IEventFormData {
   vipPrice: number;
   vvipPrice: number;
   totalSeats: number;
+  createdBy:string
+
 }

@@ -18,10 +18,10 @@ export class EventController {
      * @param req 
      * @param res 
      */
-    async addEvent(req: Request, res: Response): Promise<void> {
+    async addEvent(req: Request | any, res: Response): Promise<void> {
         try {
             const eventDTO = plainToInstance(EventDTO, req.body);
-            const createrId = req.params.id;
+            const createrId = req.user.id;
 
             // Validate the EventDTO
             // const trimmedEventDTO = mapValues(eventDTO, (value) => 
@@ -122,14 +122,37 @@ export class EventController {
         }
     }
 
-    async getFilteredEventCreatedByUser(req: Request, res: Response) {
+    async getFilteredEventCreatedByUser(req: Request | any, res: Response) {
         try {
             const id = req.params.id; // Example: filterValue could include fields like Location or Categories
 
-            const events = await eventService.getFilteredEventCreatedByUser((id));
+            const events = await eventService.getFilteredEventCreatedByUser(id);
             res.status(200).json({ message: "Filtered events retrieved successfully.", data: events });
         } catch (error: any) {
             res.status(500).json({ message: "Internal server error.", data: error.message });
+        }
+    }
+
+    async aprroveEventFromController(req: Request | any, res: Response) {
+        try {
+            const event_id = req.params.eventID;
+            const User_id = req.user?.id; // Ensure req.user is populated by middleware
+            const aprrovalValue = Boolean(Number(req.params.aprroveValue));
+
+            const result = await eventService.aprroveEventFromService(event_id, User_id, aprrovalValue);
+            res.status(200).json({ message: "Operation successfully......", data: result });
+        } catch (error) {
+            res.status(400).json({ message: "Internal server error.", data: (error as Error).message });
+        }
+
+    }
+
+    async getAllEventForAdmin(req: Request, res: Response) {
+        try {
+            const data = await eventService.getAllEventFromServiceForAdmin()
+            res.status(200).json({ message: 'Event retrive successfully...', data: data })
+        } catch (error) {
+            res.status(400).json({ message: "Internal server error.", data: (error as Error).message });
         }
     }
 }

@@ -1,9 +1,12 @@
-import { Equal } from "typeorm";
+import { Equal, MoreThanOrEqual } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { EventDTO } from "../DTO/event.dto";
 import { Evententity } from "../entities/event";
 import { User } from "../entities/User";
 import { AppError } from "../utils/appError";
+import { ApprovalStatus } from "../constant/aprrovalStatus";
+import { Status } from "../constant/status";
+import { classToPlain } from "class-transformer";
 
 export class eventRepo {
     private eventRepository = AppDataSource.getRepository(Evententity);
@@ -52,7 +55,7 @@ export class eventRepo {
         if (!Event_id) {
             throw new AppError('Event_id not found', 400);
         }
-        const eventName = await this.eventRepository.update({ EventID: Event_id }, { status: "inactive" });
+        const eventName = await this.eventRepository.update({ EventID: Event_id }, { status: Status.INACTIVE });
         // await this.appDataSource.update(id);
         return `${eventName} is deleted successfully...`
     }
@@ -77,9 +80,10 @@ export class eventRepo {
     }
 
     async getAllEvent() {
-        const data = await this.eventRepository.find({ where: { status: "active" } });
+        const currentDate = new Date();
+        const data = await this.eventRepository.find({ where: { status: Status.ACTIVE, approvalStatus: ApprovalStatus.APPROVED ,Schedule:MoreThanOrEqual(currentDate)} });
         // if(!data) return "Data is not found please add event...."
-        return data
+        return (data)
     }
 
     async getFilterEvent(event_id: string) {
@@ -95,10 +99,10 @@ export class eventRepo {
         if (!user_id) {
             throw new AppError('UserId not found', 400);
         }
-        const filterData = await this.eventRepository.find({ where: { CreatedBy: { UserID: user_id } }, relations: ['CreatedBy'] })
+        const filterData = await this.eventRepository.find({ where: { CreatedBy: { UserID: user_id }, approvalStatus:ApprovalStatus.APPROVED }, relations: ['CreatedBy'] })
         // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
         // console.log(filterData);
-        
+
         return filterData
     }
 
@@ -126,5 +130,27 @@ export class eventRepo {
             vvipTickets: vvipTicketsCount,
             remainingSeats: event.availableSeats
         };
+    }
+
+    async aprroveEvent(event_id: string, user_id: string, aprrovalValue: boolean) {
+        if (!event_id && !aprrovalValue) {
+            throw new AppError('Event_id and aprrovalValue not found', 400);
+        }
+        if (!aprrovalValue) {
+            const eventName = await this.eventRepository.findOne({ where: { EventID: event_id } });
+            await this.eventRepository.update(event_id, { approvalStatus: ApprovalStatus.REJECT, approvedBy: { UserID: user_id } });
+            return `${eventName?.Title} is Rejected successfully....`
+        }
+        const eventName = await this.eventRepository.findOne({ where: { EventID: event_id } });
+        await this.eventRepository.update(event_id, { approvalStatus: ApprovalStatus.APPROVED });
+        return `${eventName?.Title} is aprroved successfully....`
+
+    }
+
+    async getAllEventForAdmin(){
+        const data = await this.eventRepository.find({ where: { status: Status.ACTIVE, approvalStatus: ApprovalStatus.PENDING } });
+        // if(!data) return "Data is not found please add event...."
+        return classToPlain(data)
+
     }
 }

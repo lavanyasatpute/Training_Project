@@ -136,6 +136,10 @@ export class EventService {
 
   createEvent(eventData: IEventFormData): Observable<Event> | string {
     if (this.isEventDataValid(eventData)) {
+      this.sharedService.userId$.subscribe(id=>{
+        eventData.createdBy = id
+      })
+       
       swal({
         title: "Event added Successfully!",
         text: `Created: ${eventData.Title}`,
@@ -143,20 +147,20 @@ export class EventService {
         buttons: { confirm: { text: "Proceed", value: true, visible: true, closeModal: true } }
       });
 
-      this.eventList.push(eventData);
-      this.Elist.next(this.eventList);
+      // this.eventList.push(eventData);
+      // this.Elist.next(this.eventList);
 
       if (eventData.Location) {
         this.AllLocation.push(eventData.Location);
         this.Locationlist.next(this.AllLocation);
       }
 
-      this.EventListCreatedByUser.push(eventData);
-      this.eventcreateByUserSubject.next(this.EventListCreatedByUser);
+      // this.EventListCreatedByUser.push(eventData);
+      // this.eventcreateByUserSubject.next(this.EventListCreatedByUser);
 
       const headers = { 'Content-Type': 'application/json' };
 
-      return this.http.post<Event>(this.apiUrl + '/add', eventData, { headers });
+      return this.http.post<Event>(this.apiUrl + `/add`, eventData, { headers });
 
     } else {
       swal({
@@ -175,5 +179,20 @@ export class EventService {
       eventData.Description?.trim() &&
       eventData.Location?.trim() &&
       eventData.Categories?.trim());
+  }
+
+  getAllEventForAdmin() {
+    return this.http.get(`${this.apiUrl}/getforaprroved`)
+  }
+
+  aprroveEvent(event_id: string, eventData: any) {
+    // const updatedEventList = [...this.eventList, eventData];
+    this.eventList.push(eventData);
+    this.Elist.next(eventData);
+    return this.http.get(`${this.apiUrl}/aprrove/${event_id}/1`)
+  }
+
+  rejectEvent(event_id: string) {
+    return this.http.get(`${this.apiUrl}/aprrove/${event_id}/0`)
   }
 }
