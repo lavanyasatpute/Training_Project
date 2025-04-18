@@ -108,6 +108,7 @@ p-button:hover {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -133,34 +134,108 @@ p-button:hover {
   margin-bottom: 12px;
 }
 
+/* --------------FeedBack------------------ */
+
 .feedback-popup {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1050;
+  backdrop-filter: blur(2px);
 }
 
 .feedback-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 350px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: slideFadeIn 0.3s ease;
 }
 
 .feedback-content h3 {
   margin-top: 0;
-  color: #4f46e5;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #1e3a8a;
+  font-weight: 600;
+  text-align: center;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
 }
 
 .form-actions {
-  margin-top: 15px;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 0.75rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button.confirm {
+  background-color: #4f46e5;
+  color: white;
+}
+
+button.confirm:hover {
+  background-color: #4338ca;
+}
+
+button.cancel {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+button.cancel:hover {
+  background-color: #d1d5db;
+}
+
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
@@ -172,7 +247,8 @@ p-button:hover {
   margin-top: 16px;
 }
 
-.approve-btn, .reject-btn {
+.approve-btn,
+.reject-btn {
   padding: 10px 16px;
   border: none;
   border-radius: 6px;
@@ -198,5 +274,3 @@ p-button:hover {
 .reject-btn:hover {
   background-color: #c82333;
 }
-
-

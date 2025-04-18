@@ -1,16 +1,17 @@
-
 <div class="search" style="text-align: center; margin-bottom: 20px;">
-  <input type="text"
-         placeholder="Search events..."
-         [(ngModel)]="searchKeyword"
-         (ngModelChange)="onSearchChange()"
-         class="p-inputtext p-component"
-         style="padding: 8px 12px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
+  <input type="text" placeholder="Search events..." [(ngModel)]="searchKeyword" (ngModelChange)="onSearchChange()"
+    class="p-inputtext p-component"
+    style="padding: 8px 12px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
+</div>
+
+<div class="loading-container" *ngIf="!eventList.length">
+  <!-- <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner> -->
+  <mat-spinner diameter="50"></mat-spinner>
 </div>
 
 
 <div class="event-list">
-  <div *ngFor="let event of filteredEvent" @fadeIn class="event-card">
+  <div *ngFor="let event of paginatedEvents" @fadeIn class="event-card">
     <h3>{{ event.Title }}</h3>
     <p><strong>Description:</strong> {{ event.Description }}</p>
     <p><strong>Schedule:</strong> {{ event.Schedule | date:'medium' }}</p>
@@ -24,10 +25,17 @@
       <option [value]="formatOption(event.vipPrice, vipticket)">VIP - ₹{{ event.vipPrice }}</option>
       <option [value]="formatOption(event.vvipPrice, vvipticket)">VVIP - ₹{{ event.vvipPrice }}</option>
     </select>
-<br><br>
-    <p-button *ngIf="user"
-              label="Join Event"
-              (click)="openDialog(event, ticketSelect.value)">
+    <br><br>
+    <p-button *ngIf="user" label="Join Event" (click)="openDialog(event, ticketSelect.value)">
     </p-button>
   </div>
+
+  <br>
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+
 </div>
+

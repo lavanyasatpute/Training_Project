@@ -7,7 +7,8 @@ import {
     ManyToMany,
     RelationId,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    AfterLoad
 } from "typeorm";
 import { Ticket } from "./Ticket";
 import { Feedback } from "./Feedback";
@@ -52,7 +53,7 @@ export class Evententity {
     @RelationId((event: Evententity) => event.CreatedBy)
     CreatedById: number;
 
-    @Column({ default: "active" })
+    @Column({ default: Status.ACTIVE })
     status: Status;
 
     @Column('decimal', { precision: 10, scale: 2 })
@@ -98,4 +99,10 @@ export class Evententity {
     @Exclude()
     @RelationId((event: Evententity) => event.approvedBy)
     approvedById: number;
+
+    @AfterLoad()
+    updateStatus() {
+      const now = new Date();
+      this.status = this.Schedule < now ? Status.INACTIVE : Status.ACTIVE;
+    }
 }

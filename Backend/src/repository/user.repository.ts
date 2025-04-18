@@ -1,5 +1,6 @@
 // import { notContains } from "class-validator";
 import { AppDataSource } from "../config/data-source";
+import { Status } from "../constant/status";
 import { User } from "../entities/User";
 import { classToPlain } from "class-transformer";
 
@@ -19,7 +20,7 @@ export class userRepo {
     async DeleteUser(id: string) {
         const userName = await this.appDataSource.findOne({ where: { UserID: id } });
         if (!userName) throw new Error(`User with ID ${id} not found.`);
-        await this.appDataSource.update(id,{status:'deactive'});
+        await this.appDataSource.update(id,{status:Status.INACTIVE});
         return `${userName.Name} has been deleted successfully.`;
     }
 
@@ -38,8 +39,8 @@ export class userRepo {
     }
 
     // Filter users by specific criteria
-    async getFilterUser(filterValue: string) {
-        const filterData = await this.appDataSource.find({ where: {UserID:filterValue,status:'active'} });
+    async getFilterUser(userId: string) {
+        const filterData = await this.appDataSource.find({ where: {UserID:userId,status:Status.ACTIVE} });
         return filterData;
     }
 }

@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -10,26 +8,24 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrl: './generic-dialog.component.css'
 })
 export class GenericDialogComponent {
-
-
-
   constructor(
     public dialogRef: MatDialogRef<GenericDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Record<string,any>
   ) {}
 
   closeDialog() {
-    this.dialogRef.close();
-    return "confirm"
+    this.dialogRef.close("confirm");
+    
   }
  
 
-  // notCancelDialog(){
-  //   this.dialogRef.close();
-  // }
+  notCancelDialog(){
+    this.dialogRef.close(null);
+    // return null
+  }
 
   objectKeys(obj: any): string[] {
-    return Object.keys(obj).filter(key => key !== 'button' && key !== "eventId" && key !== "title"); // Exclude title if needed
+    return Object.keys(obj).filter(key => key !== 'button' && key !== "eventId" && key !== "title" && key!== 'cbutton'); // Exclude title if needed
   }
 }
 

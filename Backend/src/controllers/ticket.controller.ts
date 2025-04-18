@@ -22,7 +22,7 @@ export class TicketController {
             }
             const user_Id = req.params.userId;
             const result = await ticketService.AddTicket(ticketDto, user_Id);
-            console.log(result);
+            // console.log(result);
             
             res.status(201).json({data:result});
         } catch (error: any) {

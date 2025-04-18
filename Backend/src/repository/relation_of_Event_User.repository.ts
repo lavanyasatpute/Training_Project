@@ -1,3 +1,4 @@
+import { MoreThanOrEqual } from "typeorm";
 import { AppDataSource } from "../config/data-source";
 import { Evententity } from "../entities/event";
 import { RelationOfEventUser } from "../entities/relation_between_events_user";
@@ -94,9 +95,10 @@ export class EventUserRepo {
     async getFilteredEventUser(userId: string) {
         try {
             if (!userId) throw new AppError("Error: Invalid user ID", 401);
+            const currentDate = new Date()
 
             const data = await this.appDataSource.find({
-                where: { userId },
+                where: { userId,event:{Schedule:MoreThanOrEqual(currentDate)} },
                 relations: ['user', 'event']
             });
 

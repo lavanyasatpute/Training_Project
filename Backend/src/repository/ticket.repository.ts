@@ -5,6 +5,7 @@ import { User } from "../entities/User";
 import { Evententity } from "../entities/event";
 import { PurchaseTicketDto } from "../DTO/ticket.dto";
 import { AppError } from "../utils/appError";
+import { MoreThanOrEqual } from "typeorm";
 
 export class ticketRepo {
     private ticketRepository = AppDataSource.getRepository(Ticket);
@@ -88,8 +89,9 @@ export class ticketRepo {
 
     // Get All Tickets
     async getUserTickets(userId: string): Promise<Ticket[]> {
+        const  currentDate = new Date();
         return this.ticketRepository.find({
-            where: { purchaser: { UserID: userId } },
+            where: { purchaser: { UserID: userId },Event:{Schedule:MoreThanOrEqual(currentDate)} },
             relations: ['Event'],
         });
     }

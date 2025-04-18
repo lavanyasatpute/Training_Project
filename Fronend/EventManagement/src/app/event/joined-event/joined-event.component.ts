@@ -81,11 +81,16 @@ export class JoinedEventComponent {
         title: `Cancel ${Title}`,
         eventId: eventId,
         "Event": `You are about to register for Event: ${Title}`,
-        button: "Cancel",
+        button: "Booking Cancel",
+        cbutton:"Not Cancel"
       }
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cancelEvent(index, eventId);
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result === 'confirm') {this.cancelEvent(index, eventId);}
+      else{
+        console.log("Cancel without confirmation.");
+        
+      }
     });
   }
 

@@ -16,7 +16,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { AuthGuard } from '../guard/auth.guard';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 
 
@@ -51,7 +55,9 @@ const route: Routes = [
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    ProgressSpinnerModule,
+    MatProgressSpinnerModule
   ]
 })
 export class EventModule { }

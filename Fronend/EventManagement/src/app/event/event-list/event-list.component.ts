@@ -26,6 +26,7 @@ export class EventListComponent implements OnInit {
   regularticket: TicketType = TicketType.REGULAR;
   vipticket: TicketType = TicketType.VIP;
   vvipticket: TicketType = TicketType.VVIP;
+  loading: boolean = false;
 
   constructor(
     private eventService: EventService,
@@ -34,8 +35,19 @@ export class EventListComponent implements OnInit {
     private userEventService: UserEventService,
     private ticketService: TicketService
   ) {
-    this.eventService.EList$.subscribe(data => {
-      this.eventList = data;
+    this.loading = true;
+    this.eventService.EList$.subscribe({
+      next: (data) => {
+
+        this.eventList = data;
+        this.filteredEvent = [...this.eventList];
+
+        this.loading = false;
+      },
+      error: (err) => {
+        alert(err)
+        this.loading = false
+      }
     });
     this.debouncedSearch = debounce(this.filterEvents.bind(this), 300);
   }
@@ -49,7 +61,6 @@ export class EventListComponent implements OnInit {
       this.userId = id;
     });
 
-    this.filteredEvent = [...this.eventList];
   }
 
   getTicketPrice(event: IEvent, ticketType: string): number {
@@ -68,20 +79,26 @@ export class EventListComponent implements OnInit {
     const ticketPrice = parseFloat(Ticketprice);
     const ticketType = ticketTypeStr as TicketType; // cast to enum
 
-    this.dialog.open(GenericDialogComponent, {
+    const dialogBox = this.dialog.open(GenericDialogComponent, {
       data: {
         title: `Register for ${event.Title}`,
         eventId: event.EventID,
         Event: `You are about to register for Event: ${event.Title}`,
         button: "Join",
+        cbutton:"Cancel",
         Ticket_Price: ticketPrice,
         Ticket_Type: ticketType
       }
     });
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.joinEvent(event.EventID, ticketType);
+    dialogBox.afterClosed().subscribe((result) => {
+      if(result === 'confirm') {this.joinEvent(event.EventID, ticketType);}
+      else{
+        console.log("Dialog box closed without confirmation.");
+        
+      }
+      
     });
-    
+
   }
 
 
@@ -121,5 +138,31 @@ export class EventListComponent implements OnInit {
   }
 
   debouncedSearch: () => void;
+
+  currentPage = 1;
+  itemsPerPage = 3;
+
+  get paginatedEvents(): IEvent[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredEvent.slice(start, end);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredEvent.length / this.itemsPerPage);
+  }
+
 
 }

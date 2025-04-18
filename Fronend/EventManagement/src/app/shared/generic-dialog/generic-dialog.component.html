@@ -13,9 +13,9 @@
 
         <button class="dialog-button" (click)="closeDialog()">
             {{ data["button"] || "Close" }}
+        </button>&nbsp;
+        <button class="dialog-button" (click)="notCancelDialog()">
+           {{data['cbutton']}}
         </button>
-        <!-- <button class="dialog-button" (click)="notCancelDialog()" *ngIf="data['Obutton']">
-            {{ data["Obutton"] || "Open" }}
-        </button> -->
     </div>
 </div>

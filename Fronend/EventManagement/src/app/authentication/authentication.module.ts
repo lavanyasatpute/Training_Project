@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 
 import { Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ChartComponent } from './profile/chart/chart.component';
 
 const route: Routes = [
   
@@ -24,7 +25,8 @@ const route: Routes = [
   declarations: [
     LoginComponent,
     ProfileComponent,
-    RegistrationFormComponent
+    RegistrationFormComponent,
+    ChartComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +35,7 @@ const route: Routes = [
     ButtonModule,
     RouterModule.forChild(route),
     HttpClientModule,
+    
   ],
   exports: []
 })

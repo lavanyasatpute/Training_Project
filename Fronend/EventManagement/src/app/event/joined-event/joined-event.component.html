@@ -1,7 +1,7 @@
 <!-- For Regular Users -->
 <ng-container *ngIf="userRole !== 'admin'">
   <ng-container *ngIf="eventUserList.length > 0; else noUserEventsTemplate">
-    <h2 style="text-align: center;">Joined Events</h2>
+    <h2 style="text-align: center; margin-top: 50px;">Joined Events</h2>
 
     <div *ngIf="user" class="event-list">
       <div *ngFor="let event of eventUserList; let i = index" @fadeIn class="event-card">
@@ -36,12 +36,13 @@
       <textarea id="comment" [(ngModel)]="feedbackData.comment" name="comment" rows="4" required></textarea>
 
       <div class="form-actions">
-        <button type="submit">Submit</button>
-        <button type="button" (click)="closeFeedbackPopup()">Cancel</button>
+        <button type="submit" class="confirm">Submit</button>
+        <button type="button" class="cancel" (click)="closeFeedbackPopup()">Cancel</button>
       </div>
     </form>
   </div>
 </div>
+
 
 <!-- For Admin -->
 <ng-container *ngIf="userRole === 'admin'">

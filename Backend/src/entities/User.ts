@@ -7,7 +7,7 @@ import { Evententity } from "./event";
 
 @Entity("User_tbl_2008")
 export class User {
-    @Exclude()
+    // @Exclude()
     @PrimaryGeneratedColumn('uuid')
     UserID: string;
 

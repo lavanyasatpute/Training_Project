@@ -50,6 +50,16 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- Feedback Section for Admin -->
+  <div class="feedback-container">
+    <h2 class="feedback-header">User Feedback</h2>
+
+    <div *ngFor="let feedback of feedBackData" class="feedback-card">
+      <div class="feedback-rating">⭐ {{ feedback.Rating }}/5</div>
+      <p class="feedback-comment">"{{ feedback.Comments }}"</p>
+    </div>
+  </div>
 </div>
 
 <!-- Normal User View -->
@@ -93,115 +103,11 @@
   </div>
 </div>
 
-<!-- Visualization Popup -->
-<div *ngIf="showVisualizationPopup" class="visualization-popup">
-  <div class="popup-content">
-    <div class="popup-header">
-      <h2>
-        {{ selectedUser ? (selectedUser.Name + "'s Activity") : 'Platform Activity' }}
-      </h2>
-      <button (click)="closeVisualization()" class="close-btn">×</button>
-    </div>
-
-    <div class="popup-body">
-      <!-- Single User Visualization -->
-      <div *ngIf="selectedUser" class="user-visualization">
-        <div class="stats-overview">
-          <div class="stat-card">
-            <div class="stat-value">{{ selectedUser.eventStats.created }}</div>
-            <div class="stat-label">Created</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ selectedUser.eventStats.joined }}</div>
-            <div class="stat-label">Joined</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ selectedUser.eventStats.canceled }}</div>
-            <div class="stat-label">Canceled</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ selectedUser.eventStats.created + selectedUser.eventStats.joined +
-              selectedUser.eventStats.canceled }}</div>
-            <div class="stat-label">Total</div>
-          </div>
-        </div>
-
-        <div class="charts-container">
-          <div class="chart-wrapper">
-            <canvas id="userActivityChart"></canvas>
-          </div>
-          <div class="chart-wrapper">
-            <canvas id="userActivityTimeline"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Platform Visualization (Admin) -->
-      <div *ngIf="!selectedUser" class="platform-visualization">
-        <div class="stats-overview">
-          <div class="stat-card">
-            <div class="stat-value">{{ getOverallStats().created }}</div>
-            <div class="stat-label">Created</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ getOverallStats().joined }}</div>
-            <div class="stat-label">Joined</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ getOverallStats().canceled }}</div>
-            <div class="stat-label">Canceled</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ getOverallStats().total }}</div>
-            <div class="stat-label">Total</div>
-          </div>
-        </div>
-
-        <div class="charts-grid">
-          <div class="chart-wrapper">
-            <canvas id="platformActivityPie"></canvas>
-          </div>
-          <div class="chart-wrapper">
-            <canvas id="topUsersChart"></canvas>
-          </div>
-          <div class="chart-wrapper full-width">
-            <canvas id="platformTrendChart"></canvas>
-          </div>
-        </div>
-
-        <h3>User Rankings</h3>
-        <table class="rankings-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Created</th>
-              <th>Joined</th>
-              <th>Canceled</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of allUserProfile">
-              <td>{{ user.Name }}</td>
-              <td>{{ user.eventStats.created }}</td>
-              <td>{{ user.eventStats.joined }}</td>
-              <td>{{ user.eventStats.canceled }}</td>
-              <td>{{ user.eventStats.created + user.eventStats.joined + user.eventStats.canceled }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <br><br>
-      <div *ngIf="UserRole" class="feedback-container">
-        <h2 class="feedback-header">User Feedback</h2>
-
-        <div *ngFor="let feedback of feedBackData" class="feedback-card">
-          <div class="feedback-rating">⭐ {{ feedback.Rating }}/5</div>
-          <p class="feedback-comment">"{{ feedback.Comments }}"</p>
-          <!-- <p class="feedback-meta">— User ID: {{ feedback.User?.id || 'Unknown' }}</p> -->
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
+<!-- Chart Component -->
+<app-chart 
+  [isVisible]="showVisualizationPopup"
+  [userData]="selectedUser"
+  [allUserData]="allUserProfile"
+  [isAdmin]="UserRole"
+  (close)="closeVisualization()">
+</app-chart>

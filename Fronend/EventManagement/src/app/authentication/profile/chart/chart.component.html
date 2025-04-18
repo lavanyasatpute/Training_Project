@@ -1,0 +1,100 @@
+<!-- chart.component.html -->
+<div *ngIf="isVisible" class="visualization-container">
+    <div class="visualization-content">
+      <div class="visualization-header">
+        <h2>
+          {{ userData ? (userData.Name + "'s Activity") : 'Platform Activity' }}
+        </h2>
+        <button (click)="closeVisualization()" class="close-btn">×</button>
+      </div>
+  
+      <div class="visualization-body">
+        <!-- Single User Visualization -->
+        <div *ngIf="userData" class="user-visualization">
+          <div class="stats-overview">
+            <div class="stat-card">
+              <div class="stat-value">{{ userData.eventStats.created }}</div>
+              <div class="stat-label">Created</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ userData.eventStats.joined }}</div>
+              <div class="stat-label">Joined</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ userData.eventStats.canceled }}</div>
+              <div class="stat-label">Canceled</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ userData.eventStats.created + userData.eventStats.joined + userData.eventStats.canceled }}</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+  
+          <div class="charts-container">
+            <div class="chart-wrapper">
+              <div id="activity-chart"></div>
+            </div>
+            <div class="chart-wrapper">
+              <div id="timeline-chart"></div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Platform Visualization (Admin) -->
+        <div *ngIf="!userData && isAdmin" class="platform-visualization">
+          <div class="stats-overview">
+            <div class="stat-card">
+              <div class="stat-value">{{ getOverallStats().created }}</div>
+              <div class="stat-label">Created</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ getOverallStats().joined }}</div>
+              <div class="stat-label">Joined</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ getOverallStats().canceled }}</div>
+              <div class="stat-label">Canceled</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">{{ getOverallStats().total }}</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+  
+          <div class="charts-grid">
+            <div class="chart-wrapper">
+              <div id="platform-pie-chart"></div>
+            </div>
+            <div class="chart-wrapper">
+              <div id="top-users-chart"></div>
+            </div>
+            <div class="chart-wrapper full-width">
+              <div id="platform-trend-chart"></div>
+            </div>
+          </div>
+  
+          <h3>User Rankings</h3>
+          <table class="rankings-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Joined</th>
+                <th>Canceled</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of allUserData">
+                <td>{{ user.Name }}</td>
+                <td>{{ user.eventStats.created }}</td>
+                <td>{{ user.eventStats.joined }}</td>
+                <td>{{ user.eventStats.canceled }}</td>
+                <td>{{ user.eventStats.created + user.eventStats.joined + user.eventStats.canceled }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
