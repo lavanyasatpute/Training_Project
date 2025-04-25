@@ -23,9 +23,9 @@ export class ChartComponent implements OnChanges, OnDestroy {
   charts: Highcharts.Chart[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes['isVisible'] && this.isVisible) || 
-        (changes['userData'] && this.isVisible) || 
-        (changes['allUserData'] && this.isVisible)) {
+    if ((changes['isVisible'] && this.isVisible) ||
+      (changes['userData'] && this.isVisible) ||
+      (changes['allUserData'] && this.isVisible)) {
       setTimeout(() => {
         this.initCharts();
       }, 100);
@@ -70,6 +70,25 @@ export class ChartComponent implements OnChanges, OnDestroy {
       title: {
         text: 'User Activity Distribution'
       },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+
       series: [{
         type: 'pie',
         name: 'Activities',
@@ -77,8 +96,11 @@ export class ChartComponent implements OnChanges, OnDestroy {
           { name: 'Created', y: stats.created, color: '#4bc0c0' },
           { name: 'Joined', y: stats.joined, color: '#36a2eb' },
           { name: 'Canceled', y: stats.canceled, color: '#ff6384' }
-        ]
-      }]
+        ],
+
+      }],
+
+
     };
 
     // Timeline chart
@@ -131,7 +153,7 @@ export class ChartComponent implements OnChanges, OnDestroy {
         const chart = Highcharts.chart('activity-chart', this.activityChartOptions);
         this.charts.push(chart);
       }
-      
+
       if (document.getElementById('timeline-chart')) {
         const chart = Highcharts.chart('timeline-chart', this.timelineChartOptions);
         this.charts.push(chart);
@@ -152,6 +174,25 @@ export class ChartComponent implements OnChanges, OnDestroy {
       title: {
         text: 'Platform Activity Distribution'
       },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%'
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+
       series: [{
         type: 'pie',
         name: 'Activities',
@@ -272,12 +313,12 @@ export class ChartComponent implements OnChanges, OnDestroy {
         const chart = Highcharts.chart('platform-pie-chart', this.activityChartOptions);
         this.charts.push(chart);
       }
-      
+
       if (document.getElementById('top-users-chart')) {
         const chart = Highcharts.chart('top-users-chart', this.topUsersChartOptions);
         this.charts.push(chart);
       }
-      
+
       if (document.getElementById('platform-trend-chart')) {
         const chart = Highcharts.chart('platform-trend-chart', this.trendChartOptions);
         this.charts.push(chart);

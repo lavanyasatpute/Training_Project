@@ -50,10 +50,14 @@ export class CreatedEventComponent {
         eventId: eventId,
         "Event": `You are Crested that Event: ${Title}`,
         button: "Delete",
+        cbutton:"Cancel"
       }
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.cancelEvent(index, String(eventId));
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result === 'confirm') {
+        this.cancelEvent(index, String(eventId));
+      }
+      
     });
   }
 

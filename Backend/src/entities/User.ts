@@ -30,7 +30,7 @@ export class User {
     @Column()
     role: string;
 
-    @Column({ default: "Mumbai" })
+    @Column()
     location: string;
 
     @OneToMany(() => Ticket, ticket => ticket.purchaser)

@@ -26,7 +26,7 @@ export class TicketService {
     }
 
     // Update a Ticket
-    async UpdateTicket(ticketID: number, updatedData: Partial<Ticket>): Promise<string> {
+    async UpdateTicket(ticketID: number, updatedData: Partial<Ticket>): Promise<string | any> {
         try {
             const result = await this.ticketRepository.UpdateTicket(ticketID, updatedData);
             return result;

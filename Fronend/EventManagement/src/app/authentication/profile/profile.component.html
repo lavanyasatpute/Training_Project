@@ -11,19 +11,19 @@
     <h3>Platform Overview</h3>
     <div class="stats-summary">
       <div class="stat-card">
-        <div class="stat-value">{{ allUserProfile.length }}</div>
+        <div class="stat-value">{{ totalStats.totalUsers }}</div>
         <div class="stat-label">Total Users</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ getOverallStats().created }}</div>
+        <div class="stat-value">{{ totalStats.created }}</div>
         <div class="stat-label">Events Created</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ getOverallStats().joined }}</div>
+        <div class="stat-value">{{ totalStats.joined }}</div>
         <div class="stat-label">Events Joined</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ getOverallStats().canceled }}</div>
+        <div class="stat-value">{{ totalStats.canceled }}</div>
         <div class="stat-label">Events Canceled</div>
       </div>
     </div>
@@ -45,7 +45,7 @@
         </td>
         <td>
           <button (click)="viewUserVisualization(user)">View</button>
-          <button (click)="deleteUser(user.UserId)">Delete</button>
+          <button (click)="deleteUser(user.UserID)">Delete</button>
         </td>
       </tr>
     </tbody>

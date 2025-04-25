@@ -55,9 +55,12 @@ export class eventRepo {
         if (!Event_id) {
             throw new AppError('Event_id not found', 400);
         }
-        const eventName = await this.eventRepository.update({ EventID: Event_id }, { status: Status.INACTIVE });
-        // await this.appDataSource.update(id);
-        return `${eventName} is deleted successfully...`
+        await this.eventRepository.update(Event_id, { status: Status.INACTIVE });
+        const eventName = await this.eventRepository.findOne({ where: { EventID: Event_id } });
+        if (!eventName) {
+            throw new AppError('Event not found', 404);
+        }
+        return `${eventName.Title} is deleted successfully...`;
     }
 
     /**
@@ -75,7 +78,10 @@ export class eventRepo {
             throw new AppError('updatedData not found', 400);
         }
         const eventName = await this.eventRepository.findOne({ where: { EventID: event_id } });
-        await this.eventRepository.update(event_id, updatedData);
+        const resulte = await this.eventRepository.update(event_id, updatedData);
+        if (resulte.affected === 0) {
+            throw new AppError("The update was not found", 400);
+        }
         return `${eventName?.Title} is updated successfully....`
     }
 
@@ -100,7 +106,7 @@ export class eventRepo {
             throw new AppError('UserId not found', 400);
         }
         const filterData = await this.eventRepository.find({ where: { CreatedBy: { UserID: user_id }, approvalStatus:ApprovalStatus.APPROVED
-         }, relations: ['CreatedBy'] })
+         ,status: Status.ACTIVE}, relations: ['CreatedBy'] })
         // const filterData = await this.appDataSource.find({where:{EventID:filterValue}})
         // console.log(filterData);
 

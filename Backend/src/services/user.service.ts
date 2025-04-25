@@ -23,7 +23,7 @@ export class UserService {
     }
 
     // Delete a user by ID
-    async DeleteUser(id: string): Promise<string> {
+    async DeleteUser(id: string): Promise<string| any> {
         try {
             const result = await this.userRepository.DeleteUser(id);
             return result;

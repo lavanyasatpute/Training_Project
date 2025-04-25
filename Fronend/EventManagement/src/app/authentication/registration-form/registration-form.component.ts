@@ -18,7 +18,8 @@ export class RegistrationFormComponent {
     Username: new FormControl('', [Validators.required]),
     Password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]),
     ContactDetails: new FormControl( [Validators.required], [Validators.pattern(/^[0-9]{10}$/)]),
-    role: new FormControl('', [Validators.required])
+    role: new FormControl('', [Validators.required]),
+    Location:new FormControl('', [Validators.required])
   })
 
   constructor(private authService: AuthService, private router: Router,private cookieService:CookieService) { }
@@ -39,7 +40,8 @@ export class RegistrationFormComponent {
       Username: this.registerForm.value.Username || '',
       Password: this.registerForm.value.Password || '',
       ContactDetails: String(this.registerForm.value.ContactDetails) || '',
-      role: this.registerForm.value.role as Role || Role.User
+      role: this.registerForm.value.role as Role || Role.User,
+      location:this.registerForm.value.Location as string
     };
     const result = this.authService.userRegistration(userData).subscribe((response:any) => {
       console.log("From registration comp: ",response.data +'\n' + response.messages);

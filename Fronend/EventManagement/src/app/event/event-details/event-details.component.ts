@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ITicket } from '../../model/ticket.interface';
 import { TicketService } from '../../Services/ticket/ticket.service';
 import { SharedService } from '../../shared/shared.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-event-details',
@@ -18,7 +19,7 @@ export class EventDetailsComponent {
   recipientEmail: string = '';
   isLoading = false;
 
-  constructor(private ticketService: TicketService, private sharedService: SharedService) {
+  constructor(private ticketService: TicketService, private sharedService: SharedService, private snackBar: MatSnackBar) {
 
     this.ticketService.getUserTickets().subscribe(data => {
       console.log(data);
@@ -30,7 +31,7 @@ export class EventDetailsComponent {
 
   openEmailDialog(ticket: any): void {
     // console.log(ticket);
-    
+
     this.selectedTicket = ticket.TicketID;
     this.showEmailDialog = true;
     // Pre-fill with user's email if available
@@ -63,31 +64,36 @@ export class EventDetailsComponent {
         this.isLoading = false;
         this.showEmailDialog = false;
         // Show success message
-        this.showNotification('Ticket sent successfully to ' + this.recipientEmail);
+        this.showNotification('Ticket sent successfully to ' + this.recipientEmail, "success");
       },
       error => {
         this.isLoading = false;
         console.error('Error sending ticket email:', error);
         // Show error message
-        this.showNotification('Failed to send ticket. Please try again.', true);
+        this.showNotification('Failed to send ticket. Please try again.', "error");
       }
     );
   }
 
-  showNotification(message: string, isError: boolean = false): void {
-    // Simple implementation - replace with your notification system
-    const notificationClass = isError ? 'error-notification' : 'success-notification';
+  showNotification(message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info'): void {
+    const panelClass = {
+      success: 'mat-snack-bar-success',
+      error: 'mat-snack-bar-error',
+      info: 'mat-snack-bar-info',
+      warning: 'mat-snack-bar-warning'
+    }[type];
 
-    const notification = document.createElement('div');
-    notification.className = `notification ${notificationClass}`;
-    notification.innerText = message;
-
-    document.body.appendChild(notification);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
+    this.snackBar.open(message, 'Dismiss', {
+      duration: 3000,
+      verticalPosition: 'bottom', // or 'bottom'
+      horizontalPosition: 'center',
+      politeness: 'assertive',
+       direction: 'ltr',
+      panelClass: [panelClass],
+      announcementMessage: 'Success notification'
+    });
   }
+
+
 
 }

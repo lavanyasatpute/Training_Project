@@ -83,7 +83,10 @@ export class ticketRepo {
     async UpdateTicket(ticketID: number, updatedData: Partial<Ticket>) {
         const ticket = await this.ticketRepository.findOne({ where: { TicketID: ticketID } });
         if (!ticket) throw new AppError(`Ticket with ID ${ticketID} not found.`, 401);
-        await this.ticketRepository.update(ticketID, updatedData);
+        const resulte = await this.ticketRepository.update(ticketID, updatedData);
+        if (resulte.affected === 0) {
+            return new AppError("The update was not found", 400);
+        }
         return `Ticket with ID ${ticketID} has been updated successfully.`;
     }
 

@@ -48,7 +48,7 @@
 <ng-container *ngIf="userRole === 'admin'">
   <h2 style="text-align: center; margin-top: 50px;">Pending Events for Approval</h2>
 
-  <ng-container *ngIf="eventUserList.length > 0; else noAdminEventsTemplate">
+  <ng-container *ngIf="eventAdminList.length > 0; else noAdminEventsTemplate">
     <div class="event-list">
       <div *ngFor="let event of eventAdminList" class="event-card">
         <h3>{{ event.Title }}</h3>

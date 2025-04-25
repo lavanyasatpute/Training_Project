@@ -7,14 +7,14 @@ export class RelationOfEventUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   
-  @ManyToOne(() => User)
+  @ManyToOne(() => User,{cascade:true})
   @JoinColumn({ name: "userId" })
   user: User;
   
   @Column()
   userId: string;
   
-  @ManyToOne(() => Evententity)
+  @ManyToOne(() => Evententity,{cascade : true})
   @JoinColumn({ name: "eventId" })
   event: Evententity;
   

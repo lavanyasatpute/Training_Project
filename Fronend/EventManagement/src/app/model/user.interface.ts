@@ -10,5 +10,6 @@ export interface IUser {
     Username: string;
     Password: string;
     ContactDetails: string;
-    role: Role
+    role: Role;
+    location:string
 }

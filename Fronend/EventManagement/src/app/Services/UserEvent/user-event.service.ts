@@ -38,7 +38,7 @@ export class UserEventService implements OnDestroy {
       .subscribe({
         next: response => {
           const eventUserRelations = response.data;
-          console.log("From event user relation: ",eventUserRelations);
+          // console.log("From event user relation: ",eventUserRelations);
           
 
           if (!eventUserRelations || !Array.isArray(eventUserRelations)) {

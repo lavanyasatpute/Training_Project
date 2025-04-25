@@ -16,22 +16,23 @@ const userController = new UserController();
 const app = express();
 
 app.use(cors({
-    origin:process.env.CORS_ORIGIN,
-    credentials:true // it is used to allow the tokens or header data in a request so thats why we are used for that.
+    origin: process.env.CORS_ORIGIN,
+    credentials: true // it is used to allow the tokens or header data in a request so thats why we are used for that.
 }))
 // Middleware to parse JSON requests
 app.use(express.json({
-    limit:'16kb'
+    limit: '16kb'
 }));
 
 app.use(express.urlencoded({
-    extended:true,
-    limit:'16kb'
+    extended: true,
+    limit: '16kb'
 }));
 
 app.use(express.static("public"));
 
 app.use(cookiesParser())
+
 // Error handling middleware should be placed after all routes
 app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     errorMiddleware(err, _req, res, next)
@@ -40,7 +41,11 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
 AppDataSource.initialize()
     .then(() => {
         // console.log(AppDataSource);
-        
+        const PORT = process.env.SERVER_PORT;
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+
         console.log("Database connected successfully!");
     })
     .catch((error) => {
@@ -48,7 +53,7 @@ AppDataSource.initialize()
     });
 
 
-// Set up routes
+// Set up routes 
 app.get('/async-error', userController.asyncErrorController)
 app.use("/api/users", userRoutes); // Routes for user management
 app.use("/api/feedback", feedbackRoutes); // Routes for feedback management
@@ -64,7 +69,3 @@ app.get("/", (req, res) => {
 
 
 // Start the server
-const PORT = process.env.SERVER_PORT;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});

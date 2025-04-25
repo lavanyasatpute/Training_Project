@@ -118,11 +118,18 @@ p-button:hover {
   }
 }
 
+/* --------------Preloder------------- */
+
 .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  margin-left: 40%;
+}
+.mat-spinner{
+  margin-top: 80px;
+  margin-left: 900px;
 }
 
 .custom-spinner {

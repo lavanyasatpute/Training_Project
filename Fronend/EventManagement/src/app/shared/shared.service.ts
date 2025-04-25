@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { BehaviorSubject, interval } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +25,14 @@ export class SharedService {
     this.monitorUserLocation();
   }
 
-  
-  private monitorUserLocation(): void {
-    interval(2000).subscribe(() => {
-      const userLocation = this.getUserLocationFromCookies() as unknown as string;
-      if (userLocation !== '' && userLocation !== this.userLocation.getValue()) {
-        this.userLocation.next(userLocation);
-      }
-    });
+
+  monitorUserLocation(): void {
+
+    const userLocation = this.getUserLocationFromCookies() as unknown as string;
+    if (userLocation !== '' && userLocation !== this.userLocation.getValue()) {
+      this.userLocation.next(userLocation);
+    }
+
   }
 
   private getUserLocationFromCookies(): number | null {
@@ -48,13 +48,13 @@ export class SharedService {
   }
 
 
-  private monitorUserId(): void {
-    interval(2000).subscribe(() => {
-      const userId = this.getUserIdFromCookies();
-      if (userId !== null && String(userId) !== String(this.userId.getValue())) {
-        this.userId.next(String(userId));
-      }
-    });
+  monitorUserId(): void {
+
+    const userId = this.getUserIdFromCookies();
+    if (userId !== null && String(userId) !== String(this.userId.getValue())) {
+      this.userId.next(String(userId));
+    }
+
   }
 
   private getUserIdFromCookies(): number | null {
@@ -69,13 +69,13 @@ export class SharedService {
     }
   }
 
-  private monitorUserChanges(): void {
-    interval(2000).subscribe(() => {
-      const newUsername = this.getUsernameFromCookies();
-      if (newUsername && newUsername !== this.userSubject.getValue()) {
-        this.userSubject.next(newUsername);
-      }
-    });
+  monitorUserChanges(): void {
+
+    const newUsername = this.getUsernameFromCookies();
+    if (newUsername && newUsername !== this.userSubject.getValue()) {
+      this.userSubject.next(newUsername);
+    }
+
   }
 
   private getUsernameFromCookies(): string {
@@ -88,13 +88,13 @@ export class SharedService {
     }
   }
 
-  private monitorRoleChanges(): void {
-    interval(2000).subscribe(() => {
-      const newRole = this.getUserRole();
-      if (newRole && newRole !== this.authData.getValue()) {
-        this.authData.next(newRole);
-      }
-    });
+  monitorRoleChanges(): void {
+
+    const newRole = this.getUserRole();
+    if (newRole && newRole !== this.authData.getValue()) {
+      this.authData.next(newRole);
+
+    }
   }
 
   private getUserRole(): string {

@@ -95,7 +95,6 @@ export class UserController {
             // res.status(StatusCodes.BAD_REQUEST).json(error.message); // Handle errors
         }
     }
-
     async asyncErrorController(req:Request,res:Response,next:NextFunction){
         try {
             await Promise.reject(new AppError("Async error occured!",500));

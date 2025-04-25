@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit {
         this.isLogedIn = false
       }
     })
-    console.log(this.isLogedIn);
+    // console.log(this.isLogedIn);
 
     // this.eventService.Locationlist$.subscribe(item=>this.locations = item)
      // Check if cookie exists
@@ -60,6 +60,10 @@ export class NavbarComponent implements OnInit {
   }
   signOut(){
     this.sharedService.deleteCookies();
+    this.sharedService.monitorRoleChanges();
+    this.sharedService.monitorUserChanges();
+    this.sharedService.monitorUserId();
+    this.sharedService.monitorUserLocation();
   }
   
 }

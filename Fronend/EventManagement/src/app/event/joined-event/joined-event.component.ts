@@ -50,23 +50,31 @@ export class JoinedEventComponent {
       this.eventUserList = data;
     });
 
-    this.eventService.getAllEventForAdmin().subscribe((event: any) => {
-      const userNameObservables = event.data.map((item: any) =>
-        this.authService.filteredUser(item.CreatedById)
-      );
+    this.sharedService.authData$.subscribe(role => {
+      
+      if (role == 'admin') {
+        this.eventService.getAllEventForAdmin().subscribe((event: any) => {
+          // console.log("from joined event",event.data);
+          const userNameObservables = event.data.map((item: any) =>
+            this.authService.filteredUser(item.CreatedById)
+          );
 
-      forkJoin(userNameObservables).subscribe((userData: any) => {
-        // Merge user data with event data
-        this.eventAdminList = event.data.map((eventItem: any, index: number) => ({
-          ...eventItem,
-          CreatedById: userData[index][0].Name
-        }));
+          forkJoin(userNameObservables).subscribe((userData: any) => {
+            // Merge user data with event data
+            this.eventAdminList = event.data.map((eventItem: any, index: number) => ({
+              ...eventItem,
+              CreatedById: userData[index][0].Name
+            }));
 
-        console.log("Final merged data:", this.eventAdminList);
-      });
-    });
+            // console.log("Final merged data:", this.eventAdminList);
+          });
+        });
+      }
+    })
 
     this.sharedService.username$.subscribe(item => {
+      // console.log(item);
+      
       if (item != 'User') {
         this.user = true
       } else {
@@ -82,14 +90,14 @@ export class JoinedEventComponent {
         eventId: eventId,
         "Event": `You are about to register for Event: ${Title}`,
         button: "Booking Cancel",
-        cbutton:"Not Cancel"
+        cbutton: "Not Cancel"
       }
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if(result === 'confirm') {this.cancelEvent(index, eventId);}
-      else{
+      if (result === 'confirm') { this.cancelEvent(index, eventId); }
+      else {
         console.log("Cancel without confirmation.");
-        
+
       }
     });
   }
@@ -135,8 +143,8 @@ export class JoinedEventComponent {
 
     this.closeFeedbackPopup();
   }
-  approveEvent(id: string,event:any) {
-    this.eventService.aprroveEvent(id,event).subscribe({
+  approveEvent(id: string, event: any) {
+    this.eventService.aprroveEvent(id, event).subscribe({
       next: (data: any) => {
         alert(data.data);
       },
