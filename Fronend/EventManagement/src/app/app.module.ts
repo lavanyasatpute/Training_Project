@@ -31,10 +31,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { CheckboxModule } from 'primeng/checkbox';
 @NgModule({
   declarations: [
     AppComponent,
-    GenericDialogComponent
+    GenericDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -57,7 +58,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
     MatNativeDateModule,
     MatSelectModule,
     FormsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    CheckboxModule
   ],
   providers: [
     CookieService,
@@ -66,8 +68,11 @@ import { HighchartsChartModule } from 'highcharts-angular';
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura
-      }
+        preset: 'aura-dark-blue',
+        options: {
+            darkModeSelector: '.my-app-dark'
+        }
+    }
     })
   ],
   bootstrap: [AppComponent]

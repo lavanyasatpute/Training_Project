@@ -9,7 +9,7 @@ const eventController = new EventController();
 // Event Routes
 router.post("/add", authMiddleware, eventController.addEvent);
 router.delete("/delete/:id", authMiddleware, eventController.deleteEvent);
-router.patch("/update/:id", authMiddleware, eventController.updateEvent);
+router.put("/update/:id", authMiddleware, eventController.updateEvent);
 router.get("/getall", eventController.getAllEvents);
 router.get("/filter/:id", authMiddleware, eventController.getFilteredEvents);
 router.get("/created-event/:id", authMiddleware, eventController.getFilteredEventCreatedByUser);

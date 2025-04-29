@@ -80,6 +80,8 @@ export class CreatedEventComponent {
     }
 
     // Set the editing flag
+    // console.log(event);
+    
     event.isEditing = true;
   }
 
@@ -90,12 +92,15 @@ export class CreatedEventComponent {
     this.editEventForm = {};
   }
 
-  updateEvent(eventId: string, index: number): void {
-    this.eventService.updateEventCreatedByUser(eventId, this.editEventForm).subscribe(
+  updateEvent(event: any, index: number): void {
+    // console.log("from update event",event);
+
+    this.eventService.updateEventCreatedByUser(event.EventID, event).subscribe(
       (updatedEvent) => {
+        console.log("rsulte from backend update event:",updatedEvent);
+        
         // Update the event in the list is handled by the service
         // Just turn off editing mode
-        console.log(updatedEvent);
         
         this.createdEventList[index].isEditing = false;
         // Clear form

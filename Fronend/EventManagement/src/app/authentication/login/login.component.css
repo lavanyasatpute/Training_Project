@@ -1,16 +1,21 @@
+/* #login{
+    margin-top: 50px;
+} */
+
 form {
     max-width: 400px;
-    margin: 20px auto; /* Adds 20px spacing from the top */
+    margin: 20px auto; 
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     animation: fadeIn 1s ease-in-out;
+    margin-top: 50px;
 }
 
 .userloginform {
     max-width: 400px;
-    margin: 60px auto; /* 200px from the top, centered horizontally */
+    margin: 60px auto; 
 }
 
 label {

@@ -85,12 +85,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of allUserData">
-                <td>{{ user.Name }}</td>
-                <td>{{ user.eventStats.created }}</td>
-                <td>{{ user.eventStats.joined }}</td>
-                <td>{{ user.eventStats.canceled }}</td>
-                <td>{{ user.eventStats.created + user.eventStats.joined + user.eventStats.canceled }}</td>
+              <tr *ngFor="let user of allUserData | OrderBy:'eventStats':'created'">
+                <td>{{ user['Name'] }}</td>
+                <td>{{ user['eventStats'].created }}</td>
+                <td>{{ user['eventStats'].joined }}</td>
+                <td>{{ user['eventStats'].canceled }}</td>
+                <td>{{ user['eventStats'].created + user['eventStats'].joined + user['eventStats'].canceled }}</td>
               </tr>
             </tbody>
           </table>

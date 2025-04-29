@@ -77,12 +77,16 @@ export class eventRepo {
         if (!updatedData) {
             throw new AppError('updatedData not found', 400);
         }
-        const eventName = await this.eventRepository.findOne({ where: { EventID: event_id } });
-        const resulte = await this.eventRepository.update(event_id, updatedData);
-        if (resulte.affected === 0) {
+        // const eventName = await this.eventRepository.findOne({ where: { EventID: event_id } });
+        const result = await this.eventRepository.update(event_id, updatedData);
+        if (result.affected === 0) {
             throw new AppError("The update was not found", 400);
         }
-        return `${eventName?.Title} is updated successfully....`
+        const updatedEvent = await this.eventRepository.findOne({ where: { EventID: event_id } });
+        if (!updatedEvent) {
+            throw new AppError("Updated event not found", 404);
+        }
+        return `${updatedEvent.Title} is updated successfully....`
     }
 
     async getAllEvent() {

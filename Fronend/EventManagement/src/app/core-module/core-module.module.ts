@@ -18,6 +18,7 @@ const ngPrimeModules = [ButtonModule, InputTextModule, CheckboxModule, DropdownM
     CommonModule,
     CommonRoutingModule,
     BrowserAnimationsModule,
+    ButtonModule,
   ],
   exports: [NavbarComponent,ngPrimeModules]
 })

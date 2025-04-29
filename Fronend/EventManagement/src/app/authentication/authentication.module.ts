@@ -11,6 +11,8 @@ import { ButtonModule } from 'primeng/button';
 import { Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartComponent } from './profile/chart/chart.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { OrderBy } from '../CustomePipe/order-by-pipe.pipe';
 
 const route: Routes = [
   
@@ -26,7 +28,8 @@ const route: Routes = [
     LoginComponent,
     ProfileComponent,
     RegistrationFormComponent,
-    ChartComponent
+    ChartComponent,
+    OrderBy
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ const route: Routes = [
     ButtonModule,
     RouterModule.forChild(route),
     HttpClientModule,
+    CheckboxModule
     
   ],
   exports: []

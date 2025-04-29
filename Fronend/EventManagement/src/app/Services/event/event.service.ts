@@ -119,8 +119,10 @@ export class EventService {
       });
 
       // Send request to backend
-      const headers = { 'Content-Type': 'application/json' };
-      return this.http.patch(`${this.apiUrl}/update/${eventId}`, eventData, { headers });
+      // const headers = { 'Content-Type': 'application/json' };
+      console.log(eventData);
+      
+      return this.http.put(`${this.apiUrl}/update/${eventData.EventID}`, eventData);
     } else {
       swal({
         title: "Invalid Input!",

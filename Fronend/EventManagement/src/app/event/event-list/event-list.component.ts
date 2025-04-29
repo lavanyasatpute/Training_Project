@@ -91,7 +91,14 @@ export class EventListComponent implements OnInit {
       }
     });
     dialogBox.afterClosed().subscribe((result) => {
-      if(result === 'confirm') {this.joinEvent(event.EventID, ticketType);}
+      if(result === 'confirm') {this.joinEvent(event.EventID, ticketType);
+        this.filteredEvent = this.filteredEvent.map(events => {
+          if (events.EventID === event.EventID) {
+            return { ...events, availableSeats: events.availableSeats - 1 }; // Update the event with the ticket type
+          }
+          return event; // Return the event unchanged
+        });
+      }
       else{
         console.log("Dialog box closed without confirmation.");
         
@@ -110,7 +117,8 @@ export class EventListComponent implements OnInit {
     this.userEventService.joinEvent(eventId, this.userId).subscribe((data: any) => {
       console.log("Event joined:", data, "Ticket Type:", ticketType);
       this.ticketService.purchaseTicket({ eventId, ticketType }).subscribe(data => {
-        console.log(data);
+        // console.log(data);
+       
 
       });
     });
@@ -163,6 +171,7 @@ export class EventListComponent implements OnInit {
   get totalPages(): number {
     return Math.ceil(this.filteredEvent.length / this.itemsPerPage);
   }
+  
 
 
 }

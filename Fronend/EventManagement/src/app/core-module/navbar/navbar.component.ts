@@ -17,13 +17,13 @@ export class NavbarComponent implements OnInit {
   public isLogedIn: boolean = false;
   public username: string = '';
 
-  public location:string = ""
+  public location: string = ""
 
   // public createdEvent = true;
 
-  eventUserListLength:boolean = true;
+  eventUserListLength: boolean = true;
 
-  constructor(private eventService: EventService,private sharedService:SharedService,private http:HttpClient) {}
+  constructor(private eventService: EventService, private sharedService: SharedService, private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -33,22 +33,22 @@ export class NavbarComponent implements OnInit {
     //   this.eventUserListLength = false
     // }
 
-    
-    this.sharedService.username$.subscribe((data:any)=>this.username = data);
-    this.sharedService. userLocation$.subscribe(data=>this.location = data);
-    this.sharedService.username$.subscribe((item:any)=>{
+
+    this.sharedService.username$.subscribe((data: any) => this.username = data);
+    this.sharedService.userLocation$.subscribe(data => this.location = data);
+    this.sharedService.username$.subscribe((item: any) => {
       // console.log(item);
-      
-      if(item != 'User'){
+
+      if (item != 'User') {
         this.isLogedIn = true
-      }else{
+      } else {
         this.isLogedIn = false
       }
     })
     // console.log(this.isLogedIn);
 
     // this.eventService.Locationlist$.subscribe(item=>this.locations = item)
-     // Check if cookie exists
+    // Check if cookie exists
   }
 
   toggleSidebar(): void {
@@ -58,12 +58,25 @@ export class NavbarComponent implements OnInit {
   toggleSubmenu(menu: string): void {
     this.activeSubmenu = this.activeSubmenu === menu ? null : menu;
   }
-  signOut(){
+  signOut() {
     this.sharedService.deleteCookies();
     this.sharedService.monitorRoleChanges();
     this.sharedService.monitorUserChanges();
     this.sharedService.monitorUserId();
     this.sharedService.monitorUserLocation();
   }
-  
+
+  Mode = 'Dark'
+
+  toggleDarkMode() {
+    const element = document.querySelector('html');
+    element?.classList.toggle('my-app-dark');
+    if(this.Mode === 'Dark'){
+      this.Mode = 'Light'
+    }else{
+      this.Mode = 'Dark'
+    }
+    
+  }
+
 }

@@ -13,7 +13,7 @@ export class EventService {
             const result = await this.eventRepository.createEvent(eventData, creatorId);
             return result;
         } catch (error: any) {
-            return (`Failed to add event: ${error.message}`);
+            throw (`Failed to add event: ${error.message}`);
         }
     }
 
@@ -23,17 +23,19 @@ export class EventService {
             const result = await this.eventRepository.DeleteEvent(eventID);
             return result;
         } catch (error: any) {
-            return new AppError(`Failed to delete event with ID ${eventID}: ${error.message}`, 200);
+            throw new AppError(`Failed to delete event with ID ${eventID}: ${error.message}`, 200);
         }
     }
 
     // Update an Event
     async UpdateEvent(eventID: string, updatedData: Partial<Evententity>): Promise<string | any> {
         try {
+            console.log(updatedData);
+            
             const result = await this.eventRepository.updateEvent(eventID, updatedData);
             return result;
         } catch (error: any) {
-            return new AppError(`Failed to update event with ID ${eventID}: ${error.message}`, 200);
+            throw new AppError(`Failed to update event with ID ${eventID}: ${error.message}`, 400);
         }
     }
 
@@ -43,7 +45,7 @@ export class EventService {
             const events = await this.eventRepository.getAllEvent();
             return events;
         } catch (error: any) {
-            return new AppError(`Failed to retrivecd  events: ${error.message}`, 200);
+            throw new AppError(`Failed to retrivecd  events: ${error.message}`, 200);
         }
     }
 
@@ -55,7 +57,7 @@ export class EventService {
 
             return events;
         } catch (error: any) {
-            return new AppError(`Failed to filter events: ${error.message}`, 200);
+            throw new AppError(`Failed to filter events: ${error.message}`, 200);
         }
     }
 
